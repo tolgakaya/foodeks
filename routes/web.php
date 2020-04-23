@@ -54,3 +54,24 @@ Route::get('checkouts/result', function () {
 Route::get('reservation', function () {
     return view('frontend.reservation.create');
 })->name('reservation.create');
+Auth::routes();
+
+// Route::get('/admin/dashboard', function () {
+//     return view('admins.dashboard');
+// })->name('admin')->middleware('admin');
+
+// Route::get('/customer/dashboard', function () {
+//     return view('frontend.customers.dashboard');
+// })->name('customer')->middleware('customer');
+
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::get('dashboard', 'AdminController@index')->name('dashboard');
+});
+
+Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
+    Route::get('dashboard', 'CustomerController@index')->name('dashboard');
+    Route::get('create', 'CustomerController@create')->name('create');
+});
+
+
+// Route::get('/home', 'HomeController@index')->name('home');

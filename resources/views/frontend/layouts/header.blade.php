@@ -93,78 +93,43 @@
                                 <li><a class="text-center" href="">View Cart</a></li>
                             </ul>
                         </li>
+
+                        @guest
+                        <li><a href="#0" data-toggle="modal" data-target="#login_2">Login</a></li>
+                        <li><a href="#0" data-toggle="modal" data-target="#register">Register</a></li>
+                        @endguest
+                        @auth
                         <li class="dropdown" style=" margin-right: 60px;">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-expanded="false"> <span class="glyphicon glyphicon-user"></span> User Name<span
-                                    class="caret"></span></a>
+                                aria-expanded="false"> <span class="glyphicon glyphicon-user"></span>
+                                {{Auth::user()->name}}<span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-cart" role="menu">
+                                @if(Auth::user()->role==1)
+                                <li><a href="{{route('admin.dashboard')}}" id="user"><i
+                                            class="glyphicon glyphicon-user"></i>
+                                        Dashboard <span class="badge">1</span></a></li>
+                                @elseif(Auth::user()->role==2)
+                                <li><a href="{{route('customer.dashboard')}}" id="user"><i
+                                            class="glyphicon glyphicon-user"></i>
+                                        Dashboard <span class="badge">1</span></a></li>
+                                @endif
                                 <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                                                     document.getElementById('logout-form').submit();">
+                                        <i class="icon-logout">Logout</i>
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
                                 </li>
                                 <li class="divider"></li>
                                 <li><a class="text-center" href="">View Cart</a></li>
                             </ul>
                         </li>
-                        {{-- <li><a href="#" id="cart"><i class="glyphicon glyphicon-shopping-cart"></i> Cart <span
-                                    class="badge">3</span></a></li> --}}
+                        @endauth
 
-                        {{-- <li><a href="#" id="user"><i class="glyphicon glyphicon-user"></i> User <span
-                                    class="badge">1</span></a></li> --}}
-                        {{-- <li><a href="#0" data-toggle="modal" data-target="#login_2">Login</a></li>
-                        <li><a href="#0" data-toggle="modal" data-target="#register">Register</a></li> --}}
                     </ul>
 
                 </div><!-- End main-menu -->
@@ -172,68 +137,6 @@
 
         </div><!-- End row -->
     </div><!-- End container -->
-    <div class="container">
-        <div class="shopping-cartx">
-            <div class="shopping-cart-header">
-                <i class="glyphicon glyphicon-user"></i><span class="badge">3</span>
-                <div class="shopping-cart-total">
-                    <span class="lighter-text">UserName</span>
-                </div>
-            </div>
-            <!--end shopping-cart-header -->
-
-            <ul class="shopping-cart-items">
-                <li class="clearfix">
-                    <span class="item-quantity">My Account</span>
-                </li>
-
-                <li class="clearfix">
-                    <span class="item-quantity">Any Noificatiton...</span>
-                </li>
-            </ul>
-
-            <a href="#" class="button">Logout</a>
-        </div>
-        <!--end shopping-cart -->
-    </div>
-    <div class="container">
-        <div class="shopping-cart">
-            <div class="shopping-cart-header">
-                <i class="glyphicon glyphicon-shopping-cart"></i><span class="badge">3</span>
-                <div class="shopping-cart-total">
-                    <span class="lighter-text">Total:</span>
-                    <span class="main-color-text">$2,229.97</span>
-                </div>
-            </div>
-            <!--end shopping-cart-header -->
-
-            <ul class="shopping-cart-items">
-                <li class="clearfix">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item1.jpg" alt="item1" />
-                    <span class="item-name">Sony DSC-RX100M III</span>
-                    <span class="item-price">$849.99</span>
-                    <span class="item-quantity">Quantity: 01</span>
-                </li>
-
-                <li class="clearfix">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item2.jpg" alt="item1" />
-                    <span class="item-name">KS Automatic Mechanic...</span>
-                    <span class="item-price">$1,249.99</span>
-                    <span class="item-quantity">Quantity: 01</span>
-                </li>
-
-                <li class="clearfix">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/cart-item3.jpg" alt="item1" />
-                    <span class="item-name">Kindle, 6" Glare-Free To...</span>
-                    <span class="item-price">$129.99</span>
-                    <span class="item-quantity">Quantity: 01</span>
-                </li>
-            </ul>
-
-            <a href="#" class="button">Checkout</a>
-        </div>
-        <!--end shopping-cart -->
-    </div>
 
 </header>
 

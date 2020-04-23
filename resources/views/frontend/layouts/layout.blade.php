@@ -9,6 +9,7 @@
     <meta name="keywords" content="pizza, delivery food, fast food, sushi, take away, chinese, italian food">
     <meta name="description" content="">
     <meta name="author" content="Ansonika">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>QuickFood - Quality delivery or take away food</title>
 
     <!-- Favicons-->
@@ -84,10 +85,39 @@
         <div class="modal-dialog">
             <div class="modal-content modal-popup">
                 <a href="#" class="close-link"><i class="icon_close_alt2"></i></a>
-                <form action="#" class="popup-form" id="myLogin">
+                <form action="{{route('login')}}" method="POST" class="popup-form" id="myLogin">
+                    {{-- {{ csrf_field() }} --}}
+                    @csrf
                     <div class="login_icon"><i class="icon_lock_alt"></i></div>
-                    <input type="text" class="form-control form-white" placeholder="Username">
-                    <input type="text" class="form-control form-white" placeholder="Password">
+                    <input id="email" name="email" type="text"
+                        class="form-control form-white @error('email') is-invalid @enderror" placeholder="email"
+                        value="{{ old('email') }}" required autocomplete="email" autofocus>
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                    <input type="password"
+                        class="form-control form-white form-control @error('password') is-invalid @enderror"
+                        placeholder="Password" id="password" name="password" required autocomplete="current-password">
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+
+                    <div class="form-group row">
+                        <div class="col-md-6 offset-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                                    {{ old('remember') ? 'checked' : '' }}>
+
+                                <label class="form-check-label" for="remember">
+                                    {{ __('Remember Me') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-left">
                         <a href="#">Forgot Password?</a>
                     </div>
@@ -123,13 +153,40 @@
         </div>
     </div><!-- End Register modal -->
 
+
     <!-- COMMON SCRIPTS -->
     <script src="{{asset('js/jquery-2.2.4.min.js')}}"></script>
     <script src="{{asset('js/common_scripts_min.js')}}"></script>
     <script src="{{asset('js/functions.js')}}"></script>
     <script src="{{asset('assets/validate.js')}}"></script>
 
-
+    <script type="text/javascript">
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+           
+            $(".btn-submit").click(function(e){
+          
+                e.preventDefault();
+           
+                var name = $("input[name=name]").val();
+                var password = $("input[name=password]").val();
+                var email = $("input[name=email]").val();
+           
+                $.ajax({
+                   type:'POST',
+                   url:"{{ route('login') }}",
+                   data:{name:name, password:password, email:email},
+                   success:function(data){
+                    //   alert(data.success);
+                    location.reload(true);
+                   }
+                });
+          
+        	});
+    </script>
 
     @yield('specialscript')
     <script>
