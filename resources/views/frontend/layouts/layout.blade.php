@@ -92,19 +92,15 @@
                     <input id="email" name="email" type="text"
                         class="form-control form-white @error('email') is-invalid @enderror" placeholder="email"
                         value="{{ old('email') }}" required autocomplete="email" autofocus>
-                    @error('email')
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                        <strong id="email-error"></strong>
                     </span>
-                    @enderror
                     <input type="password"
                         class="form-control form-white form-control @error('password') is-invalid @enderror"
                         placeholder="Password" id="password" name="password" required autocomplete="current-password">
-                    @error('password')
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
+                        <strong id="password-error"></strong>
                     </span>
-                    @enderror
 
                     <div class="form-group row">
                         <div class="col-md-6 offset-md-4">
@@ -121,101 +117,47 @@
                     <div class="text-left">
                         <a href="#">Forgot Password?</a>
                     </div>
-                    <button type="submit" class="btn btn-submit">Submit</button>
+                    <button type="submit" id="btnLogin" class="btn btn-submit">Submit</button>
                 </form>
             </div>
         </div>
     </div><!-- End modal -->
-
-    <!-- Register modal -->
-    <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myRegister" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content modal-popup">
-                <a href="#" class="close-link"><i class="icon_close_alt2"></i></a>
-                <form action="#" class="popup-form" id="myRegister">
-                    <div class="login_icon"><i class="icon_lock_alt"></i></div>
-                    <input type="text" class="form-control form-white" placeholder="Name">
-                    <input type="text" class="form-control form-white" placeholder="Last Name">
-                    <input type="email" class="form-control form-white" placeholder="Email">
-                    <input type="text" class="form-control form-white" placeholder="Password" id="password1">
-                    <input type="text" class="form-control form-white" placeholder="Confirm password" id="password2">
-                    <div id="pass-info" class="clearfix"></div>
-                    <div class="checkbox-holder text-left">
-                        <div class="checkbox">
-                            <input type="checkbox" value="accept_2" id="check_2" name="check_2" />
-                            <label for="check_2"><span>I Agree to the <strong>Terms &amp;
-                                        Conditions</strong></span></label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-submit">Register</button>
-                </form>
-            </div>
-        </div>
-    </div><!-- End Register modal -->
-
 
     <!-- COMMON SCRIPTS -->
     <script src="{{asset('js/jquery-2.2.4.min.js')}}"></script>
     <script src="{{asset('js/common_scripts_min.js')}}"></script>
     <script src="{{asset('js/functions.js')}}"></script>
     <script src="{{asset('assets/validate.js')}}"></script>
-
     <script type="text/javascript">
         $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-           
-            $(".btn-submit").click(function(e){
-          
-                e.preventDefault();
-           
-                var name = $("input[name=name]").val();
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+               
+                $("#btnLogin").click(function(e){
+              e.preventDefault();
+                
                 var password = $("input[name=password]").val();
                 var email = $("input[name=email]").val();
-           
                 $.ajax({
-                   type:'POST',
-                   url:"{{ route('login') }}",
-                   data:{name:name, password:password, email:email},
-                   success:function(data){
-                    //   alert(data.success);
-                    location.reload(true);
-                   }
+                    type:'POST',
+                    url:"{{ route('login') }}",
+                    data:{email:email, password:password},
+                    success:function(data){
+                        console.log(data.message);
+                        // location.reload(true);
+                        },
+                    error:function(data){
+               if(data.responseJSON.errors.email) {
+                $( '#email-error' ).html(data.responseJSON.errors.email[0]);
+                }
+                    }
                 });
-          
-        	});
+              	});
     </script>
-
     @yield('specialscript')
-    <script>
-        (function () {
-    $("#cart").on("click", function () {
-    $(".shopping-cart").fadeToggle("fast");
-    $(".shopping-cartx").fadeOut("fast");
-    });
-    })();
-    
-    (function () {
-            $("#user").on("click", function () {
-            $(".shopping-cartx").fadeToggle("fast");
-            $(".shopping-cart").fadeOut("fast");
-            });
-            })();
 
-    $(document).ready(function() {
-        $(".shopping-cart").fadeOut("fast");
-        $(".shopping-cartx").fadeOut("fast");
-    $(window).scroll(function() {
-    if ($(document).scrollTop() > 50) {
-    $(".shopping-cart").fadeOut("fast");
-    $(".shopping-cartx").fadeOut("fast");
-    }
-    });
-    });
-    
-    </script>
 </body>
 
 </html>

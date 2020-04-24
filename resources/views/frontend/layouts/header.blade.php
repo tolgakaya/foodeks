@@ -96,7 +96,7 @@
 
                         @guest
                         <li><a href="#0" data-toggle="modal" data-target="#login_2">Login</a></li>
-                        <li><a href="#0" data-toggle="modal" data-target="#register">Register</a></li>
+                        <li><a href="{{route('register')}}">Register</a></li>
                         @endguest
                         @auth
                         <li class="dropdown" style=" margin-right: 60px;">
