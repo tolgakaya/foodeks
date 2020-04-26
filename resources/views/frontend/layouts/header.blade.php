@@ -4,10 +4,10 @@
         <div class="row">
             <div class="col--md-3 col-sm-3 col-xs-3">
                 <a href="{{route('home')}}" id="logo">
-                    <img src="{{asset('img/logo.png')}}" width="190" height="23" alt="" data-retina="true"
+                    <img src="{{asset('frontend/img/logo.png')}}" width="190" height="23" alt="" data-retina="true"
                         class="hidden-xs">
-                    <img src="{{asset('img/logo_mobile.png')}}" width="59" height="23" alt="" data-retina="true"
-                        class="hidden-lg hidden-md hidden-sm">
+                    <img src="{{asset('frontend/img/logo_mobile.png')}}" width="59" height="23" alt=""
+                        data-retina="true" class="hidden-lg hidden-md hidden-sm">
                 </a>
             </div>
             <nav class="col--md-9 col-sm-9 col-xs-9">
@@ -15,7 +15,7 @@
                         mobile</span></a>
                 <div class="main-menu">
                     <div id="header_menu">
-                        <img src="{{asset('img/logo.png')}}" width="190" height="23" alt="" data-retina="true">
+                        <img src="{{asset('frontend/img/logo.png')}}" width="190" height="23" alt="" data-retina="true">
                     </div>
                     <a href="#" class="open_close" id="close_in"><i class="icon_close"></i></a>
                     <ul>

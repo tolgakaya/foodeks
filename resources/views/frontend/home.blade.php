@@ -20,8 +20,9 @@
             </form>
         </div><!-- End sub_content -->
     </div>
-    <img src="img/video_fix.png" alt="" class="header-video--media" data-video-src="video/intro"
-        data-teaser-source="video/intro" data-provider="Vimeo" data-video-width="1920" data-video-height="960">
+    <img src="{{asset('frontend/img/video_fix.png')}}" alt="" class="header-video--media"
+        data-video-src="{{asset('frontend/video/intro')}}" data-teaser-source="{{asset('frontend/video/intro')}}"
+        data-provider="Vimeo" data-video-width="1920" data-video-height="960">
     <div id="count" class="hidden-xs">
         <ul>
             <li><span class="number">2650</span> Restaurant</li>
@@ -254,8 +255,8 @@
     </div><!-- End container -->
 </div><!-- End hight_light -->
 
-<section class="parallax-window" data-parallax="scroll" data-image-src="img/bg_office.jpg" data-natural-width="1200"
-    data-natural-height="600">
+<section class="parallax-window" data-parallax="scroll" data-image-src="{{asset('frontend/img/bg_office.jpg')}}"
+    data-natural-width="1200" data-natural-height="600">
     <div class="parallax-content">
         <div class="sub_content">
             <i class="icon_mug"></i>
@@ -304,7 +305,7 @@
 @section('specialscript')
 
 <!-- SPECIFIC SCRIPTS -->
-<script src="js/video_header.js"></script>
+<script src="{{asset('frontend/js/video_header.js')}}"></script>
 <script>
     $(document).ready(function () {
     'use strict';

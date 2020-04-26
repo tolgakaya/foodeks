@@ -37,14 +37,14 @@
     <link href="css/pop_up.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet"> --}}
 
-    <link href="{{asset('css/base.css')}}" rel="stylesheet">
+    <link href="{{asset('frontend/css/base.css')}}" rel="stylesheet">
 
 
     {{-- <link href="css/skins/square/grey.css" rel="stylesheet">
     <link href="css/ion.rangeSlider.css" rel="stylesheet">
     <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet"> --}}
     <!-- Modernizr -->
-    <script src="{{asset('js/modernizr.js')}}"></script>
+    <script src="{{asset('frontend/js/modernizr.js')}}"></script>
     @yield('extracss')
 
     <!--[if lt IE 9]>
@@ -124,10 +124,10 @@
     </div><!-- End modal -->
 
     <!-- COMMON SCRIPTS -->
-    <script src="{{asset('js/jquery-2.2.4.min.js')}}"></script>
-    <script src="{{asset('js/common_scripts_min.js')}}"></script>
-    <script src="{{asset('js/functions.js')}}"></script>
-    <script src="{{asset('assets/validate.js')}}"></script>
+    <script src="{{asset('frontend/js/jquery-2.2.4.min.js')}}"></script>
+    <script src="{{asset('frontend/js/common_scripts_min.js')}}"></script>
+    <script src="{{asset('frontend/js/functions.js')}}"></script>
+    <script src="{{asset('frontend/assets/validate.js')}}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
                     headers: {
@@ -145,8 +145,8 @@
                     url:"{{ route('login') }}",
                     data:{email:email, password:password},
                     success:function(data){
-                        console.log(data.message);
-                        // location.reload(true);
+                        // console.log(data.message);
+                        location.reload(true);
                         },
                     error:function(data){
                if(data.responseJSON.errors.email) {

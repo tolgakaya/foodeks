@@ -66,6 +66,7 @@ Auth::routes();
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('dashboard', 'AdminController@index')->name('dashboard');
+    // Route::get('dashboard', 'AdminController@index')->name('dashboard');
 });
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
