@@ -137,6 +137,7 @@
             <!--End tools -->
 
             @if ($viewType=='list')
+            @foreach($restaurants as $restaurant )
             <div class="strip_list wow fadeIn" data-wow-delay="0.1s">
                 <div class="ribbon_1">
                     Popular
@@ -145,7 +146,7 @@
                     <div class="col-md-9 col-sm-9">
                         <div class="desc">
                             <div class="thumb_strip">
-                                <a href="{{route('restaurants.show','1')}}"><img
+                                <a href="{{route('restaurants.show',[$restaurant->id])}}"><img
                                         src="{{asset('img/thumb_restaurant.jpg')}}" alt=""></a>
                             </div>
                             <div class="rating">
@@ -153,13 +154,15 @@
                                     class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
                                 (<small><a href="#0">98 reviews</a></small>)
                             </div>
-                            <h3>Taco Mexican</h3>
+                            <h3>{{$restaurant->name}}</h3>
                             <div class="type">
                                 Mexican / American
                             </div>
                             <div class="location">
-                                135 Newtownards Road, Belfast, BT4. <span class="opening">Opens at 17:00.</span>
-                                Minimum order: $15
+                                {{-- 135 Newtownards Road, Belfast, BT4. <span class="opening">Opens at 17:00.</span>
+                                Minimum order: $15 --}}
+                                {{$restaurant->description}} <span class="opening">{{round($restaurant->distance, 2)}}
+                                    km</span>
                             </div>
                             <ul>
                                 <li>Take away<i class="icon_check_alt2 ok"></i></li>
@@ -170,171 +173,21 @@
                     <div class="col-md-3 col-sm-3">
                         <div class="go_to">
                             <div>
-                                <a href="{{route('restaurants.show','1')}}" class="btn_1">View Menu</a>
+                                <a href="{{route('restaurants.menu',['restaurant'=>$restaurant->id])}}"
+                                    class="btn_1">View Menu</a>
                             </div>
                         </div>
                     </div>
                 </div><!-- End row-->
             </div><!-- End strip_list-->
+            @endforeach
 
-            <div class="strip_list wow fadeIn" data-wow-delay="0.2s">
-                <div class="ribbon_1">
-                    Popular
-                </div>
-                <div class="row">
-                    <div class="col-md-9 col-sm-9">
-                        <div class="desc">
-                            <div class="thumb_strip">
-                                <a href="{{route('restaurants.show','1')}}"><img
-                                        src="{{asset('img/thumb_restaurant_2.jpg')}}" alt=""></a>
-                            </div>
-                            <div class="rating">
-                                <i class="icon_star voted"></i><i class="icon_star voted"></i><i
-                                    class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
-                                (<small><a href="#0">98 reviews</a></small>)
-                            </div>
-                            <h3>Naples Pizza</h3>
-                            <div class="type">
-                                Italian / Pizza
-                            </div>
-                            <div class="location">
-                                135 Newtownards Road, Belfast, BT4. <span class="opening">Opens at 17:00.</span>
-                                Minimum order: $15
-                            </div>
-                            <ul>
-                                <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                                <li>Delivery<i class="icon_check_alt2 ok"></i></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-3">
-                        <div class="go_to">
-                            <div>
-                                <a href="{{route('restaurants.show','1')}}" class="btn_1">View Menu</a>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- End row-->
-            </div><!-- End strip_list-->
-            @else
-            <div class="row">
-                <div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.1s">
-                    <a class="strip_list grid" href="{{route('restaurants.show','1')}}>
-                        <div class=" ribbon_1">Popular</div>
-                <div class="desc">
-                    <div class="thumb_strip">
-                        <img src="{{asset('img/thumb_restaurant.jpg')}}" alt="">
-                    </div>
-                    <div class="rating">
-                        <i class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star voted"></i><i
-                            class="icon_star voted"></i><i class="icon_star"></i>
-                    </div>
-                    <h3>Taco Mexican</h3>
-                    <div class="type">
-                        Mexican / American
-                    </div>
-                    <div class="location">
-                        135 Newtownards Road, Belfast, BT4. <br><span class="opening">Opens at 17:00.</span>
-                        Minimum order:
-                        $15
-                    </div>
-                    <ul>
-                        <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                        <li>Delivery<i class="icon_check_alt2 ok"></i></li>
-                    </ul>
-                </div>
-                </a><!-- End strip_list-->
-            </div><!-- End col-md-6-->
-            <div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                <a class="strip_list grid" href="{{route('restaurants.show','1')}}">
-                    <div class="ribbon_1">Popular</div>
-                    <div class="desc">
-                        <div class="thumb_strip">
-                            <img src="{{asset('img/thumb_restaurant_2.jpg')}}" alt="">
-                        </div>
-                        <div class="rating">
-                            <i class="icon_star voted"></i><i class="icon_star voted"></i><i
-                                class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
-                        </div>
-                        <h3>Naples Pizza</h3>
-                        <div class="type">
-                            Italian / Pizza
-                        </div>
-                        <div class="location">
-                            135 Newtownards Road, Belfast, BT4. <br><span class="opening">Opens at 17:00.</span>
-                            Minimum order:
-                            $15
-                        </div>
-                        <ul>
-                            <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                            <li>Delivery<i class="icon_check_alt2 ok"></i></li>
-                        </ul>
-                    </div>
-                </a><!-- End strip_list-->
-            </div><!-- End col-md-6-->
-        </div><!-- End row-->
+            @endif
 
-        <div class="row">
-            <div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.3s">
-                <a class="strip_list grid" href="{{route('restaurants.show','1')}}">
-                    <div class="ribbon_1">Popular</div>
-                    <div class="desc">
-                        <div class="thumb_strip">
-                            <img src="{{asset('img/thumb_restaurant_3.jpg')}}" alt="">
-                        </div>
-                        <div class="rating">
-                            <i class="icon_star voted"></i><i class="icon_star voted"></i><i
-                                class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
-                        </div>
-                        <h3>Japan Food</h3>
-                        <div class="type">
-                            Sushi / Japanese
-                        </div>
-                        <div class="location">
-                            135 Newtownards Road, Belfast, BT4. <br><span class="opening">Opens at 17:00.</span>
-                            Minimum order:
-                            $15
-                        </div>
-                        <ul>
-                            <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                            <li>Delivery<i class="icon_check_alt2 ok"></i></li>
-                        </ul>
-                    </div>
-                </a><!-- End strip_list-->
-            </div><!-- End col-md-6-->
-            <div class="col-md-6 col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                <a class="strip_list grid" href="{{route('restaurants.show','1')}}">
-                    <div class="desc">
-                        <div class="thumb_strip">
-                            <img src="{{asset('img/thumb_restaurant_4.jpg')}}" alt="">
-                        </div>
-                        <div class="rating">
-                            <i class="icon_star voted"></i><i class="icon_star voted"></i><i
-                                class="icon_star voted"></i><i class="icon_star voted"></i><i class="icon_star"></i>
-                        </div>
-                        <h3>Sushi Gold</h3>
-                        <div class="type">
-                            Sushi / Japanese
-                        </div>
-                        <div class="location">
-                            135 Newtownards Road, Belfast, BT4. <br><span class="opening">Opens at 17:00.</span>
-                            Minimum order:
-                            $15
-                        </div>
-                        <ul>
-                            <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                            <li>Delivery<i class="icon_check_alt2 ok"></i></li>
-                        </ul>
-                    </div>
-                </a><!-- End strip_list-->
-            </div><!-- End col-md-6-->
-        </div><!-- End row-->
-        @endif
+            <a href="#0" class="load_more_bt wow fadeIn" data-wow-delay="0.2s">Load more...</a>
+        </div><!-- End col-md-9-->
 
-        <a href="#0" class="load_more_bt wow fadeIn" data-wow-delay="0.2s">Load more...</a>
-    </div><!-- End col-md-9-->
-
-</div><!-- End row -->
+    </div><!-- End row -->
 </div><!-- End container -->
 <!-- End Content =============================================== -->
 
@@ -355,11 +208,11 @@
 <script>
     $('#cat_nav').mobileMenu();
 </script>
-<script src="http://maps.googleapis.com/maps/api/js"></script>
+{{-- <script src="http://maps.googleapis.com/maps/api/js"></script>
 <script src="{{asset('js/map.js')}}"></script>
-<script src="{{asset('js/infobox.js')}}"></script>
-<script src="{{asset('js/ion.rangeSlider.js')}}"></script>
-<script>
+<script src="{{asset('js/infobox.js')}}"></script> --}}
+{{-- <script src="{{asset('js/ion.rangeSlider.js')}}"></script> --}}
+{{-- <script>
     $(function () {
         			'use strict';
         			$("#range").ionRangeSlider({
@@ -375,5 +228,23 @@
         				grid: true
         			});
         		});
+</script> --}}
+
+<!--GMap Plugin -->
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyDudjGDbcq3lKGFqFsHdGWZNgWOsNX4gjs"></script>
+<script src="{{asset('frontend/js/restaurants.js')}}"></script>
+<script>
+    $( document ).ready(function() {
+                    // console.log( "document loaded" );
+                    // initializeMusteriler();
+                });
+             $('#collapseMap').on('shown.bs.collapse', function (e) {
+            initializeMusteriler();
+            
+        });
+                // $( window ).on( "load", function() {
+                //     console.log( "window loaded" );
+                //     initializeMusteriler();
+                // });
 </script>
 @endsection

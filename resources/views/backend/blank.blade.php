@@ -20,5 +20,10 @@
         </div>
     </div>
 </div>
-<div style="height:80vh"></div>
+<div style="height:80vh">
+    <form action="{{route('admin.sms')}}" method="post">
+        @csrf
+        <button class="btn btn-block btn-primary">Send</button>
+    </form>
+</div>
 @endsection

@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view(env('THEME') . '.home');
+})->name('home');
+
+Route::get('/', function () {
     return view('frontend.home');
 })->name('home');
 
@@ -29,11 +33,10 @@ Route::get('contact', function () {
     return view('frontend.contact');
 })->name('contact');
 
-Route::get('/restaurants/{viewType?}', 'RestaurantController@index')->name('restaurants.index');
 
-Route::get('restaurants/show/{restaurant?}', function () {
-    return view('frontend.restaurants.show');
-})->name('restaurants.show');
+// Route::get('restaurants/show/{restaurant?}', function () {
+//     return view('frontend.restaurants.show');
+// })->name('restaurants.show');
 
 Route::get('restaurants/test', function () {
     return view('frontend.restaurants.test');
@@ -54,25 +57,85 @@ Route::get('checkouts/result', function () {
 Route::get('reservation', function () {
     return view('frontend.reservation.create');
 })->name('reservation.create');
+Route::get('modal', function () {
+    return view('backend.media.modal');
+})->name('modal.create');
 Auth::routes();
-
-// Route::get('/admin/dashboard', function () {
-//     return view('admins.dashboard');
-// })->name('admin')->middleware('admin');
-
-// Route::get('/customer/dashboard', function () {
-//     return view('frontend.customers.dashboard');
-// })->name('customer')->middleware('customer');
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('dashboard', 'AdminController@index')->name('dashboard');
-    // Route::get('dashboard', 'AdminController@index')->name('dashboard');
+    Route::post('sms', 'AdminController@nida')->name('sms');
+    Route::get('restaurants', 'RestaurantController@index')->name('restaurant.index');
+    Route::get('restaurants/create', 'RestaurantController@create')->name('restaurant.create');
+    Route::post('restaurants', 'RestaurantController@store')->name('restaurant.store');
+    Route::get('restaurants/edit/{restaurant}', 'RestaurantController@edit')->name('restaurant.edit');
+    Route::post('restaurants/update/{restaurant}', 'RestaurantController@update')->name('restaurant.update');
+    Route::get('restaurants/distances', 'RestaurantController@distances')->name('restaurant.distances');
+    Route::get('restaurants/users/{restaurant}', 'RestaurantController@users')->name('restaurant.users');
+    Route::get('restaurants/staffs/{restaurant}', 'RestaurantController@staffs')->name('restaurant.staffs');
+    Route::post('restaurants/users/{restaurant}', 'RestaurantController@assign')->name('restaurant.assign');
+    Route::post('restaurants/users/unsign/{restaurant}', 'RestaurantController@unsign')->name('restaurant.unsign');
+
+
+
+    Route::get('categories', 'CategoryController@index')->name('categories.index');
+    Route::get('categories/create', 'CategoryController@create')->name('categories.create');
+    Route::post('categories', 'CategoryController@store')->name('categories.store');
+    Route::get('categories/edit/{category}', 'CategoryController@edit')->name('categories.edit');
+    Route::post('categories/update/{category}', 'CategoryController@update')->name('categories.update');
+    Route::get('categories/delete/{category}', 'CategoryController@destroy')->name('categories.delete');
+
+    Route::get('meals', 'MealController@index')->name('meals.index');
+    Route::get('meals/category/{category}', 'MealController@modal')->name('meals.category.index');
+    Route::get('meals/create', 'MealController@create')->name('meals.create');
+    Route::post('meals', 'MealController@store')->name('meals.store');
+    Route::post('meals/media/create', 'MealController@MediaCreate')->name('meals.media.store');
+    Route::post('meals/media/update', 'MealController@MediaUpdate')->name('meals.media.update');
+    Route::get('meals/edit/{meal}', 'MealController@edit')->name('meals.edit');
+    Route::get('meals/delete/{meal}', 'MealController@destroy')->name('meals.destroy');
+    Route::get('meals/sil/{meal}', 'MealController@sil')->name('meals.sil');
+    Route::post('meals/update/{meal}', 'MealController@update')->name('meals.update');
+    Route::post('meals/media/delete', 'MealController@destroy')->name('meals.media.delete');
+
+    Route::get('meals/details/{meal}', 'MealController@details')->name('meals.details');
+    Route::post('meals/details/option/{meal}', 'MealController@addOption')->name('meals.details.option');
+    Route::post('meals/details/extra/{meal}', 'MealController@addExtra')->name('meals.details.extra');
+
+    Route::get('menus/list/', 'MenuController@index')->name('menus.index');
+    Route::get('menus/sil/{menu}', 'MenuController@sil')->name('menus.sil');
+    Route::get('menus/edit/{menu}', 'MenuController@edit')->name('menus.edit');
+    Route::get('menus/details/{menu}', 'MenuController@details')->name('menus.details');
+    Route::post('menus/details/{menu}', 'MenuController@mealAdd')->name('menus.details.add');
+    Route::post('menus/details/delete/{menu}/', 'MenuController@mealDelete')->name('menus.details.delete');
+
+    Route::post('menus/update/{menu}', 'MenuController@update')->name('menus.update');
+    Route::get('menus/create', 'MenuController@create')->name('menus.create');
+    Route::post('menus', 'MenuController@store')->name('menus.store');
+
+    Route::get('users/create/', 'UserController@create')->name('users.create');
+    Route::post('users', 'UserController@store')->name('users.store');
+    Route::get('users', 'UserController@index')->name('users.index');
+    Route::get('users/delete/{user}', 'UserController@destroy')->name('users.delete');
+
+    Route::get('library/{chcbox?}', 'MediaController@index')->name('media.index');
+    Route::get('library/detail/{filename}', 'MediaController@show')->name('media.show');
+    Route::get('more', 'MediaController@more')->name('media.more');
+    Route::post('library', 'MediaController@store')->name('media.store');
+    Route::get('library/create', 'MediaController@create')->name('media.create');
+    Route::post('library/delete', 'MediaController@destroy')->name('media.delete');
+    Route::post('library/delete/mass', 'MediaController@destroymass')->name('media.delete.mass');
+    Route::post('library/search/', 'MediaController@search')->name('media.search');
 });
+
+Route::get('api/restaurant/{restaurant}', 'Api\RestaurantController@show');
+Route::get('api/restaurants/', 'Api\RestaurantController@index');
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('dashboard', 'CustomerController@index')->name('dashboard');
     Route::get('create', 'CustomerController@create')->name('create');
 });
 
-
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/restaurants/{viewType?}', 'RestaurantController@index')->name('restaurants.index');
+Route::post('/restaurant/search', 'RestaurantController@index')->name('searchresult');
+Route::get('restaurants/{restaurant}', 'RestaurantController@show')->name('restaurants.show');
+Route::get('restaurants/menu/{restaurant}', 'RestaurantController@menu')->name('restaurants.menu');

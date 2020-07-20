@@ -8,10 +8,14 @@
             <p>
                 Ridiculus sociosqu cursus neque cursus curae ante scelerisque vehicula.
             </p>
-            <form method="post" action="list_page.html">
+            <form method="post" action="{{route('searchresult')}}">
                 <div id="custom-search-input">
                     <div class="input-group">
-                        <input type="text" class=" search-query" placeholder="Your Address or postal code">
+                        @csrf
+                        <input type="text" class=" search-query map-input" placeholder="Your Address or postal code"
+                            id="address-input" name="address_address">
+                        <input type="hidden" name="address_latitude" id="address-latitude" value="0" />
+                        <input type="hidden" name="address_longitude" id="address-longitude" value="0" />
                         <span class="input-group-btn">
                             <input type="submit" class="btn_search" value="submit">
                         </span>
@@ -31,6 +35,9 @@
         </ul>
     </div>
 </section><!-- End Header video -->
+<div id="address-map-container" style="width:100%;height:400px; ">
+    <div style="width: 100%; height: 100%" id="address-map"></div>
+</div>
 <!-- End SubHeader ============================================ -->
 @endsection
 
@@ -105,7 +112,7 @@
                     <div class="ribbon_1">Popular</div>
                     <div class="desc">
                         <div class="thumb_strip">
-                            <img src="img/thumb_restaurant.jpg" alt="">
+                            <img src="{{asset('frontend/img/thumb_restaurant.jpg')}}" alt="">
                         </div>
                         <div class="rating">
                             <i class="icon_star voted"></i><i class="icon_star voted"></i><i
@@ -128,7 +135,7 @@
                     <div class="ribbon_1">Popular</div>
                     <div class="desc">
                         <div class="thumb_strip">
-                            <img src="img/thumb_restaurant_2.jpg" alt="">
+                            <img src="{{asset('frontend/img/thumb_restaurant_2.jpg')}}" alt="">
                         </div>
                         <div class="rating">
                             <i class="icon_star voted"></i><i class="icon_star voted"></i><i
@@ -151,7 +158,7 @@
                     <div class="ribbon_1">Popular</div>
                     <div class="desc">
                         <div class="thumb_strip">
-                            <img src="img/thumb_restaurant_3.jpg" alt="">
+                            <img src="{{asset('frontend/img/thumb_restaurant_3.jpg')}}" alt="">
                         </div>
                         <div class="rating">
                             <i class="icon_star voted"></i><i class="icon_star voted"></i><i
@@ -303,6 +310,10 @@
 @endsection
 
 @section('specialscript')
+<script
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+    async defer></script>
+<script src="{{asset('frontend/js/mapInput.js')}}"></script>
 
 <!-- SPECIFIC SCRIPTS -->
 <script src="{{asset('frontend/js/video_header.js')}}"></script>

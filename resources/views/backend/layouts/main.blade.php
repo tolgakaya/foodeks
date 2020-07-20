@@ -28,6 +28,7 @@
     <!-- Custom scroll bar css-->
     <link href="{{asset('backend/plugins/customscroll/jquery.mCustomScrollbar.css')}}" rel="stylesheet" />
 
+
     <!-- Sidemenu Css -->
     <link href="{{asset('backend/plugins/toggle-sidebar/css/sidemenu.css')}}" rel="stylesheet">
     @yield('extracss')
@@ -49,13 +50,14 @@
                         <li class="slide">
                             <a class="side-menu__item active" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-home"></i><span
-                                    class="side-menu__label">Dashboard</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__label">Restaurant</span><i
+                                    class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a class="slide-item" href="index-2.html">Retail Sales Dashboard</a>
+                                    <a class="slide-item" href="{{route('admin.restaurant.index')}}">Restaurants</a>
                                 </li>
                                 <li>
-                                    <a class="slide-item" href="dashboard-social.html">Social Dashboard</a>
+                                    <a class="slide-item" href="{{route('admin.restaurant.create')}}">New Restaurant</a>
                                 </li>
                                 <li>
                                     <a class="slide-item" href="dashboard-marketing.html">Marketing Dashboard</a>
@@ -72,14 +74,14 @@
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Apps</span><i
+                                    class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Media</span><i
                                     class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="cards.html" class="slide-item">Cards</a>
+                                    <a href="{{route('admin.media.index')}}" class="slide-item">Media Library</a>
                                 </li>
                                 <li>
-                                    <a href="dragable-cards.html" class="slide-item">Dragable Cards</a>
+                                    <a href="{{route('admin.media.create')}}" class="slide-item">Add Media</a>
                                 </li>
                                 <li>
                                     <a href="widgets.html" class="slide-item">Widgets</a>
@@ -107,39 +109,40 @@
 
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-edit"></i><span class="side-menu__label">Forms</span><i
-                                    class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__icon fe fe-edit"></i><span class="side-menu__label">Menü
+                                    İşlemleri</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="forms.html" class="slide-item">Basic Forms</a>
+                                    <a href="{{route('admin.categories.create')}}" class="slide-item">Yeni Kategori</a>
                                 </li>
                                 <li>
-                                    <a href="form-select2.html" class="slide-item">Forms Select2</a>
+                                    <a href="{{route('admin.categories.index')}}" class="slide-item">Kategori
+                                        Listesi</a>
                                 </li>
                                 <li>
-                                    <a href="file-uploads.html" class="slide-item">Forms Uploads</a>
+                                    <a href="{{route('admin.meals.create')}}" class="slide-item">Yeni F&B</a>
                                 </li>
                                 <li>
-                                    <a href="form-wizard.html" class="slide-item">Form wizard</a>
+                                    <a href="{{route('admin.meals.index')}}" class="slide-item">F&B Listesi</a>
                                 </li>
                                 <li>
-                                    <a href="datepicker.html" class="slide-item">Form Datepicker</a>
+                                    <a href="{{route('admin.menus.create')}}" class="slide-item">Yeni Menü</a>
                                 </li>
                                 <li>
-                                    <a href="form-switches.html" class="slide-item">Form switches</a>
+                                    <a href="{{route('admin.menus.index')}}" class="slide-item">Menü Listesi</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-map"></i><span class="side-menu__label">Maps</span><i
-                                    class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__icon fe fe-map"></i><span
+                                    class="side-menu__label">Personel</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="maps.html" class="slide-item">Google Maps</a>
+                                    <a href="{{route('admin.users.index')}}" class="slide-item">Personel Listesi</a>
                                 </li>
                                 <li>
-                                    <a href="vector-map.html" class="slide-item">Vector Map</a>
+                                    <a href="{{route('admin.users.create')}}" class="slide-item">Personel Ekle</a>
                                 </li>
                             </ul>
                         </li>
@@ -549,7 +552,7 @@
                                                         alt="Image placeholder"
                                                         src="{{asset('backend/img/faces/female/32.jpg')}}"></span>
                                                 <div class="media-body ml-2 d-none d-lg-block">
-                                                    <span class="mb-0 ">Cori Stover</span>
+                                                    <span class="mb-0 ">{{Auth::user()->name}}</span>
                                                 </div>
                                             </div>
                                         </a>
@@ -627,6 +630,35 @@
 
     <!-- Ansta JS -->
     <script src="{{asset('backend/js/custom.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+                            function Delete(menid, mealid) {
+                                console.log("menuid "+menid );
+                                var ans = confirm("Kaydı silmek istiyor musunuz?");
+                                if (ans) {
+            
+                                var silinecek = { meal:mealid};
+                                                   $.ajax({
+                                    headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                                    },
+                                url: "/admin/menus/details/delete/" + menid+"/"+mealid,
+                                data: JSON.stringify(silinecek),
+                                type: "GET",
+                                contentType: "application/json;charset=UTF-8",
+                                dataType: "json",
+                                success: function (result) {
+                                console.log(result);
+                                },
+                                error: function (errormessage) {
+                                alert(errormessage.responseText);
+                                }
+                                });
+                                }
+                                }});
+    </script>
+
+
     @yield('extrascript')
 </body>
 

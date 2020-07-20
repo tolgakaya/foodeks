@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Restaurant;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Restaurant;
+use App\Category;
 
 class RestaurantController extends Controller
 {
@@ -12,30 +14,27 @@ class RestaurantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($viewType = 'list')
+    public function index(Request $request, $viewType = 'list')
     {
-        return view('frontend.restaurants.index', compact('viewType'));
-    }
+        $user = auth()->user;
+        dd($user);
+        $latitude = $request->input('address_latitude');
+        $longitude = $request->input('address_longitude');
+        // dd($latitude, $longitude);
+        // $restaurants = Restaurant::all();
+        // $latitude = 36.896893;
+        // $longitude = 30.713324;
+        $restaurants = Restaurant::distance($latitude, $longitude)->orderBy('distance', 'asc')->get();
+        // $restaurants = $query->orderBy('distance', 'asc')->get();
+        // dd($restaurants);
+        //belli bir yarı çaptakileri arama
+        // $restaurants = Restaurant::geofence($latitude, $longitude, 0, 5)->orderBy('distance', 'ASC')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('frontend.restaurants.index', compact('restaurants', 'viewType'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function show(Restaurant $restaurant)
     {
-        //
+        return view('frontend.restaurants.show', compact('restaurant'));
     }
 
     /**
@@ -44,42 +43,13 @@ class RestaurantController extends Controller
      * @param  \App\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function show(Restaurant $restaurant)
+    public function menu(Restaurant $restaurant)
     {
-        //
-    }
+        $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Restaurant  $restaurant
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Restaurant $restaurant)
-    {
-        //
-    }
+        $meals = $menu->meals()->get()->groupBy('category.category');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Restaurant  $restaurant
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Restaurant $restaurant)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Restaurant  $restaurant
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Restaurant $restaurant)
-    {
-        //
+        // dd($meals);
+        return view('frontend.restaurants.menu', compact('menu', 'meals'));
     }
 }

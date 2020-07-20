@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Helpers\RoleConstant;
 
 class User extends Authenticatable
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'adi', 'email', 'password', 'mobile', 'role', 'restaurant_id'
     ];
 
     /**
@@ -36,4 +37,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
+    //depricated(kullanmıyoruz)
+    public function menus()
+    {
+        return $this->hasManyThrough(Menu::class, Restaurant::class);
+    }
+    public function UserRole()
+    {
+        return RoleConstant::UserRole($this->role);
+    }
+    // private $myrole  = RoleConstant::UserRole($this->role);
+    public function getUserRoleAttribute()
+    {
+        return RoleConstant::UserRole($this->role);
+    }
+    protected $appends = ['user_role'];
 }

@@ -20,7 +20,7 @@ class Admin
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-        if (Auth::user()->role == RoleConstant::ROLE_ADMIN) {
+        if (Auth::user()->role == RoleConstant::ROLE_ADMIN || Auth::user()->role == RoleConstant::ROLE_MANAGER) {
             return $next($request);
         } else {
             return redirect()->route('login');

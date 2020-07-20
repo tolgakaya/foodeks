@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Restaurant::class, function (Faker $faker) {
     return [
-        //
+        'name' => $faker->city,
+        'description' => $faker->text(100),
     ];
 });
