@@ -139,3 +139,8 @@ Route::get('/restaurants/{viewType?}', 'RestaurantController@index')->name('rest
 Route::post('/restaurant/search', 'RestaurantController@index')->name('searchresult');
 Route::get('restaurants/{restaurant}', 'RestaurantController@show')->name('restaurants.show');
 Route::get('restaurants/menu/{restaurant}', 'RestaurantController@menu')->name('restaurants.menu');
+
+Route::get('/cart', 'CartController@index')->name('cart.index');
+Route::post('/cart/add', 'CartController@store')->name('cart.add');
+Route::post('/cart/update/rowid', 'CartController@update')->name('cart.update');
+Route::get('/cart/remove/rowid', 'CartController@destroy')->name('cart.remove');

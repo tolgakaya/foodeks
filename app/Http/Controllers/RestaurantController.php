@@ -16,8 +16,6 @@ class RestaurantController extends Controller
      */
     public function index(Request $request, $viewType = 'list')
     {
-        $user = auth()->user;
-        dd($user);
         $latitude = $request->input('address_latitude');
         $longitude = $request->input('address_longitude');
         // dd($latitude, $longitude);

@@ -1,9 +1,9 @@
 @extends('frontend.layouts.layout')
 @section('extracss')
 <!-- Radio and check inputs -->
-<link href="{{asset('css/skins/square/grey.css')}}" rel="stylesheet">
-<link href="{{asset('css/ion.rangeSlider.css')}}" rel="stylesheet">
-<link href="{{asset('css/ion.rangeSlider.skinFlat.css')}}" rel="stylesheet">
+<link href="{{asset('frontend/css/skins/square/grey.css')}}" rel="stylesheet">
+<link href="{{asset('frontend/css/ion.rangeSlider.css')}}" rel="stylesheet">
+<link href="{{asset('frontend/css/ion.rangeSlider.skinFlat.css')}}" rel="stylesheet">
 @endsection
 
 @section('subheader')
@@ -92,6 +92,7 @@
                             </td>
                             <td>
                                 <strong>{{$m->pivot->fee}} TL</strong>
+                                <input type="hidden" id="fiyat{{$m->id}}" value="{{$m->pivot->fee}}">
                             </td>
 
                             <td class="options">
@@ -103,7 +104,7 @@
                                         <h5>Seçenekler</h5>
                                         @foreach ($m->options as $op)
                                         <label>
-                                            <input type="radio" value="{{$op->option}}" name="option"
+                                            <input type="radio" value="{{$op->id}}" name="option{{$m->id}}"
                                                 checked>{{$op->option}}
                                             <span>+ {{$op->fee}} TL</span>
                                         </label>
@@ -113,12 +114,14 @@
                                         <h5>Extralar</h5>
                                         @foreach ($m->extras as $ex)
                                         <label>
-                                            <input type="checkbox" value="">{{$ex->extra}} <span>+ {{$ex->fee}}
+                                            <input type="checkbox" value="{{$ex->id}}"
+                                                name="extra{{$m->id}}">{{$ex->extra}} <span>+
+                                                {{$ex->fee}}
                                                 TL</span>
                                         </label>
                                         @endforeach
                                         @endif
-                                        <a href="#0" class="add_to_basket">Add to cart</a>
+                                        <a id="{{$m->id}}" class="add_to_basket">Sepete Ekle</a>
                                     </div>
                                 </div>
                             </td>
@@ -195,11 +198,11 @@
 @endsection
 
 @section('specialscript')
-<script src="{{asset('js/cat_nav_mobile.js')}}"></script>
+<script src="{{asset('frontend/js/cat_nav_mobile.js')}}"></script>
 <script>
     $('#cat_nav').mobileMenu();
 </script>
-<script src="{{asset('js/theia-sticky-sidebar.js')}}"></script>
+<script src="{{asset('frontend/js/theia-sticky-sidebar.js')}}"></script>
 <script>
     jQuery('#sidebar').theiaStickySidebar({
     			additionalMarginTop: 80
@@ -216,5 +219,48 @@
     				window.location.hash = target;
     			});
     		});
+</script>
+<script>
+    $(document).ready(function () {
+  
+        $(".add_to_basket").click(function() {
+           var mealid=$(this).attr('id');
+           var fiyat=$("#fiyat"+mealid).val();
+           var idd="option"+mealid;
+           var optionid=$("input[name = " + idd+ "]:checked").val();
+
+           var exid="extra"+mealid;
+           var extras = [];
+            $.each($("input[name = " + exid+ "]:checked"), function(){
+            extras.push($(this).val());
+            console.log($(this).val());
+            });
+                    var mealModel = {
+                    mealid: mealid,
+                    fiyat:fiyat,
+                    miktar:1,
+                    optionid:optionid,
+                    extras:extras
+                    };
+                    $.ajax({
+                    headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    url: "/cart/add",
+                    data:JSON.stringify( mealModel),
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                    // var bosalt=$('#tekil'+silinecekMeal);
+                    // bosalt.empty();
+                    console.log(result);
+                    },
+                    error: function (errormessage) {
+                    alert(errormessage.responseText);
+                    }
+                    });
+        });
+});
 </script>
 @endsection
