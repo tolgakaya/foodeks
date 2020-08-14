@@ -211,6 +211,7 @@
 $('#optionModal').on('show.bs.modal', function(event) {
      var meal = $(event.relatedTarget).data('val');
     console.log('iliskiid' + meal);
+    $('#btnOptionSave').off('click');
     $('#btnOptionSave').click(function() {
         var fiyat = $('#optionFee').val();
         var secenek = $('#option').val();
@@ -257,6 +258,7 @@ $('#optionModal').on('show.bs.modal', function(event) {
 $('#extraModal').on('show.bs.modal', function(event) {
 var meal = $(event.relatedTarget).data('val');
 console.log('iliskiid' + meal);
+$('#btnExtraSave').off('click');
 $('#btnExtraSave').click(function() {
     console.log('tıkladım');
 var fiyat = $('#extraFee').val();

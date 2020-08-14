@@ -156,7 +156,7 @@
                             </div>
                             <h3>{{$restaurant->name}}</h3>
                             <div class="type">
-                                Mexican / American
+                                {{$restaurant->isAvailable()==true ? $restaurant->openCloseTimes()['close'].'a kadar sipariş verin' : 'Servis zamanı dışında'  }}
                             </div>
                             <div class="location">
                                 {{-- 135 Newtownards Road, Belfast, BT4. <span class="opening">Opens at 17:00.</span>
@@ -165,8 +165,10 @@
                                     km</span>
                             </div>
                             <ul>
-                                <li>Take away<i class="icon_check_alt2 ok"></i></li>
-                                <li>Delivery<i class="icon_check_alt2 no"></i></li>
+                                <li>Açılış {{$restaurant->openCloseTimes()['open']}}<i class="icon_check_alt2 ok"></i>
+                                </li>
+                                <li>Kapanış {{$restaurant->openCloseTimes()['close']}}<i class="icon_check_alt2 no"></i>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -174,7 +176,7 @@
                         <div class="go_to">
                             <div>
                                 <a href="{{route('restaurants.menu',['restaurant'=>$restaurant->id])}}"
-                                    class="btn_1">View Menu</a>
+                                    class="btn_1">Menüye Bakın</a>
                             </div>
                         </div>
                     </div>

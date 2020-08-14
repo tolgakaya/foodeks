@@ -51,6 +51,16 @@ class User extends Authenticatable
     {
         return RoleConstant::UserRole($this->role);
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
     // private $myrole  = RoleConstant::UserRole($this->role);
     public function getUserRoleAttribute()
     {

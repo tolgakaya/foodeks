@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\Category;
+use Darryldecode\Cart;
 
 class RestaurantController extends Controller
 {
@@ -46,8 +47,25 @@ class RestaurantController extends Controller
         $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
 
         $meals = $menu->meals()->get()->groupBy('category.category');
-
-        // dd($meals);
-        return view('frontend.restaurants.menu', compact('menu', 'meals'));
+        $cartItems = \Cart::getContent();
+        $total = 0;
+        $quantity = 0;
+        foreach ($cartItems as   $row) {
+            $base = $row->quantity * $row->price;
+            $quantity += $row->quantity;
+            $opfee = 0;
+            $extfee = 0;
+            if ($row->attributes['option'] !== null) {
+                $opfee = $row->attributes['option']->fee * $row->quantity;
+            }
+            if ($row->attributes['extras'] !== null) {
+                foreach ($row->attributes['extras']  as $ext) {
+                    $extfee += $ext->fee;
+                }
+            }
+            $total += $base + $extfee + $opfee;
+        }
+        // dd($total);
+        return view('frontend.restaurants.menu', compact('menu', 'meals', 'cartItems', 'total', 'quantity', 'restaurant'));
     }
 }

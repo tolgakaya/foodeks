@@ -19,21 +19,8 @@ class CartController extends Controller
     public function index()
     {
         // \Cart::clear();
-        $cart = \Cart::session(session('_token'))->getContent();
+        $cart = \Cart::getContent();
         return $cart;
-        // // dd(session('_token'));
-        // $m = Meal::find(1);
-        // $rowid =   floor(time() - 999999999);
-        // \Cart::session(session('_token'))->add(array(
-        //     'id' => $rowid,
-        //     'name' => $m->name,
-        //     'price' => 10,
-        //     'quantity' => 4,
-        //     'attributes' => array(),
-        //     'associatedModel' => $m
-        // ));
-        // $cartCollection = \Cart::getContent();
-        // dd($cartCollection);
     }
 
     /**
@@ -53,41 +40,70 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        // \Cart::session(sKCession('_token'))->clear();
-        //meal_id
-        //meal_adi
-        //fiyat//
-        //adet
-        //seçenek
-        //toplam
-        //genel toplam
-        //extralar=[adet, 'extra adi, fiyat]
-        // return $request->all();
+        // return  $request->$extras;
         $mealid =  $request->mealid;
         $optionid = $request->optionid;
+        $menuid = $request->menuid;
+
+        if (!\Cart::isEmpty()) {
+            $mevcutCart = \Cart::getContent();
+            $first = $mevcutCart->first();
+            $mevcutMenu = $first->attributes['menuid'];
+            if ($menuid !== $mevcutMenu) {
+                return ['message' => 'Aynı anda tek bir şubeden sipariş verebilirsiniz. Sepetinizi boşaltıp tekrar deneyiniz?', 'code' => 'mix'];
+            }
+        }
+
         $option = null;
+        $rowid = $mealid;
         if ($optionid !== null) {
             $option = Option::find($optionid);
+            $rowid = $mealid . $optionid;
         }
         $extras = null;;
+        $extrasids = "";
         if ($request->extras !== null) {
             $extras = Extra::whereIn('id', $request->extras)->get();
+            $extrasids = implode("-", $request->extras);
         }
+
+        $rowid .= $extrasids;
+
         $meal = Meal::find($mealid);
-        $id = Str::random(9);
-        \Cart::session(session('_token'))->add(array(
-            'id' => $mealid,
+
+        \Cart::add(array(
+            'id' => $rowid,
             'name' => $meal->name,
             'price' => $request->fiyat,
             'quantity' => $request->miktar,
-            'attributes' => array(['meal_id' => $meal->id, 'option' => $option, 'extras' => $extras]),
+            'attributes' => ['meal_id' => $meal->id, 'option' => $option, 'extras' => $extras, 'menuid' => $menuid],
             'associatedModel' => $meal
         ));
 
-        $cart = \Cart::session(session('_token'))->getContent();
-        return $cart;
+        $total = 0;
+        $cart = \Cart::getContent();
+        $quantity = 0;
+        foreach ($cart as   $row) {
+            $base = $row->quantity * $row->price;
+            $quantity += $row->quantity;
+            $opfee = 0;
+            $extfee = 0;
+            if ($row->attributes['option'] !== null) {
+                $opfee = $row->attributes['option']->fee * $row->quantity;
+            }
+
+
+            if ($row->attributes['extras'] !== null) {
+                foreach ($row->attributes['extras']  as $ext) {
+                    $extfee += $ext->fee;
+                }
+            }
+            $total += $base + $extfee + $opfee;
+        }
+        return ['cart' => $cart, 'total' => $total, 'quantity' => $quantity, 'code' => 'ok'];
     }
 
     /**
@@ -130,8 +146,31 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $rowid = $request->rowid;
+
+        \Cart::remove($rowid);
+        $total = 0;
+        $cart = \Cart::getContent();
+        $quantity = 0;
+        foreach ($cart as   $row) {
+            $base = $row->quantity * $row->price;
+            $quantity += $row->quantity;
+            $opfee = 0;
+            $extfee = 0;
+            if ($row->attributes['option'] !== null) {
+                $opfee = $row->attributes['option']->fee * $row->quantity;
+            }
+
+
+            if ($row->attributes['extras'] !== null) {
+                foreach ($row->attributes['extras']  as $ext) {
+                    $extfee += $ext->fee;
+                }
+            }
+            $total += $base + $extfee + $opfee;
+        }
+        return ['cart' => $cart, 'total' => $total, 'quantity' => $quantity];
     }
 }

@@ -4,6 +4,17 @@
 <link href="{{asset('frontend/css/skins/square/grey.css')}}" rel="stylesheet">
 <link href="{{asset('frontend/css/ion.rangeSlider.css')}}" rel="stylesheet">
 <link href="{{asset('frontend/css/ion.rangeSlider.skinFlat.css')}}" rel="stylesheet">
+<link href="{{asset('frontend/css/loader.css')}}" rel="stylesheet">
+<link href="{{asset('frontend/cart/css/style.css')}}" rel="stylesheet">
+<meta name="_token" content="{{csrf_token()}}" />
+<style>
+    .app_loader {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
 @endsection
 
 @section('subheader')
@@ -34,26 +45,28 @@
 <!-- Content ================================================== -->
 <div class="container margin_60_35">
     <div class="row">
-
-        <div class="col-md-3">
-            <p><a href="list_page.html" class="btn_side">Back to search</a></p>
-            <div class="box_style_1">
-                <ul id="cat_nav">
-                    @foreach ($meals as $category=> $meal)
-                    <li><a href="#{{$category}}" class="active">{{$category}} <span></span></a></li>
-                    @endforeach
-                </ul>
-            </div><!-- End box_style_1 -->
-
-            <div class="box_style_2 hidden-xs" id="help">
-                <i class="icon_lifesaver"></i>
-                <h4>Need <span>Help?</span></h4>
-                <a href="tel://004542344599" class="phone">+45 423 445 99</a>
-                <small>Monday to Friday 9.00am - 7.30pm</small>
+        <div id='loadergif' class='app_loader' style='display: none; z-index:9999'>
+            <div id="cooking">
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div id="area">
+                    <div id="sides">
+                        <div id="pan"></div>
+                        <div id="handle"></div>
+                    </div>
+                    <div id="pancake">
+                        <div id="pastry"></div>
+                    </div>
+                </div>
             </div>
-        </div><!-- End col-md-3 -->
-
-        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" value="{{$menu->id}}" id="menuid">
+        <div class="col-md-7">
             <div class="box_style_2" id="main_menu">
                 <h2 class="inner">Menu</h2>
 
@@ -95,6 +108,7 @@
                                 <input type="hidden" id="fiyat{{$m->id}}" value="{{$m->pivot->fee}}">
                             </td>
 
+                            @if (count($m->options) >0 && count($m->extras) >0)
                             <td class="options">
                                 <div class="dropdown dropdown-options">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i
@@ -111,20 +125,30 @@
                                         @endforeach
                                         @endif
                                         @if (count($m->extras) >0)
-                                        <h5>Extralar</h5>
+                                        <h5>Ekstralar</h5>
                                         @foreach ($m->extras as $ex)
                                         <label>
                                             <input type="checkbox" value="{{$ex->id}}"
-                                                name="extra{{$m->id}}">{{$ex->extra}} <span>+
+                                                name="extra{{$m->id}}">{{$ex->extra}}
+                                            <span>+
                                                 {{$ex->fee}}
                                                 TL</span>
                                         </label>
                                         @endforeach
                                         @endif
-                                        <a id="{{$m->id}}" class="add_to_basket">Sepete Ekle</a>
+                                        <a id="{{$m->id}}" href="#" class="add_to_basket">Sepete Ekle</a>
                                     </div>
                                 </div>
                             </td>
+                            @else
+                            <td class="options">
+                                <div class="dropdown dropdown-options">
+                                    <a id="{{$m->id}}" href="#" class="add_to_basket dropdown-toggle "
+                                        data-toggle="dropdown" aria-expanded="true"><i class="icon_plus_alt2"></i></a>
+                                </div>
+                            </td>
+
+                            @endif
 
 
                         </tr>
@@ -138,66 +162,182 @@
 
             </div><!-- End box_style_1 -->
         </div><!-- End col-md-6 -->
+        <!-- Image loader -->
 
-        <div class="col-md-3" id="sidebar">
+        <!-- Image loader -->
+        <div class="col-md-5" id="sidebar">
             <div class="theiaStickySidebar">
-                <div id="cart_box">
+                <div class="table table-responsive" id="cart_box">
                     <h3>Siparişiniz<i class="icon_cart_alt pull-right"></i></h3>
                     <table class="table table_summary">
-                        <tbody>
-                            <tr>
+                        <tbody id="cartbody" class="cartbody">
+                            @foreach($cartItems as $rowid => $row)
+                            <tr class="info">
                                 <td>
-                                    <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a>
-                                    <strong>1x</strong> Enchiladas
+                                    <a href="#0" class="remove_item" id="{{$row->id}}"><i
+                                            class="icon_minus_alt"></i></a>
+                                    <strong>{{$row->quantity}}X</strong>
+                                    @if($row->attributes['option']!==null)
+
+                                    <strong>{{$row->attributes['option']->option}}</strong>
+
+                                    @endif
+                                    {{$row->name}}
                                 </td>
                                 <td>
-                                    <strong class="pull-right">$11</strong>
+                                    @if($row->attributes['option']!==null)
+                                    <strong
+                                        class="pull-right">{{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}
+                                        TL</strong>
+                                    @else
+                                    <strong class="pull-right">{{$row->quantity * $row->price}} TL</strong>
+                                    @endif
                                 </td>
+
                             </tr>
+                            @foreach($row->attributes['extras'] as $key => $extra)
+                            <tr>
+
+                                <td class="pull-right">
+                                    {{-- <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a> --}}
+                                    <strong>Ekstra </strong>
+                                    {{$extra->extra}}
+                                </td>
+                                <td>
+                                    <strong class="pull-right">{{$extra->fee}}</strong>
+                                </td>
+
+                            </tr>
+                            @endforeach
+
+                            @endforeach
                         </tbody>
                     </table>
                     <hr>
-                    <div class="row" id="options_2">
+                    {{-- <div class="row" id="options_2">
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
                             <label><input type="radio" value="" checked name="option_2" class="icheck">Delivery</label>
                         </div>
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-6">
                             <label><input type="radio" value="" name="option_2" class="icheck">Take Away</label>
                         </div>
-                    </div><!-- Edn options 2 -->
-
+                    </div><!-- Edn options 2 --> --}}
                     <hr>
+
                     <table class="table table_summary">
                         <tbody>
                             <tr>
-                                <td>
-                                    Subtotal <span class="pull-right">$56</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Delivery fee <span class="pull-right">$10</span>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td class="total">
-                                    TOTAL <span class="pull-right">$66</span>
+                                    TOPLAM <span class="pull-right">{{$total}} TL</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <hr>
-                    <a class="btn_full" href="cart.html">Order now</a>
+
+                    <a class="btn_full"
+                        href="{{$restaurant->isAvailable()== true ? route('orders.create') : '#'}}">{{$restaurant->isAvailable()== false ? 'Servis Zamanı Dışında' : 'Sipariş Ver'}}</a>
                 </div><!-- End cart_box -->
             </div><!-- End theiaStickySidebar -->
         </div><!-- End col-md-3 -->
 
     </div><!-- End row -->
 </div><!-- End container -->
+<div class="cd-cart  js-cd-cart">
+    <a href="#0" class="cd-cart__trigger text-replace">
+        Cart
+        <ul class="cd-cart__count">
+            <!-- cart items count -->
+            <li id='quantity'>{{$quantity}}</li>
+            <li>0</li>
+        </ul> <!-- .cd-cart__count -->
+    </a>
+
+    <div class="cd-cart__content">
+        <div class="cd-cart__layout">
+            <header class="cd-cart__header">
+                <h3>Siparişiniz</h3><i class="icon_cart_alt"></i>
+
+            </header>
+
+            <div class="cd-cart__body">
+
+                <div class="table table-responsive" id="cart_box">
+
+                    <table class="table table_summary">
+                        <tbody id="cd_cartbody" class="cartbody">
+                            @foreach($cartItems as $rowid => $row)
+                            <tr class="info">
+                                <td>
+                                    <a href="#0" class="remove_item" id="{{$row->id}}"><i
+                                            class="icon_minus_alt"></i></a>
+                                    <strong>{{$row->quantity}}X</strong>
+                                    @if($row->attributes['option']!==null)
+
+                                    <strong>{{$row->attributes['option']->option}}</strong>
+
+                                    @endif
+                                    {{$row->name}}
+                                </td>
+                                <td>
+                                    @if($row->attributes['option']!==null)
+                                    <strong
+                                        class="pull-right">{{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}
+                                        TL</strong>
+                                    @else
+                                    <strong class="pull-right">{{$row->quantity * $row->price}} TL</strong>
+                                    @endif
+                                </td>
+
+                            </tr>
+                            @foreach($row->attributes['extras'] as $key => $extra)
+                            <tr>
+
+                                <td class="pull-right">
+                                    {{-- <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a> --}}
+                                    <strong>Ekstra </strong>
+                                    {{$extra->extra}}
+                                </td>
+                                <td>
+                                    <strong class="pull-right">{{$extra->fee}}</strong>
+                                </td>
+
+                            </tr>
+                            @endforeach
+
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <hr>
+                </div><!-- End cart_box -->
+            </div>
+
+            <footer class="cd-cart__footer">
+
+                <a href="{{$restaurant->isAvailable()== true ? route('orders.create') : '#'}}"
+                    class="cd-cart__checkout">
+                    <em>Toplam <span
+                            class="total">{{$restaurant->isAvailable()== false ? 'Servis Zamanı Dışında' : $total}}</span>
+                        <svg class="icon icon--sm" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor">
+                                <line stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="3" y1="12"
+                                    x2="21" y2="12" />
+                                <polyline stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    points="15,6 21,12 15,18 " />
+                            </g>
+                        </svg>
+                    </em>
+                </a>
+            </footer>
+        </div>
+    </div> <!-- .cd-cart__content -->
+</div> <!-- cd-cart -->
 <!-- End Content =============================================== -->
 @endsection
 
 @section('specialscript')
+<script src="{{asset('frontend/cart/js/util.js')}}"></script>
+<script src="{{asset('frontend/cart/js/main.js')}}"></script>
 <script src="{{asset('frontend/js/cat_nav_mobile.js')}}"></script>
 <script>
     $('#cat_nav').mobileMenu();
@@ -222,9 +362,101 @@
 </script>
 <script>
     $(document).ready(function () {
-  
-        $(".add_to_basket").click(function() {
+  $('body').on('click', '.remove_item', function () {
+        var silRow=$(this).attr('id');
+     
+        var ans = confirm("Kaydı silmek istiyor musunuz?");
+        if (ans) {
+        var mealModel = {
+        rowid: silRow
+        };
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                },
+                url: "/cart/delete",
+                data:JSON.stringify( mealModel),
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                beforeSend: function(){
+                        // Show image container
+                        $("#loadergif").show();
+                        },
+                success: function (result) {
+                console.log(result);
+                                    $('.cartbody').empty();
+                                    // $('#cd_cartbody').empty();
+                                    $('.total').empty();
+                                    var html = '';
+                                    var htmlTotal = '';
+                                    var htmlQuantity='';
+                                    $.each(result.cart, function (key, item) {
+                                    var rowPrice=0;
+                                    if(item.attributes.option){
+                                    rowPrice=parseInt(item.quantity,10) *(parseFloat(item.price) + parseFloat(item.attributes.option.fee));
+                                    
+                                    }else{
+                                    rowPrice=parseInt(item.quantity,10)*parseFloat(item.price);
+                                    
+                                    }
+                                    
+                                    html += '<tr class="info">';
+                                        html += '<td>';
+                                            html+= '<a href="#0" class="remove_item" id="'+item.id+'"><i class="icon_minus_alt"></i></a>';
+                                            html+='<strong>'+item.quantity+'X</strong>;'
+                                            if(item.attributes.option){
+                                            html+= '<strong>'+item.attributes.option.option+'</strong>';
+                                            }
+                                    
+                                            html+= item.name;
+                                            html+='</td>';
+                                        // $row->quantity * ($row->price + $row->attributes['option']->fee
+                                    
+                                        html +='<td> <strong class="pull-right">'+rowPrice+'TL</strong> </td> </tr>';
+                                    if(item.attributes.extras){
+                                    $.each(item.attributes.extras, function (k, ex) {
+                                    html+='<tr>';
+                                        html+=' <td class="pull-right"><strong>Ekstra </strong>';
+                                    
+                                            // html+=' <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a>';
+                                            html+= ex.extra;
+                                            html+= '</td>';
+                                        html+= '<td>';
+                                            html+= '<strong class="pull-right">'+ex.fee+'</strong>';
+                                            html+='</td>';
+                                        html+='</tr>';
+                                    });
+                                    }
+                                    
+                                    
+                                    });
+                                    
+                                    htmlTotal +=' <span class="pull-right">'+result.total+'TL</span>';
+
+                                    htmlQuantity +=result.quantity;
+                                    $('#quantity').empty();
+                                   $('#quantity').append(htmlQuantity);
+                                    $('.total').append(htmlTotal);
+                                    $('.cartbody').append(html);
+                },
+                complete:function(data){
+                // Hide image container
+                $("#loadergif").hide();
+                },
+        
+                error: function (errormessage) {
+                alert(errormessage.responseText);
+                }
+                });
+
+        }
+        });
+
+        $(".add_to_basket").click(function(e) {
+            e.preventDefault();
            var mealid=$(this).attr('id');
+            var menuid=$('#menuid').val();
            var fiyat=$("#fiyat"+mealid).val();
            var idd="option"+mealid;
            var optionid=$("input[name = " + idd+ "]:checked").val();
@@ -240,6 +472,7 @@
                     fiyat:fiyat,
                     miktar:1,
                     optionid:optionid,
+                    menuid:menuid,
                     extras:extras
                     };
                     $.ajax({
@@ -251,11 +484,80 @@
                     type: "POST",
                     contentType: "application/json;charset=UTF-8",
                     dataType: "json",
+                    beforeSend: function(){
+                            // Show image container
+                            $("#loadergif").show();
+                            },
                     success: function (result) {
-                    // var bosalt=$('#tekil'+silinecekMeal);
-                    // bosalt.empty();
-                    console.log(result);
+                            // console.log(result);
+                            if(result.code=='mix'){
+                                // ask for clear cart
+                                // var conf=confirm(result.message);
+                                if(confirm(result.message)){
+                                    console.log('okeeeeeeeeeeey');
+                                    return;
+                                }
+                            }
+                              $('.cartbody').empty();
+                              $('.total').empty();
+                    
+                            //   addToCart();
+                             var html = '';
+                             var htmlTotal = '';
+                             var htmlQuantity='';
+                            $.each(result.cart, function (key, item) {
+                                var rowPrice=0;
+                                if(item.attributes.option){
+                                                      rowPrice=parseInt(item.quantity,10) *(parseFloat(item.price) + parseFloat(item.attributes.option.fee));
+                                                      
+                                                        }else{
+                                                       rowPrice=parseInt(item.quantity,10)*parseFloat(item.price);
+                                               
+                                                        }
+
+                                            html += '<tr class="info">';
+                                            html += '<td>';
+                                       html+= '<a href="#0" class="remove_item" id="'+item.id+'"><i class="icon_minus_alt"></i></a>';
+                                            html+='<strong>'+item.quantity+'X</strong>;'
+                                            if(item.attributes.option){
+                                                html+= '<strong>'+item.attributes.option.option+'</strong>';
+                                            }
+                                        
+                                            html+=  item.name;
+                                            html+='</td>';
+                                            // $row->quantity * ($row->price + $row->attributes['option']->fee
+                  
+                                       html +='<td> <strong class="pull-right">'+rowPrice+'TL</strong> </td></tr>';
+                                      if(item.attributes.extras){
+                                          $.each(item.attributes.extras, function (k, ex) {
+                                          html+='<tr>';
+                                          html+='  <td class="pull-right"><strong>Ekstra </strong>';
+
+                                                // html+=' <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a>';
+                                               html+= ex.extra;
+                                           html+= '</td>';
+                                           html+= '<td>';
+                                              html+=  '<strong class="pull-right">'+ex.fee+'</strong>';
+                                            html+='</td>';
+                                        html+='</tr>';
+                                          });
+                                      }
+                                      
+                      
+                            });
+
+                                htmlTotal +='<span class="pull-right">'+result.total+'TL</span>';
+                                $('.total').append(htmlTotal);
+                                htmlQuantity +=result.quantity;
+                                        $('#quantity').empty();
+                                        $('#quantity').append(htmlQuantity);
+                              $('.cartbody').append(html);
+        
                     },
+                    complete:function(data){
+                                // Hide image container
+                                $("#loadergif").hide();
+                                },
                     error: function (errormessage) {
                     alert(errormessage.responseText);
                     }
@@ -263,4 +565,5 @@
         });
 });
 </script>
+
 @endsection

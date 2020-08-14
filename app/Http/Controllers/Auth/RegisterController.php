@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Address;
+
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -43,8 +45,8 @@ class RegisterController extends Controller
                 return $this->redirectTo;
                 break;
             default:
-                $this->redirectTo = '/login';
-                return $this->redirectTo;
+                // $this->redirectTo = '/login';
+                return url()->previous();
         }
     }
 
@@ -71,7 +73,9 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required'],
-            'mobile' => ['required']
+            'mobile' => ['required'],
+            'address' => ['required'],
+            'city' => ['required']
         ]);
     }
 
@@ -83,12 +87,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        //datada adres bilgisi vaarsa bir tane adres oluşturalım;
+
+        $user = User::create([
             'adi' => $data['adi'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'mobile' => $data['mobile'],
             'role' => $data['role']
         ]);
+        Address::create([
+            'user_id' => $user->id,
+            'address_name' => 'Kayıtlı adres',
+            'city' => $data['city'],
+            'address' => $data['address'],
+            'contact_name' => $data['adi'],
+            'phone' => $data['mobile'],
+            'email' => $data['email']
+        ]);
+
+        return $user;
     }
 }

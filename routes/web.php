@@ -42,9 +42,7 @@ Route::get('restaurants/test', function () {
     return view('frontend.restaurants.test');
 })->name('restaurants.test');
 
-Route::get('orders/create', function () {
-    return view('frontend.orders.create');
-})->name('orders.create');
+
 
 Route::get('checkouts/create', function () {
     return view('frontend.checkouts.create');
@@ -143,4 +141,8 @@ Route::get('restaurants/menu/{restaurant}', 'RestaurantController@menu')->name('
 Route::get('/cart', 'CartController@index')->name('cart.index');
 Route::post('/cart/add', 'CartController@store')->name('cart.add');
 Route::post('/cart/update/rowid', 'CartController@update')->name('cart.update');
-Route::get('/cart/remove/rowid', 'CartController@destroy')->name('cart.remove');
+Route::post('/cart/delete', 'CartController@destroy')->name('cart.remove');
+
+Route::get('orders/create', 'OrderController@create')->name('orders.create');
+Route::post('orders', 'OrderController@store')->name('orders.store');
+Route::get('/address/{address}', 'OrderController@address')->name('orders.address');
