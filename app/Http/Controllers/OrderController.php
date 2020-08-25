@@ -57,7 +57,9 @@ class OrderController extends Controller
         $firstAdres = null;
         if ($user !== null) {
             $addresses = Address::where('user_id', $user->id)->get();
-            $firstAdres = $addresses[0];
+            if (count($addresses) > 0) {
+                $firstAdres = $addresses[0];
+            }
         }
 
         return view('frontend.orders.create', compact('cartItems', 'total', 'quantity', 'user', 'addresses', 'firstAdres'));

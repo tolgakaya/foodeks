@@ -36,20 +36,14 @@ class Restaurant extends Model
         return $this->hasMany(User::class);
     }
 
-    // public function openCloseTimes()
-    // {
-    //     //kullanıcının current timeına göre paket servisinin yapıldığı saatleri gösterir
-    //     $today = new DateTime();
-    //     $gun = $today->format('N');
-    //     $simdi = $today->format('H:i:s');
-
-    //     $zamanlar = $this->RestaurantTimes()->where('day', $gun)->first();
-    //     $available = ['open' => '10:00:00', 'close' => '23:00:00'];
-    //     if ($zamanlar != null && $zamanlar->openning_time  <  $simdi  && $zamanlar->closing_time) {
-    //         $available = ['open' => $simdi, 'close' => $zamanlar->closing_time];
-    //     }
-    //     return $available;
-    // }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
     public function openCloseTimes()
     {
         //kullanıcının current timeına göre paket servisinin yapıldığı saatleri gösterir

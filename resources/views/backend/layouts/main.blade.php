@@ -627,7 +627,7 @@
 
     <!-- Custom scroll bar Js-->
     <script src="{{asset('backend/plugins/customscroll/jquery.mCustomScrollbar.concat.min.js')}}"></script>
-
+    <script src="{{asset('backend//plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
     <!-- Ansta JS -->
     <script src="{{asset('backend/js/custom.js')}}"></script>
     <script>

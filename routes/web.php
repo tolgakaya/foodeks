@@ -123,6 +123,27 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('library/delete', 'MediaController@destroy')->name('media.delete');
     Route::post('library/delete/mass', 'MediaController@destroymass')->name('media.delete.mass');
     Route::post('library/search/', 'MediaController@search')->name('media.search');
+
+    //admin tarafında rezervasyon işlemleri
+    Route::get('bookings', 'BookingController@index')->name('bookings.index');
+    Route::get('bookings/current', 'BookingController@gunluk')->name('bookings.gunluk');
+    Route::get('bookings/yarin', 'BookingController@yarin')->name('bookings.yarin');
+    Route::get('bookings/create', 'BookingController@create')->name('bookings.create');
+    Route::post('bookings', 'BookingController@store')->name('bookings.store');
+    Route::get('bookings/edit/{booking}', 'BookingController@edit')->name('bookings.edit');
+    Route::get('bookings/delete/{booking}', 'BookingController@destroy')->name('bookings.delete');
+    Route::post('bookings/{booking}', 'BookingController@update')->name('bookings.update');
+
+    Route::get('orders/{status?}', 'OrderController@index')->name('orders.index');
+    Route::post('orders/status/update', 'OrderController@statusUpdate')->name('orders.status.update');
+    Route::post('orders/tasks', 'OrderController@taskStore')->name('orders.tasks.store');
+    Route::get('orders/create/{restaurant}', 'OrderController@create')->name('orders.create');
+    Route::get('orders/edit/{order}', 'OrderController@edit')->name('orders.edit');
+    Route::post('orders/update/{order}', 'OrderController@update')->name('orders.update');
+    Route::post('orders/addresses/{user}', 'OrderController@addresses')->name('orders.addresses');
+    Route::post('orders/meal/details/{meal}', 'OrderController@mealDetails')->name('orders.meal.details');
+    Route::post('orders/detail/update', 'OrderController@detailUpdate')->name('orders.detail.update');
+    Route::post('orders/detail/delete', 'OrderController@detailDelete')->name('orders.detail.delete');
 });
 
 Route::get('api/restaurant/{restaurant}', 'Api\RestaurantController@show');
@@ -146,3 +167,8 @@ Route::post('/cart/delete', 'CartController@destroy')->name('cart.remove');
 Route::get('orders/create', 'OrderController@create')->name('orders.create');
 Route::post('orders', 'OrderController@store')->name('orders.store');
 Route::get('/address/{address}', 'OrderController@address')->name('orders.address');
+
+Route::get('/bookings/create/{restaurant}', 'BookingController@create')->name('bookings.create');
+Route::post('/bookings', 'BookingController@store')->name('bookings.store');
+Route::get('/bookings/edit/{booking}', 'BookingController@edit')->name('bookings.edit');
+Route::post('/bookings/{booking}', 'BookingController@update')->name('bookings.update');

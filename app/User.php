@@ -61,7 +61,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    // private $myrole  = RoleConstant::UserRole($this->role);
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
     public function getUserRoleAttribute()
     {
         return RoleConstant::UserRole($this->role);
