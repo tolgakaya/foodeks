@@ -21,7 +21,6 @@ class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index($status = 'all')
@@ -33,7 +32,9 @@ class OrderController extends Controller
         $user = auth()->user();
         if ($user->role === RoleConstant::ROLE_ADMIN) {
             $users = User::where('role', RoleConstant::ROLE_CARRIER)->get();
+            $restaurants = Restaurant::all();
             if ($status == 'all') {
+
                 $orders = Order::with('orderdetails')->orderByDesc('updated_at')->paginate(20);
             } else {
                 $orders = Order::with('orderdetails')->where('status', $status)->orderByDesc('updated_at')->paginate(20);
@@ -42,13 +43,14 @@ class OrderController extends Controller
             $users = User::where('role', RoleConstant::ROLE_CARRIER)
                 ->where('restaurant_id', '=', $user->restaurant_id)
                 ->get();
+            $restaurants = Restaurant::where('id', '=', $user->restaurant_id)->get();
             if ($status == 'all') {
                 $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->with('orderdetails', 'address')->orderByDesc('updated_at')->paginate(20);
             } else {
                 $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('status', $status)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
             }
         }
-        return view('backend.orders.index', compact('orders', 'users'));
+        return view('backend.orders.index', compact('orders', 'users', 'restaurants'));
     }
 
     /**
@@ -60,6 +62,7 @@ class OrderController extends Controller
      */
     public function create(Restaurant $restaurant)
     {
+        ///en iyisi restaurantsı indexe atıp oradan restaurantla gelelim.
         $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
         $user = auth()->user();
         if ($user->role === RoleConstant::ROLE_ADMIN) {
@@ -259,7 +262,7 @@ class OrderController extends Controller
     public function taskStore(Request $request)
     {
         $rules = [
-            'orderids.*' => 'unique:tasks,order_id',
+            'orderids.*' => 'unique:order_user,order_id',
             'userid' => 'required',
         ];
 
@@ -282,14 +285,7 @@ class OrderController extends Controller
                 if ($orders !== null) {
                     foreach ($orders as   $order) {
 
-                        $task = [
-                            'restaurant_id' => $order->restaurant_id,
-                            'order_id' => $order->id,
-                            'user_id' => $paketciId,
-                            'begin_date' => $tarih,
-                            'begin_time' => $saat
-                        ];
-                        $order->task()->create($task);
+                        $order->carriers()->attach($paketciId, ['restaurant_id' => $order->restaurant->id, 'order_id' => $order->id, 'begin_date' => $tarih, 'begin_time' => $saat]);
                         $order->status = 3;
 
                         $order->save();
@@ -304,6 +300,55 @@ class OrderController extends Controller
 
         // return redirect('admin.orders.index', ['status' => $request->status]);
     }
+
+    // public function taskStore(Request $request)
+    // {
+    //     $rules = [
+    //         'orderids.*' => 'unique:tasks,order_id',
+    //         'userid' => 'required',
+    //     ];
+
+    //     $customMessages = [
+    //         'required' => 'The :attribute field can not be blank.',
+    //         'orderids.*.unique' => 'Seçilen siparişlerden birisi yolda görülüyor.'
+    //     ];
+    //     $validator = Validator::make($request->all(), $rules, $customMessages);
+    //     // $this->validate($request, $rules, $customMessages);
+    //     if ($validator->passes()) {
+    //         $orderids = $request->orderids;
+    //         $paketciId = $request->userid;
+
+    //         $date = new \DateTime();
+    //         $tarih = $date->format('Y-m-d');
+    //         $saat = $date->format('H:i:s');
+    //         if ($orderids != null) {
+
+    //             $orders = Order::whereIn('id', $orderids)->get();
+    //             if ($orders !== null) {
+    //                 foreach ($orders as   $order) {
+
+    //                     $task = [
+    //                         'restaurant_id' => $order->restaurant_id,
+    //                         'order_id' => $order->id,
+    //                         'user_id' => $paketciId,
+    //                         'begin_date' => $tarih,
+    //                         'begin_time' => $saat
+    //                     ];
+    //                     $order->task()->create($task);
+    //                     $order->status = 3;
+
+    //                     $order->save();
+    //                 }
+    //                 return $orders;
+    //             }
+    //         }
+    //     }
+    //     return response()->json(['error' => 'Seçili sipariş çoktan yola çıkmış görünüyor']);
+
+
+
+    //     // return redirect('admin.orders.index', ['status' => $request->status]);
+    // }
 
     public function detailDelete(Request $request)
     {

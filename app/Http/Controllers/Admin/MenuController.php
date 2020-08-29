@@ -114,7 +114,7 @@ class MenuController extends Controller
     public function details(Menu $menu)
     {
         $restaurants = Restaurant::all();
-        $meals = Meal::all();
+        // $meals = Meal::all();
         $categories = Category::all();
 
         // $details = $menu->

@@ -23,7 +23,8 @@
 <div class="email-app card shadow">
     <nav class="p-0">
         <div class="card-body">
-            <a href="email-compose.html" class="btn btn-primary btn-block  btn-sm mt-1 mb-1">Yeni Sipariş Oluştur</a>
+            <a href='#' id="yeniSiparis" class="btn btn-primary btn-block  btn-sm mt-1 mb-1">Yeni Sipariş
+                Oluştur</a>
         </div>
         <ul class="nav">
             <li class="nav-item">
@@ -73,13 +74,18 @@
                     <button type="button" class="btn btn-sm btn-light status" title="Teslim Edildi" data-status="4">
                         <span class="fas fa-bookmark"></span>
                     </button>
-                </div>
-                {{-- iptal edildi --}}
-                <button type="button" class="mt-1 mb-1 btn btn-sm btn-light status" title="İptal Edildi"
-                    data-status="5">
-                    <span class="fas fa-trash"></span>
-                </button>
+                    <button type="button" class="btn btn-sm btn-light status" title="İptal Edildi" data-status="5">
+                        <span class="fas fa-trash"></span>
+                    </button>
+                    @if ($restaurants!=null)
+                    <select class="form-control" id="selectRestaurant" name="restaurant_id">
+                        @foreach ($restaurants as $restaurant)
+                        <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
+                        @endforeach
+                    </select>
+                    @endif
 
+                </div>
                 <div class="btn-group float-right ">
                     <a class="btn btn-primary btn-sm dropdown-toggle" href="#" data-toggle="modal"
                         data-target="#userModal"><i class="fas fa-plus mr-2"></i>Paketçi
@@ -109,19 +115,22 @@
         <ul class="mail_list list-group list-unstyled">
             @foreach ($orders as $order)
             @if ($loop->odd)
-            <li class="list-group-item">
+            <li class="list-group-item" id="row{{$order->id}}">
                 @else
-            <li class="list-group-item unread">
+            <li class="list-group-item unread" id="row{{$order->id}}">
                 @endif
+                <h3>{{$order->address->contact_name}} - {{$order->address->phone}}</h3>
+                <small class="text-muted"><time class="hidden-sm-down" datetime="2017">{{$order->created_at}}</time><i
+                        class="zmdi zmdi-attachment-alt ml-2"></i> </small>
                 <div class="media">
                     <div class="pull-left">
+
                         <div class="controls">
                             <div class="checkbox">
                                 <input type="checkbox" id="{{$order->id}}" name="orderCheck" value="{{$order->id}}">
                                 <label for="{{$order->id}}"></label>
                             </div>
-                            {{-- <a href="javascript:void(0);" class="favourite text-muted hidden-sm-down"
-                                data-toggle="active"><i class="zmdi zmdi-star-outline"></i></a> --}}
+
                         </div>
                     </div>
                     <div class="media-body">
@@ -133,11 +142,15 @@
                                     class="fas fa-motorcycle fa-2x"></i></span>
                             @else
                             <span class="{{$order->statusStyle()}}">{{$order->orderStatus()}}</span>
+
                             @endif
 
-                            <small class="float-right text-muted"><time class="hidden-sm-down"
+                            {{-- <small class="text-muted"><time class="hidden-sm-down"
                                     datetime="2017">{{$order->created_at}}</time><i
-                                    class="zmdi zmdi-attachment-alt ml-2"></i> </small>
+                                class="zmdi zmdi-attachment-alt ml-2"></i> </small> --}}
+                            <div class="float-right">
+                                {!! QrCode::size(150)->generate(route('carrier.orders.qr',['order'=>$order->id])); !!}
+                            </div>
                         </div>
                         <p class="msg">{{$order->notes}}</p>
                         @foreach ($order->orderdetails as $detail)
@@ -157,10 +170,11 @@
                                 @endif
                                 @endforeach
                             </p>
-
                         </div>
 
 
+                        <button class="btn  btn-sm btn-success yazdir pull-left"
+                            data-yazdir="row{{$order->id}}">Yazdır</button>
                         @endforeach
                     </div>
                 </div>
@@ -241,6 +255,22 @@
 {{-- <script src="{{asset('backend/js/menu.js')}}"></script> --}}
 <script>
     $(document).ready(function () {
+$('.yazdir').on('click',function () {
+    var yazdirilacak=$(this).data('yazdir');
+    console.log(yazdirilacak);
+   
+   var prtContent = document.getElementById(yazdirilacak);
+    var WinPrint = window.open();
+    WinPrint.document.write('<link rel="stylesheet" href="http://foodeks/backend/plugins/bootstrap/css/bootstrap.min.css">');
+    WinPrint.document.write('<link href="http://foodeks/backend/css/dashboard.css" rel="stylesheet" type="text/css">');
+
+    WinPrint.document.write(prtContent.innerHTML);
+    WinPrint.document.close();
+    WinPrint.focus();
+    WinPrint.print();
+    WinPrint.close();
+  });
+
 var table= $('#example2').DataTable();
 $('#example2 #userbody').on('click', 'tr', function () {
 
@@ -308,6 +338,12 @@ console.log('Lütfen bir servis elemanı seçiniz.');
 </script>
 <script>
     $(document).ready(function () {
+        $('#yeniSiparis').click(function(e){
+            e.preventDefault();
+           var siparisId= $('#selectRestaurant').val();
+           var url='/admin/orders/create/'+siparisId;
+            location.href=url;
+        });
       $(".status").click(function(e) {
         e.preventDefault();
        var status= $(this).data("status");

@@ -19,13 +19,19 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function task()
-    {
-        return $this->hasOne(Task::class);
-    }
+    // public function task()
+    // {
+    //     return $this->hasOne(Task::class);
+    // }
     public function orderdetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+    public function carriers()
+    {
+        return $this->belongsToMany(User::class)
+            ->using(OrderUser::class)
+            ->withPivot(['id', 'order_id', 'user_id', 'begin_date', 'begin_date', 'begin_time', 'end_time', 'notes']);
     }
     public function address()
     {

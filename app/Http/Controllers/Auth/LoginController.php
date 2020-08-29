@@ -27,25 +27,18 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo;
-    // public function redirectTo()
-    // {
-    //     switch (Auth::user()->role) {
-    //         case 1:
-    //             $this->redirectTo = route('admin.dashboard');
-    //             return $this->redirectTo;
-    //             break;
-    //         case 2:
-    //             $this->redirectTo = route('customer.dashboard');
-    //             return $this->redirectTo;
-    //             break;
-    //         default:
-    //             $this->redirectTo = '/';
-    //             return $this->redirectTo;
-    //     }
+    protected $redirectTo;
+    public function redirectTo()
+    {
+        switch (Auth::user()->role) {
+            case 4:
+                $this->redirectTo = route('carrier.dashboard');
+                return $this->redirectTo;
+                break;
+        }
 
-    //     // return $next($request);
-    // }
+        // return $next($request);
+    }
     /**
      * Create a new controller instance.
      *

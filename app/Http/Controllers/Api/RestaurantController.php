@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Restaurant;
+use App\Order;
 
 class RestaurantController extends Controller
 {
@@ -48,7 +49,10 @@ class RestaurantController extends Controller
     {
         return response()->json($restaurant);
     }
-
+    public function address(Order $order)
+    {
+        return response()->json($order->address);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -60,6 +64,7 @@ class RestaurantController extends Controller
         // dd($restaurant);
         return view('backend.restaurant.edit', compact('restaurant'));
     }
+
 
     /**
      * Update the specified resource in storage.

@@ -75,6 +75,7 @@
     <!--GMap Plugin -->
     <script src="https://maps.google.com/maps/api/js?key=AIzaSyDudjGDbcq3lKGFqFsHdGWZNgWOsNX4gjs"></script>
     <script src="{{asset('backend/js/harita-musteri-kaydet.js')}}"></script>
+
     <script>
         $( document ).ready(function() {
                 // console.log( "document loaded" );

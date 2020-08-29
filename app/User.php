@@ -70,6 +70,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+    public function paketciOrders()
+    {
+        return $this->belongsToMany(Order::class)
+            ->using(OrderUser::class)
+            ->withPivot(['id', 'order_id', 'user_id', 'begin_date', 'begin_date', 'begin_time', 'end_time', 'notes']);
+    }
     public function getUserRoleAttribute()
     {
         return RoleConstant::UserRole($this->role);

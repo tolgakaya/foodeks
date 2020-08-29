@@ -135,9 +135,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('bookings/{booking}', 'BookingController@update')->name('bookings.update');
 
     Route::get('orders/{status?}', 'OrderController@index')->name('orders.index');
+    Route::post('orders/store', 'OrderController@store')->name('orders.store');
     Route::post('orders/status/update', 'OrderController@statusUpdate')->name('orders.status.update');
     Route::post('orders/tasks', 'OrderController@taskStore')->name('orders.tasks.store');
-    Route::get('orders/create/{restaurant}', 'OrderController@create')->name('orders.create');
+    Route::get('orders/create/{restaurant?}', 'OrderController@create')->name('orders.create');
     Route::get('orders/edit/{order}', 'OrderController@edit')->name('orders.edit');
     Route::post('orders/update/{order}', 'OrderController@update')->name('orders.update');
     Route::post('orders/addresses/{user}', 'OrderController@addresses')->name('orders.addresses');
@@ -145,9 +146,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('orders/detail/update', 'OrderController@detailUpdate')->name('orders.detail.update');
     Route::post('orders/detail/delete', 'OrderController@detailDelete')->name('orders.detail.delete');
 });
+Route::get('carriers/orders/{status?}', 'CarrierController@index')->middleware((['auth', 'carrier']))->name('carrier.dashboard');
+Route::post('carriers/orders/status/{order}', 'CarrierController@status')->middleware((['auth', 'carrier']))->name('carrier.status');
+Route::get('carriers/orders/show/{order}', 'CarrierController@addshow')->name('carriers.orders.addshow');
+
+Route::get('qr/orders/{order}', 'CarrierController@qr')->middleware((['auth', 'carrier']))->name('carrier.orders.qr');
 
 Route::get('api/restaurant/{restaurant}', 'Api\RestaurantController@show');
 Route::get('api/restaurants/', 'Api\RestaurantController@index');
+Route::get('api/orders/{order}', 'Api\RestaurantController@address')->name('api.orders.address');
+
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('dashboard', 'CustomerController@index')->name('dashboard');

@@ -2,11 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Task extends Model
+class OrderUser extends Pivot
 {
     protected $guarded = [];
+    protected $table = 'order_user';
+    public $incrementing = true;
 
     public function order()
     {

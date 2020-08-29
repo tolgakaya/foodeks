@@ -1,11 +1,11 @@
-﻿
+
 //query stringle müşteri ID gelecek ve  burada müşteri ID'ye göre latlong müşteri kaydı yapılacak.
 var map;
 var markers = [];
 var bounds = new google.maps.LatLngBounds();
 var panorama;
-
-var url = '/api/restaurant/' + id.value;
+var orderid = $('#orderid').val();
+var url = '/api/orders/' + orderid;
 
 
 function initialize() {
@@ -24,32 +24,22 @@ function initialize() {
     google.maps.event.addListener(map, 'click', function (event) {
         addMarker(event.latLng);
     });
+    getLatLng();
 
     $.getJSON(url,
         function (data) {
 
-            var coordinate = data.coordinate;
-            var lat = data.latitude;
-            var lng = data.longitude;
+            console.log(data);
 
-            // var temiz1 = coordinate.replace('(', ' ');
-            // var temiz2 = temiz1.replace(')', ' ');
-            // var tertemiz = temiz2.trim();
-
-            // var liste = tertemiz.split(',');
-            // lat = liste[0].trim();
-            // lng = liste[1].trim();
-            console.log(lat);
-            console.log(lng);
-            var pos = new google.maps.LatLng(lat, lng);
-            addMarker(pos);
+            // var pos = new google.maps.LatLng(lat, lng);
+            // addMarker(pos);
+            getLatLng(data.address);
 
         })
         .fail(
             function (jqXHR, textStatus, err) {
                 console.log('api hatasi');
             });
-
     map.setZoom(2);
 
 
@@ -87,9 +77,9 @@ function addMarker(location) {
         map: map
     });
 
-    txtLatitude.value = location;
-    ltd.value = location.lat();
-    lng.value = location.lng();
+    // txtLatitude.value = location;
+    // ltd.value = location.lat();
+    // lng.value = location.lng();
     bounds.extend(location);
     map.fitBounds(bounds);
     markers.push(marker);
@@ -114,9 +104,9 @@ function setAllMap(map) {
         markers[i].setMap(map);
     }
 }
-function getLatLng() {
+function getLatLng(address) {
     // var address = document.getElementById("txtAddress").value;
-    var address = "Altınova Sinan Mahallesi Özlem Sokak No:13, Kepez, Antalya";
+    // var address = "Altınova Sinan Mahallesi Özlem Sokak No:13, Kepez, Antalya";
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ 'address': address }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
@@ -126,8 +116,6 @@ function getLatLng() {
             // txtLatitude.value = latitude;
             //txtLongitude.value = longitude;
             goster(results[0].geometry.location.lat(), results[0].geometry.location.lng(), longaddress);
-        } else {
-            alert('Geocode error: ' + status);
         }
     });
 }
