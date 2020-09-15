@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class PageSettings extends Model
 {
-    //
+    protected $guarded = [];
 }

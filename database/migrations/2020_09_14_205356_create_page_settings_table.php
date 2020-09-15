@@ -16,7 +16,13 @@ class CreatePageSettingsTable extends Migration
         Schema::create('page_settings', function (Blueprint $table) {
             $table->id();
             $table->string('logo');
-
+            $table->string('company');
+            $table->boolean('payment_card')->default(true);
+            $table->boolean('payment_setcard')->default(true);
+            $table->boolean('payment_ticket')->default(true);
+            $table->boolean('payment_multinet')->default(true);
+            $table->boolean('payment_cash')->default(true);
+            $table->decimal('radius_service')->default(5);
             $table->timestamps();
         });
     }

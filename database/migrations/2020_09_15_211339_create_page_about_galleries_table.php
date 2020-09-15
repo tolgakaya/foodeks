@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePageFaqsTable extends Migration
+class CreatePageAboutGalleriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreatePageFaqsTable extends Migration
      */
     public function up()
     {
-        Schema::create('page_faqs', function (Blueprint $table) {
+        Schema::create('page_about_galleries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('page_faq_group_id');
-            $table->string('question');
-            $table->text('answer');
+            $table->string('title')->nullable();
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreatePageFaqsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('page_faqs');
+        Schema::dropIfExists('page_about_galleries');
     }
 }
