@@ -46,10 +46,31 @@
                             <input type="hidden" id="lng" name="longitude">
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Telefon</label>
+                            <input type="text" class="form-control" name="phone"
+                                placeholder="Rezervasyon ve Sipariş Telefonu" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Adres</label>
+                            <input type="text" class="form-control" name="address"
+                                placeholder="Restaurant adresini giriniz" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email"
+                                placeholder="Sipariş/Rezervasyon email giriniz" required>
+                        </div>
+                    </div>
                     <div class=" col-md-12 ">
                         <div class="card shadow">
                             <div class="card-header">
-                                <h2 class="mb-0">Restaurant Location</h2>
+                                <h2 class="mb-0">Restaurant Koordinatları</h2>
                             </div>
                             <div class="card-body">
                                 <div id="myMap" class="mapheight"></div>

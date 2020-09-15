@@ -15,8 +15,9 @@ class Meal extends Model
     public function menus()
     {
         return $this->belongsToMany(Menu::class)
+            ->withTimestamps()
             ->using(MealMenu::class)
-            ->withPivot(['id', 'fee', 'menu_id', 'meal_id']);
+            ->withPivot(['id', 'fee', 'pasif', 'menu_id', 'meal_id']);
     }
     public function options()
     {

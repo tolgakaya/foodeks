@@ -60,7 +60,9 @@ class RestaurantController extends Controller
             'description' => 'required',
             'coordinate' => 'required',
             'longitude' => 'required',
-            'latitude' => 'required'
+            'latitude' => 'required',
+            'phone' => 'required',
+            'address' => 'required'
         ]);
 
         Restaurant::create($validated);
@@ -127,7 +129,9 @@ class RestaurantController extends Controller
             'description' => 'required',
             'coordinate' => 'required',
             'longitude' => 'required',
-            'latitude' => 'required'
+            'latitude' => 'required',
+            'phone' => 'required',
+            'address' => 'required'
         ]);
 
 

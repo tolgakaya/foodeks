@@ -111,21 +111,44 @@ class MenuController extends Controller
         return redirect()->back();
     }
 
+
     public function details(Menu $menu)
     {
         $restaurants = Restaurant::all();
-        // $meals = Meal::all();
+
         $categories = Category::all();
 
-        // $details = $menu->
-        // dd($menu->options);
-        // dd($details);
-        // $myMenu = $menu->with('meals', 'meals.options', 'meals.extras')->get()->groupBy('category_id');
         $meals = $menu->meals()->with('options', 'extras', 'category')->get();
-        // dd($meals);
+
         return view('backend.menus..details', compact('menu', 'restaurants', 'meals', 'categories'));
     }
+    // public function mealUpdate(Menu $menu)
+    // {
+    //     $validated = request()->validate([
+    //         'meal_id' => 'required',
+    //         'fee' => 'required',
+    //         'category' => 'required',
+    //         'pasif', 'required'
+    //     ]);
+    //     $meal_id = $validated['meal_id'];
+    //     $fee = $validated['fee'];
+    //     $pasif = $validated['pasif'];
+    //     $menu->meals()->detach($meal_id);
+    //     $menu->meals()->attach($meal_id, ['fee' => $fee, 'pasif' => $pasif]);
+    //     // $menu->meals()->where('phone_problem', $problem->id)->firstOrFail()
+    //     // $menu->load('meals');
+    //     // return new MealResource($menu->meals()->latest()->get());
+    //     $myId = MealMenu::where(['menu_id' => $menu->id, 'meal_id' => $validated['meal_id']])->firstOrFail()->id;
+    //     $last = $menu->meals()->with('options')->where('category_id', $validated['category'])->get();
 
+    //     return response()->json(compact('last', 'myId'));
+    // }
+
+    private function updateCategory(Menu $menu, $category_id)
+    {
+        $menu->categories()->detach($category_id);
+        $menu->categories()->attach($category_id);
+    }
     public function mealAdd(Menu $menu)
     {
         $validated = request()->validate([
@@ -137,6 +160,7 @@ class MenuController extends Controller
         $fee = $validated['fee'];
         $menu->meals()->detach($meal_id);
         $menu->meals()->attach($meal_id, ['fee' => $fee]);
+        $this->updateCategory($menu, $validated['category']);
         // $menu->meals()->where('phone_problem', $problem->id)->firstOrFail()
         // $menu->load('meals');
         // return new MealResource($menu->meals()->latest()->get());
@@ -154,6 +178,21 @@ class MenuController extends Controller
         ]);
 
         $menu->meals()->detach($validated['mealid']);
+
+        return response()->json('başarılı');
+    }
+
+    public function mealUpdate(Menu $menu, Request $request)
+    {
+        // return $request->all();
+        $validated = request()->validate([
+            'mealid' => 'required',
+            'status' => 'required'
+        ]);
+        $mealMenu = MealMenu::where('meal_id', $request->mealid)->where('menu_id', $menu->id)->first();
+
+        $mealMenu->pasif = $validated['status'];
+        $mealMenu->save();
 
         return response()->json('başarılı');
     }

@@ -18,7 +18,8 @@ class CreateMealMenuTable extends Migration
             $table->unsignedBigInteger('meal_id');
             $table->unsignedBigInteger('menu_id');
             $table->decimal('fee');
-            // $table->timestamps();
+            $table->boolean('pasif')->default(false);
+            $table->timestamps();
         });
     }
 

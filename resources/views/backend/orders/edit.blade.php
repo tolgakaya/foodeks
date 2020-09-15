@@ -97,24 +97,27 @@
 
             </div>
             <div class="card-body">
-                <form action="{{route('admin.orders.update',['order'=>$order->id])}}" method="POST">
+                <form action="{{route('admin.orders.update',['order'=>$order->id])}}" method="POST"
+                    style="{{$order->masaid != null ? 'display:none' : ''}}">
                     @csrf
+
                     <div class="form-group">
                         <label>İsminiz</label>
                         <input type="hidden" value="anonim adres" name="address_name">
                         <input type="text" class="form-control" id="contact_name" name="contact_name"
-                            value="{{$order->address->contact_name}}" placeholder="İsminizi giriniz">
+                            value="{{$order->address != null ? $order->address->contact_name :''}}"
+                            placeholder="İsminizi giriniz">
                     </div>
 
                     <div class="form-group">
                         <label>Telephone/mobile</label>
                         <input type="text" id="phone" name="phone" class="form-control" placeholder="Telephone/mobile"
-                            value="{{$order->address->phone}}">
+                            value="{{$order->address != null ? $order->address->phone : ''}}">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" id="email" name="email" class="form-control" placeholder="Your email"
-                            value="{{$order->address->email}}">
+                            value="{{$order->address != null ? $order->address->email: ''}}">
                     </div>
                     <div class="form-group">
                         <label>Teslimat adresi</label>
@@ -123,10 +126,9 @@
                             placeholder="Ex. Allergies, cash change..." name="address" id="address"></textarea>
                         <input type="hidden" name="address_id" id="address_id" value="{{$order->address_id}}">
                         <input type="hidden" name="userid" id="userid" value="{{$order->user_id}}">
-                        <a href="#" data-toggle="modal" data-target="#userModal" class="btn btn-primary">Müşteri Seçiniz
+                        <a href="#" data-toggle="modal" data-target="#userModal" class="btn btn-primary">Müşteri
+                            Seçiniz
                         </a>
-
-
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
@@ -160,6 +162,12 @@
                         </div>
                     </div>
                 </form>
+                @if ($order->masaid != null )
+                <form action="{{route('admin.orders.update',['order'=>$order->id])}}" method="POST">
+                    @csrf
+                    <input type="submit" id="gonder" class="btn btn-primary btn-block" value="Kaydet">
+                </form>
+                @endif
             </div>
         </div>
 

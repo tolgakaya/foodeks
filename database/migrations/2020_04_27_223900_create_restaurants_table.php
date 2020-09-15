@@ -17,6 +17,9 @@ class CreateRestaurantsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->string('phone');
+            $table->text('address');
+            $table->text('email');
             $table->string('coordinate')->default('36.896893, 30.713324');
             $table->double('longitude')->default(30.713324);
             $table->double('latitude')->default(36.896893);

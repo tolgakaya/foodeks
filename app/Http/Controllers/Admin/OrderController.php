@@ -16,6 +16,8 @@ use App\Meal;
 use App\Option;
 use App\MealMenu;
 use App\Extra;
+use App\Notifications\OrderCreated;
+use Notification;
 
 class OrderController extends Controller
 {
@@ -35,9 +37,9 @@ class OrderController extends Controller
             $restaurants = Restaurant::all();
             if ($status == 'all') {
 
-                $orders = Order::with('orderdetails')->orderByDesc('updated_at')->paginate(20);
+                $orders = Order::where('masaid', null)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
             } else {
-                $orders = Order::with('orderdetails')->where('status', $status)->orderByDesc('updated_at')->paginate(20);
+                $orders = Order::where('masaid', null)->with('orderdetails')->where('status', $status)->orderByDesc('updated_at')->paginate(20);
             }
         } else {
             $users = User::where('role', RoleConstant::ROLE_CARRIER)
@@ -45,14 +47,47 @@ class OrderController extends Controller
                 ->get();
             $restaurants = Restaurant::where('id', '=', $user->restaurant_id)->get();
             if ($status == 'all') {
-                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->with('orderdetails', 'address')->orderByDesc('updated_at')->paginate(20);
+                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('masaid', null)->with('orderdetails', 'address')->orderByDesc('updated_at')->paginate(20);
             } else {
-                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('status', $status)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
+                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('masaid', null)->where('status', $status)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
             }
         }
         return view('backend.orders.index', compact('orders', 'users', 'restaurants'));
     }
 
+    /**
+     * Display a listing of the resource.
+     * @return \Illuminate\Http\Response
+     */
+    public function indexMasa($status = null)
+    {
+        //günlük orders
+        //active orders
+        //günlük active orders
+        //status-created, üretildi, yolda, teslim edildi, iptal edildi, iptal
+        $user = auth()->user();
+        if ($user->role === RoleConstant::ROLE_ADMIN) {
+            $users = User::where('role', RoleConstant::ROLE_CARRIER)->get();
+            $restaurants = Restaurant::all();
+            if ($status == null) {
+
+                $orders = Order::where('masaid', '!=', null)->where('kapandi', '!=', true)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
+            } else {
+                $orders = Order::where('masaid', '!=', null)->where('kapandi', '!=', true)->with('orderdetails')->where('status', $status)->orderByDesc('updated_at')->paginate(20);
+            }
+        } else {
+            $users = User::where('role', RoleConstant::ROLE_CARRIER)
+                ->where('restaurant_id', '=', $user->restaurant_id)
+                ->get();
+            $restaurants = Restaurant::where('id', '=', $user->restaurant_id)->get();
+            if ($status == 'all') {
+                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('kapandi', '!=', true)->where('masaid', '!=', null)->with('orderdetails', 'address')->orderByDesc('updated_at')->paginate(20);
+            } else {
+                $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('masaid', '!=', true)->where('kapandi', '!=', null)->where('status', $status)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
+            }
+        }
+        return view('backend.orders.adisyons', compact('orders', 'users', 'restaurants'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -184,10 +219,13 @@ class OrderController extends Controller
 
         //sepeti temizle
         \Cart::clear();
+        \Notification::route('mail',  $order->restaurant->email)->notifyNow(new OrderCreated($order, 'mudur'));
+        \Notification::route('mail', $request->email)->notifyNow(new OrderCreated($order, ''));
         return 'başarılı';
         // dd($order);
 
     }
+
 
     public function mealDetails(Meal $meal)
     {
@@ -201,11 +239,24 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function goruldu(Order $order)
     {
-        //
+        $details = $order->orderdetails()->where('goruldu', '!=', true)->get();
+        if ($details != null) {
+            foreach ($details as  $detail) {
+                $detail->goruldu = true;
+                $detail->save();
+            }
+        }
+        return redirect()->route('admin.orders.indexMasa');
     }
 
+    public function kapat(Order $order)
+    {
+        $order->kapandi = true;
+        $order->save();
+        return redirect()->route('admin.orders.indexMasa');
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -226,7 +277,10 @@ class OrderController extends Controller
         }
         $bisey = $order->with('orderdetails')->first();
         // dd($bisey->orderdetails);
-        return view('backend.orders.edit', ['order' => $order->with('orderdetails')->first(), 'users' => $users]);
+        $addresid = $bisey->address_id;
+        $addresimiz = $bisey->address;
+
+        return view('backend.orders.edit', ['order' => $order, 'users' => $users]);
     }
 
     /**
@@ -236,8 +290,26 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
+        if ($order->masaid == null) {
+            $validated = request()->validate([
+                'address_name' => 'required',
+                'city' => 'required',
+                'address' => 'required',
+                'contact_name' => 'required',
+                'phone' => 'required',
+                'email' => 'required'
+            ]);
+
+            $addressid = $request->address_id;
+            if ($addressid == null || $addressid == '') {
+                $adres = Address::create($validated);
+                $addressid = $adres->id;
+                $order->address_id = $addressid;
+            }
+        }
+        return back();
     }
 
     public function statusUpdate(Request $request)

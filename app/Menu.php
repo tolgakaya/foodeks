@@ -16,18 +16,15 @@ class Menu extends Model
     public function meals()
     {
         return $this->belongsToMany(Meal::class)
+            ->withTimestamps()
             ->using(MealMenu::class)
-            ->withPivot(['id', 'fee', 'menu_id', 'meal_id']);
-    }
-    public function options()
-    {
-        return $this->hasManyThrough(Option::class, Meal::class)
-            ->withPivot(['id', 'fee', 'menu_id', 'meal_id']);
+            ->withPivot(['id', 'fee', 'pasif', 'menu_id', 'meal_id']);
     }
 
-    public function extras()
+    public function categories()
     {
-        return $this->hasManyThrough(Extra::class, Meal::class)
-            ->withPivot(['id', 'fee', 'menu_id', 'meal_id']);
+        return $this->belongsToMany(Category::class)
+            ->using(CategoryMenu::class)
+            ->withPivot(['id', 'category_id', 'menu_id']);
     }
 }

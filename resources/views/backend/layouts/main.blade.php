@@ -74,41 +74,6 @@
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-grid"></i><span class="side-menu__label">Media</span><i
-                                    class="angle fa fa-angle-right"></i></a>
-                            <ul class="slide-menu">
-                                <li>
-                                    <a href="{{route('admin.media.index')}}" class="slide-item">Media Library</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('admin.media.create')}}" class="slide-item">Add Media</a>
-                                </li>
-                                <li>
-                                    <a href="widgets.html" class="slide-item">Widgets</a>
-                                </li>
-                                <li>
-                                    <a href="full-calendar.html" class="slide-item">Full Calendar</a>
-                                </li>
-                                <li>
-                                    <a href="range-slider.html" class="slide-item">Range Slider</a>
-                                </li>
-                                <li>
-                                    <a href="scroll-bar.html" class="slide-item">Scroll Bar</a>
-                                </li>
-                                <li>
-                                    <a href="sweet-alerts.html" class="slide-item">Sweet Alerts</a>
-                                </li>
-                                <li>
-                                    <a href="timeline.html" class="slide-item">Timeline</a>
-                                </li>
-                                <li>
-                                    <a href="users.html" class="slide-item">Users</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-edit"></i><span class="side-menu__label">Menü
                                     İşlemleri</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
@@ -149,110 +114,67 @@
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-file-text"></i><span
-                                    class="side-menu__label">Tables</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__label">Siparişler</span><i
+                                    class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="tables.html" class="slide-item">Tables</a>
+                                    <a href="{{route('admin.orders.index')}}" class="slide-item">Sipariş Listesi</a>
                                 </li>
-                                <li>
-                                    <a href="datatable.html" class="slide-item">Data Tables</a>
-                                </li>
+
                             </ul>
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-bar-chart-2"></i><span class="side-menu__label">Chart
-                                    Types</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__icon fe fe-bar-chart-2"></i><span
+                                    class="side-menu__label">Rezervasyonlar</span><i
+                                    class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="chart-flot.html" class="slide-item">Flot Charts</a>
+                                    <a href="{{route('admin.bookings.create')}}" class="slide-item">Yeni rezervasyon</a>
                                 </li>
                                 <li>
-                                    <a href="chart-high.html" class="slide-item">High Charts </a>
+                                    <a href="{{route('admin.bookings.index')}}" class="slide-item">Rezervasyon
+                                        listesi</a>
                                 </li>
                                 <li>
-                                    <a href="charts-chartjs.html" class="slide-item">Chartjs Charts</a>
+                                    <a href="{{route('admin.bookings.gunluk')}}" class="slide-item">Bugünkü
+                                        ezervasyonlar</a>
                                 </li>
                                 <li>
-                                    <a href="charts-echarts.html" class="slide-item">Echart Charts</a>
-                                </li>
-                                <li>
-                                    <a href="charts-morris.html" class="slide-item">Morris Charts</a>
+                                    <a href="{{route('admin.bookings.yarin')}}" class="slide-item">Yarınki
+                                        rezervasyonlar</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-folder"></i><span
-                                    class="side-menu__label">Pages</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__label">Adisyonlar</span><i
+                                    class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="user-profile.html" class="slide-item">User Profile</a>
-                                </li>
-                                <li>
-                                    <a href="email-inbox.html" class="slide-item">Email Inbox</a>
-                                </li>
-                                <li>
-                                    <a href="email-compose.html" class="slide-item">Email</a>
-                                </li>
-                                <li>
-                                    <a href="gallery.html" class="slide-item">Gallery</a>
-                                </li>
-                                <li>
-                                    <a href="invoice.html" class="slide-item">Invoice</a>
-                                </li>
-                                <li>
-                                    <a href="pricing.html" class="slide-item">Pricing Tables</a>
-                                </li>
-                                <li>
-                                    <a href="empty.html" class="slide-item">Empty</a>
-                                </li>
-                                <li>
-                                    <a href="under-construction.html" class="slide-item">Under Construction</a>
-                                </li>
-                                <li>
-                                    <a href="400.html" class="slide-item">Page 400</a>
-                                </li>
-                                <li>
-                                    <a href="404.html" class="slide-item">Page 404</a>
-                                </li>
-                                <li>
-                                    <a href="500.html" class="slide-item">Page 500</a>
-                                </li>
-                                <li>
-                                    <a href="505.html" class="slide-item">Page 505</a>
+                                    <a href="{{route('admin.orders.indexMasa')}}" class="slide-item">Açık Adisyonlar</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-italic"></i><span
-                                    class="side-menu__label">Icons</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__label">Sayfalar</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="icons-feather.html" class="slide-item">Feather Icons</a>
+                                    <a href="icons-feather.html" class="slide-item">Ana Sayfa</a>
                                 </li>
                                 <li>
-                                    <a href="icons-fontawesome.html" class="slide-item">Font Awesome Icons</a>
+                                    <a href="icons-fontawesome.html" class="slide-item">Hakkımızda</a>
                                 </li>
                                 <li>
-                                    <a href="icons-ion.html" class="slide-item">Ion Icons</a>
+                                    <a href="icons-ion.html" class="slide-item">Sosyal Ağ</a>
                                 </li>
                                 <li>
-                                    <a href="icons-materialdesign.html" class="slide-item">Materialdesign Icons</a>
+                                    <a href="icons-materialdesign.html" class="slide-item">Sıkça Sorular Sorular</a>
                                 </li>
-                                <li>
-                                    <a href="icons-nucleo.html" class="slide-item">Nucleo Icons</a>
-                                </li>
-                                <li>
-                                    <a href="icons-pe7.html" class="slide-item">pe7 Icons</a>
-                                </li>
-                                <li>
-                                    <a href="icons-simpleline.html" class="slide-item">Simpleline Icons</a>
-                                </li>
-                                <li>
-                                    <a href="icons-themify.html" class="slide-item">Themify Icons</a>
-                                </li>
+
                             </ul>
                         </li>
                         <li class="slide">

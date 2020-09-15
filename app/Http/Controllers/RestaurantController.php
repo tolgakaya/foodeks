@@ -46,7 +46,7 @@ class RestaurantController extends Controller
     {
         $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
 
-        $meals = $menu->meals()->get()->groupBy('category.category');
+        $meals = $menu->meals()->where('pasif', 0)->get()->groupBy('category.category');
         $cartItems = \Cart::getContent();
         $total = 0;
         $quantity = 0;

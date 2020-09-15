@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
 
         $extra2 = new Extra();
         $extra2->meal_id = $icecek->id;
-        $extra2->extra = 'Extra 1';
+        $extra2->extra = 'Extra 2';
         $extra2->fee = 5;
         $extra2->save();
 
@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
         $menu->name = 'Test Menüsü';
         $menu->description = 'Test Menüsü';
         $menu->save();
-
+        $menu->categories()->attach($icecek->category_id);
         $menu->meals()->attach($icecek->id, ['fee' => 10]);
 
         $user = new User();

@@ -11,4 +11,10 @@ class Category extends Model
     {
         return $this->hasMany(Meal::class);
     }
+    public function categories()
+    {
+        return $this->belongsToMany(Menu::class)
+            ->using(CategoryMenu::class)
+            ->withPivot(['id', 'category_id', 'menu_id']);
+    }
 }

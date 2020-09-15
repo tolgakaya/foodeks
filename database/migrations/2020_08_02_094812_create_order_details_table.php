@@ -28,6 +28,7 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('sub_total');
             $table->decimal('discount');
             $table->decimal('total');
+            $table->boolean('goruldu')->nullable();
             $table->timestamps();
             ///başka bir tabloda sipariş hakkında notlar eklenebilir.
         });

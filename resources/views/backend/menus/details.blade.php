@@ -23,15 +23,7 @@
         <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">Actions</button>
         <input type="hidden" id="menuid" value="{{$menu->id}}">
-        {{-- <div class="dropdown-menu">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mealModal"><i
-                    class="fas fa-plus mr-2"></i>Ürün Ekle</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-eye mr-2"></i>View the page
-                Details</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-edit mr-2"></i>Edit Page</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i> Settings</a>
-        </div> --}}
+
     </div>
 </div>
 
@@ -43,22 +35,11 @@
                 <div class="row">
                     <div class="col md-3 text-left ">
                         <div class="btn-group mb-0">
-                            {{-- <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">İşlemler</button> --}}
-                            {{-- <div class="dropdown-menu"> --}}
+
                             <a class="btn btn-primary btn-sm dropdown-toggle" href="#" data-toggle="modal"
                                 data-target="#mealModal" data-val={{$category->id}}><i class="fas fa-plus mr-2"></i>Ürün
                                 ekle</a>
-                            {{-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#optionModal"><i
-                                        class="fas fa-plus mr-2"></i>Ürün
-                                    seçeneği ekle</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#extraModal"><i
-                                        class="fas fa-plus mr-2"></i>Ürün
-                                    ekstrası ekle</a> --}}
-                            {{-- <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>
-                                    Sil</a> --}}
-                            {{-- </div> --}}
+
                         </div>
                     </div>
                     <div class="col md-9 text-right">
@@ -104,7 +85,8 @@
                                     <div class="row">
                                         <div class="col md-3 text-left ">
                                             <div class="btn-group mb-0">
-                                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                <button type="button"
+                                                    class="{{$meal->pivot->pasif ==1 ? 'btn btn-warning' : 'btn btn-primary'}} btn-sm dropdown-toggle"
                                                     data-toggle="dropdown" aria-haspopup="true"
                                                     aria-expanded="false">İşlemler</button>
                                                 <div class="dropdown-menu">
@@ -113,6 +95,11 @@
                                                     <a class="dropdown-item deletebutton" href="#" id="{{$meal->id}}"><i
                                                             class="fas fa-cog mr-2"></i>
                                                         Sil</a>
+                                                    <a class="dropdown-item statusbutton" href="#"
+                                                        data-id="{{$meal->id}}"
+                                                        data-status="{{$meal->pivot->pasif ==1 ? 0 : 1}}"><i
+                                                            class="fas fa-cog mr-2"></i>
+                                                        {{$meal->pivot->pasif ==1 ? 'Aktif' :'Pasif'}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -316,11 +303,40 @@
         });
         }
         });
-        // $('.deletebutton').click(function () {
-   
-            
-        //     });
- 
+  
+ //status update
+
+ $('body').on('click', '.statusbutton', function () {
+    var mealimiz=$(this).data('id');
+    var menuid = $('#menuid').val();
+    var status=$(this).data('status');
+  
+    var ans = confirm("Kaydı silmek istiyor musunuz?");
+    if (ans) {
+    var mealModel = {
+    mealid: mealimiz,
+    status:status
+    };
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    },
+    url: "/admin/menus/details/status/" + menuid,
+    data:JSON.stringify( mealModel),
+    type: "POST",
+    contentType: "application/json;charset=UTF-8",
+    dataType: "json",
+    success: function (result) {
+        //burada ilgili alanı renklendirelim
+        console.log(result);
+location.reload();
+    },
+    error: function (errormessage) {
+    alert(errormessage.responseText);
+    }
+    });
+    }
+    });
 
     //mealModal baslangıc
     $('#mealModal').on('show.bs.modal', function (event) {

@@ -105,6 +105,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::get('menus/details/{menu}', 'MenuController@details')->name('menus.details');
     Route::post('menus/details/{menu}', 'MenuController@mealAdd')->name('menus.details.add');
     Route::post('menus/details/delete/{menu}/', 'MenuController@mealDelete')->name('menus.details.delete');
+    Route::post('menus/details/status/{menu}/', 'MenuController@mealUpdate')->name('menus.details.status');
 
     Route::post('menus/update/{menu}', 'MenuController@update')->name('menus.update');
     Route::get('menus/create', 'MenuController@create')->name('menus.create');
@@ -135,6 +136,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('bookings/{booking}', 'BookingController@update')->name('bookings.update');
 
     Route::get('orders/{status?}', 'OrderController@index')->name('orders.index');
+    Route::get('orders/goruldu/{order}', 'OrderController@goruldu')->name('orders.goruldu');
+    Route::get('orders/kapat/{order}', 'OrderController@kapat')->name('orders.kapat');
+    Route::get('orders/masa/adisyons/{status?}', 'OrderController@indexMasa')->name('orders.indexMasa');
     Route::post('orders/store', 'OrderController@store')->name('orders.store');
     Route::post('orders/status/update', 'OrderController@statusUpdate')->name('orders.status.update');
     Route::post('orders/tasks', 'OrderController@taskStore')->name('orders.tasks.store');
@@ -168,15 +172,18 @@ Route::get('restaurants/{restaurant}', 'RestaurantController@show')->name('resta
 Route::get('restaurants/menu/{restaurant}', 'RestaurantController@menu')->name('restaurants.menu');
 
 Route::get('/cart', 'CartController@index')->name('cart.index');
-Route::post('/cart/add', 'CartController@store')->name('cart.add');
+Route::post('/cart/add/{masaid?}/{menuid?}', 'CartController@store')->name('cart.add');
 Route::post('/cart/update/rowid', 'CartController@update')->name('cart.update');
-Route::post('/cart/delete', 'CartController@destroy')->name('cart.remove');
+Route::post('/cart/delete/{masaid?}/{menuid?}', 'CartController@destroy')->name('cart.remove');
 
 Route::get('orders/create', 'OrderController@create')->name('orders.create');
 Route::post('orders', 'OrderController@store')->name('orders.store');
+Route::get('orders/masa/{masaid}/{menuid}', 'OrderController@masaStore')->name('orders.masaStore');
 Route::get('/address/{address}', 'OrderController@address')->name('orders.address');
 
 Route::get('/bookings/create/{restaurant}', 'BookingController@create')->name('bookings.create');
 Route::post('/bookings', 'BookingController@store')->name('bookings.store');
 Route::get('/bookings/edit/{booking}', 'BookingController@edit')->name('bookings.edit');
 Route::post('/bookings/{booking}', 'BookingController@update')->name('bookings.update');
+Route::get('/touchless', 'Admin\TouchlessController@index')->name('touchless.index');
+Route::get('/touchless/{masaid}/{restaurant}/{category?}/{next?}', 'Admin\TouchlessController@nextBefore')->name('touchless.paging');

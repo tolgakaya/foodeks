@@ -3421,8 +3421,8 @@ mark {
 
 .cd-cart__trigger, .cd-cart__content {
     position: fixed;
-    bottom: 20px;
-    right: 5%;
+    bottom: 40px;
+    right: 10%;
     transition: -webkit-transform .2s;
     transition: transform .2s;
     transition: transform .2s, -webkit-transform .2s;

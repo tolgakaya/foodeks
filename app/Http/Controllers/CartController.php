@@ -42,15 +42,25 @@ class CartController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request)
+    public function store(Request $request, $masaid = null, $menuid = null)
     {
         // return  $request->all();
+
         $mealid =  $request->mealid;
         $optionid = $request->optionid;
         $menuid = $request->menuid;
-
-        if (!\Cart::isEmpty()) {
+        $cartBos = true;
+        if ($masaid == null) {
+            $cartBos = \Cart::isEmpty();
             $mevcutCart = \Cart::getContent();
+        } else {
+            $cartSession = $masaid . $menuid;
+            $cartBos = \Cart::session($cartSession)->isEmpty();
+            $mevcutCart = \Cart::session($cartSession)->getContent();
+        }
+
+        if (!$cartBos) {
+
             $first = $mevcutCart->first();
             $mevcutMenu = $first->attributes['menuid'];
             if ($menuid !== $mevcutMenu) {
@@ -74,18 +84,34 @@ class CartController extends Controller
         $rowid .= $extrasids;
 
         $meal = Meal::find($mealid);
+        if ($masaid == null) {
 
-        \Cart::add(array(
-            'id' => $rowid,
-            'name' => $meal->name,
-            'price' => $request->fiyat,
-            'quantity' => $request->miktar,
-            'attributes' => ['meal_id' => $meal->id, 'option' => $option, 'extras' => $extras, 'menuid' => $menuid],
-            'associatedModel' => $meal
-        ));
+            \Cart::add(array(
+                'id' => $rowid,
+                'name' => $meal->name,
+                'price' => $request->fiyat,
+                'quantity' => $request->miktar,
+                'attributes' => ['meal_id' => $meal->id, 'option' => $option, 'extras' => $extras, 'menuid' => $menuid, 'masaid' => $masaid],
+                'associatedModel' => $meal
+            ));
+            $cart = \Cart::getContent();
+        } else {
+            $cartSession = $masaid . $menuid;
+            \Cart::session($cartSession)->add(array(
+                'id' => $rowid,
+                'name' => $meal->name,
+                'price' => $request->fiyat,
+                'quantity' => $request->miktar,
+                'attributes' => ['meal_id' => $meal->id, 'option' => $option, 'extras' => $extras, 'menuid' => $menuid, 'masaid' => $masaid],
+                'associatedModel' => $meal
+            ));
+
+            $cart = \Cart::session($cartSession)->getContent();
+        }
+
 
         $total = 0;
-        $cart = \Cart::getContent();
+
         $quantity = 0;
         foreach ($cart as   $row) {
             $base = $row->quantity * $row->price;
@@ -211,13 +237,20 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, $masaid = null, $menuid = null)
     {
         $rowid = $request->rowid;
+        if ($masaid == null) {
+            \Cart::remove($rowid);
+            $cart = \Cart::getContent();
+        } else {
+            $cartSession = $masaid . $menuid;
+            \Cart::session($cartSession)->remove($rowid);
+            $cart = \Cart::session($cartSession)->getContent();
+        }
 
-        \Cart::remove($rowid);
         $total = 0;
-        $cart = \Cart::getContent();
+
         $quantity = 0;
         foreach ($cart as   $row) {
             $base = $row->quantity * $row->price;

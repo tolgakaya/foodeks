@@ -9,5 +9,8 @@ $factory->define(Restaurant::class, function (Faker $faker) {
     return [
         'name' => $faker->city,
         'description' => $faker->text(100),
+        'phone' => $faker->phoneNumber,
+        'address' => $faker->streetAddress,
+        'email' => 'bilgitap@hotmail.com'
     ];
 });

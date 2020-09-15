@@ -301,9 +301,10 @@ var orderids = $('input:checked').map(function(){
 if (id) {
 // console.log(id + ' ve ' + restaurantid);
 var userModel = {
-orderids: orderids,
+orderids: orderids.get(),
 userid:id
 };
+console.log(userModel);
 $.ajax({
 headers: {
 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
