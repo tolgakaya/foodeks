@@ -16,7 +16,7 @@ class CreatePageAboutGalleriesTable extends Migration
         Schema::create('page_about_galleries', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->string('image');
+            $table->text('filename');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ class CreatePageHomesTable extends Migration
     {
         Schema::create('page_homes', function (Blueprint $table) {
             $table->id();
+            $table->string('video');
             $table->string('slogan');
             $table->string('sub_slogan');
             $table->boolean('show_how')->default(true);

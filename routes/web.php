@@ -62,6 +62,7 @@ Auth::routes();
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('dashboard', 'AdminController@index')->name('dashboard');
+    Route::get('alert/paket', 'AlertController@index')->name('alert.paket');
     Route::post('sms', 'AdminController@nida')->name('sms');
     Route::get('restaurants', 'RestaurantController@index')->name('restaurant.index');
     Route::get('restaurants/create', 'RestaurantController@create')->name('restaurant.create');
@@ -149,6 +150,21 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('orders/meal/details/{meal}', 'OrderController@mealDetails')->name('orders.meal.details');
     Route::post('orders/detail/update', 'OrderController@detailUpdate')->name('orders.detail.update');
     Route::post('orders/detail/delete', 'OrderController@detailDelete')->name('orders.detail.delete');
+
+    Route::get('pages/home', 'PageHomeController@index')->name('pages.home.index');
+    Route::post('pages/home', 'PageHomeController@store')->name('pages.home.store');
+
+    Route::get('pages/settings', 'PageSettingsController@index')->name('pages.settings.index');
+    Route::post('pages/settings', 'PageSettingsController@store')->name('pages.settings.store');
+
+    Route::get('pages/about', 'PageAboutController@index')->name('pages.about.index');
+    Route::get('pages/about/more', 'PageAboutController@more')->name('about.more');
+    Route::post('pages/about/media',  'PageAboutController@mediastore')->name('about.media.store');
+    Route::post('pages/about',  'PageAboutController@store')->name('about.store');
+
+    Route::post('pages/about/media/delete', 'PageAboutController@destroy')->name('about.media.delete');
+    Route::post('pages/about/media/delete/mass', 'PageAboutController@destroymass')->name('about.media.delete.mass');
+    Route::post('pages/about/media/search', 'PageAboutController@search')->name('about.media.search');
 });
 Route::get('carriers/orders/{status?}', 'CarrierController@index')->middleware((['auth', 'carrier']))->name('carrier.dashboard');
 Route::post('carriers/orders/status/{order}', 'CarrierController@status')->middleware((['auth', 'carrier']))->name('carrier.status');
@@ -187,3 +203,5 @@ Route::get('/bookings/edit/{booking}', 'BookingController@edit')->name('bookings
 Route::post('/bookings/{booking}', 'BookingController@update')->name('bookings.update');
 Route::get('/touchless', 'Admin\TouchlessController@index')->name('touchless.index');
 Route::get('/touchless/{masaid}/{restaurant}/{category?}/{next?}', 'Admin\TouchlessController@nextBefore')->name('touchless.paging');
+
+Route::post('gonder', 'Admin\CKEditorController@upload')->name('gonder');

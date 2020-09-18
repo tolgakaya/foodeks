@@ -17,12 +17,17 @@ class CreatePageSettingsTable extends Migration
             $table->id();
             $table->string('logo');
             $table->string('company');
-            $table->boolean('payment_card')->default(true);
-            $table->boolean('payment_setcard')->default(true);
-            $table->boolean('payment_ticket')->default(true);
-            $table->boolean('payment_multinet')->default(true);
-            $table->boolean('payment_cash')->default(true);
+            $table->boolean('payment_card')->nullable();
+            $table->boolean('payment_setcard')->nullable();
+            $table->boolean('payment_ticket')->nullable();
+            $table->boolean('payment_multinet')->nullable();
+            $table->boolean('payment_cash')->nullable();
             $table->decimal('radius_service')->default(5);
+            $table->boolean('multi_branch')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('youtube')->nullable();
+            $table->string('twitter')->nullable();
             $table->timestamps();
         });
     }

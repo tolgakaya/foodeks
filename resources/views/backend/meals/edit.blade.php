@@ -145,11 +145,7 @@
             
             // And optionally show the thumbnail of the file:
             thisDropzone.emit("thumbnail", mockFile,defaultValue);
-            
-            // If you use the maxFiles option, make sure you adjust it to the
-            // correct amount:
-            //var existingFileCount = 1; // The number of files already uploaded
-            //myDropzone.options.maxFiles = myDropzone.options.maxFiles - existingFileCount;
+          
                         
             },
             renameFile: function(file) {

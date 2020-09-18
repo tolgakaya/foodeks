@@ -93,23 +93,26 @@
 {{-- Ajax Script Start --}}
 <script>
     $(document).ready(function() {
-$('#btnForm').click(function() {
-var formData = $('#modalForm').serialize();
-console.log('Posting the following: ', formData);
-
-$.ajax({
-headers: {
-    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    },
-    url: '/admin/library/delete/mass',
-data: formData,
-type: 'post',
-dataType: 'json',
-success: function(data) {
-console.log(data);
-}
-});
-});
+            $('#btnForm').click(function() {
+            // var formData = $('#modalForm').serialize();
+    
+            var extras = $('.selecteds:input:checked').map(function(){
+            return $(this).val();
+            });
+            console.log('Posting the following: ', extras.get());
+            $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                },
+                url: '/admin/library/delete/mass',
+            data: extras.get(),
+            type: 'post',
+            dataType: 'json',
+            success: function(data) {
+            console.log(data);
+            }
+            });
+            });
 });
         
 </script>
@@ -134,9 +137,9 @@ console.log(data);
 $.each(response,function(index,value){
 _html+='<div class="col-lg-3 satir">';
                 _html+='<div class="card shadow overflow-hidden custom-control custom-checkbox image-checkbox">';
-                    _html+= '<input type="checkbox" class="custom-control-input" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
+                    _html+= '<input type="checkbox" class="custom-control-input selecteds" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
                     _html+= '<label class="custom-control-label" for="' + value.filename+'">';
-                        _html+= '<img src="'+image+ value.filename+'" class="big" alt="" title="Beautiful Image" name="selecteds[]" />';
+                        _html+= '<img src="'+image+ value.filename+'" class="big" alt="" title="Beautiful Image" />';
                         _html+= '</label>';
                     _html+= '</div>';
                 _html+= '</div>';
@@ -187,7 +190,7 @@ $(".load-more").html('Load More');
                
                                                 _html+='<div class="col-lg-3 satir">';
                                                     _html+='<div class="card shadow overflow-hidden custom-control custom-checkbox image-checkbox">';
-                                              _html+= '<input type="checkbox" class="custom-control-input" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
+                                              _html+= '<input type="checkbox" class="custom-control-input selecteds" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
                                                         _html+= '<label class="custom-control-label" for="' + value.filename+'">';
                                                             _html+= '<img src="'+image+ value.filename+'" class="big" alt="" title="Beautiful Image"  />';
                                                             _html+= '</label>';
@@ -235,7 +238,7 @@ $(".load-more").html('Load More');
                     
                         _html+='<div class="col-lg-3 satir">';
                             _html+='<div class="card shadow overflow-hidden custom-control custom-checkbox image-checkbox">';
-                         _html+= '<input type="checkbox" class="custom-control-input" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
+                         _html+= '<input type="checkbox" class="custom-control-input selecteds" name="selecteds[]" id="' + value.filename+'" value="'+ value.id+'">';
                                 _html+= '<label class="custom-control-label" for="' + value.filename+'">';
                                     _html+= '<img src="'+image+ value.filename+'" class="big" alt="" title="Beautiful Image"  />';
                                     _html+= '</label>';
@@ -300,13 +303,14 @@ $(".load-more").html('Load More');
         var image="{{ asset('images') }}/";
    
 
-        $.each(response,function(index,value){
-      
+        $.each(response,function(index, value){
+    
+ 
                 _html+='<div class="col-lg-3 satir">';
                     _html+='<div class="card shadow overflow-hidden custom-control custom-checkbox image-checkbox">';
-                        _html+= '<input type="checkbox" class="custom-control-input" id="' + value+'">';
-                        _html+= '<label class="custom-control-label" for="' + value+'">';
-                            _html+= '<img src="'+image+ value+'" class="big" alt="" title="Beautiful Image" name="selecteds[]" />';
+                        _html+= '<input type="checkbox" class="custom-control-input selecteds" value= "'+index+'" id="' +index+'" >';
+                        _html+= '<label class="custom-control-label" for="' +index+'">';
+                            _html+= '<img src="'+image+ value+'" class="big" alt="" title="Beautiful Image"  />';
                             _html+= '</label>';
                         _html+= '</div>';
                     _html+= '</div>';

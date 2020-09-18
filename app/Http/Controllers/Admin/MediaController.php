@@ -68,7 +68,8 @@ class MediaController extends Controller
         $media = new Media();
         $media->filename = $imageName;
         $media->save();
-        return response()->json(['success' => $imageName]);
+        $resim = [$media->id => $imageName];
+        return $resim;
     }
 
     /**

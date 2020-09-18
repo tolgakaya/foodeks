@@ -31,11 +31,27 @@
 
     <!-- Sidemenu Css -->
     <link href="{{asset('backend/plugins/toggle-sidebar/css/sidemenu.css')}}" rel="stylesheet">
+    <style>
+        .badge {
+            position: absolute;
+            font-size: xx-small;
+            margin-left: -5px;
+            margin-top: -15px;
+            background-color: var(--orange);
+            color: white;
+        }
+    </style>
     @yield('extracss')
 
 </head>
 
 <body class="app sidebar-mini rtl">
+    <audio id="notification" src="{{asset('backend/sounds/alert.wav')}}" muted></audio>
+    {{-- <audio id="soundFX">
+        <source src="{{asset('backend/sounds/alert.wav')}}">
+    </source>
+    </audio> --}}
+    {{-- var mp3Source = '<source src="' + filename + '.mp3" type="audio/mpeg">'; --}}
     <div id="global-loader"></div>
     <div class="page">
         <div class="page-main">
@@ -163,13 +179,14 @@
                                     class="side-menu__label">Sayfalar</span><i class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a href="icons-feather.html" class="slide-item">Ana Sayfa</a>
+                                    <a href="{{route('admin.pages.home.index')}}" class="slide-item">Ana Sayfa<a>
                                 </li>
                                 <li>
-                                    <a href="icons-fontawesome.html" class="slide-item">Hakkımızda</a>
+                                    <a href="{{route('admin.pages.about.index')}}" class="slide-item">Hakkımızda</a>
                                 </li>
                                 <li>
-                                    <a href="icons-ion.html" class="slide-item">Sosyal Ağ</a>
+                                    <a href="{{route('admin.pages.settings.index')}}" class="slide-item">Site
+                                        Ayarları</a>
                                 </li>
                                 <li>
                                     <a href="icons-materialdesign.html" class="slide-item">Sıkça Sorular Sorular</a>
@@ -332,7 +349,7 @@
                                 </ul>
 
                                 <!-- Brand -->
-                                <a class="navbar-brand pt-0 d-md-none" href="index-2.html">
+                                <a class="navbar-brand pt-0 d-md-none" href="{{route('admin.dashboard')}}">
                                     <img src="backend/img/brand/logo-light.png" class="navbar-brand-img" alt="...">
                                 </a>
                                 <!-- Form -->
@@ -356,13 +373,16 @@
                                     <li class="nav-item dropdown d-none d-md-flex">
                                         <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
                                             data-toggle="dropdown" href="#" role="button">
+
                                             <div class="media align-items-center">
-                                                <i class="fe fe-user "></i>
+                                                <i class="fe fe-user " id="paketcount"></i>
                                             </div>
+
                                         </a>
-                                        <div
+                                        <input type="hidden" id="currentPaket">
+                                        <div id='alarmpaket'
                                             class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                            <a class="dropdown-item d-flex" href="#">
+                                            {{-- <a class="dropdown-item d-flex" href="#">
                                                 <span class="avatar brround mr-3 align-self-center"> <img
                                                         src="backend/img/faces/male/4.jpg" alt="imag"></span>
                                                 <div>
@@ -372,31 +392,7 @@
                                                         <span class="btn btn-sm btn-outline-primary">Delete</span>
                                                     </div>
                                                 </div>
-                                            </a>
-                                            <a class="dropdown-item d-flex" href="#">
-                                                <span class="avatar brround mr-3 align-self-center"><img
-                                                        src="{{asset('backend/img/faces/female/14.jpg')}}"
-                                                        alt="imag"></span>
-                                                <div>
-                                                    <strong>rebica</strong> sent you friend request
-                                                    <div class=" mt-2 small text-muted">
-                                                        <span class="btn btn-sm btn-primary">Conform</span>
-                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="dropdown-item d-flex" href="#">
-                                                <span class="avatar brround mr-3 align-self-center"><img
-                                                        src="{{asset('backend/img/faces/male/1.jpg')}}"
-                                                        alt="imag"></span>
-                                                <div>
-                                                    <strong>Devid robott</strong> sent you friend request
-                                                    <div class=" mt-2 small text-muted">
-                                                        <span class="btn btn-sm btn-primary">Conform</span>
-                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
+                                            </a> --}}
                                             <div class="dropdown-divider"></div><a
                                                 class="dropdown-item text-center text-muted-dark" href="#">View all
                                                 Requestes</a>
@@ -407,63 +403,27 @@
                                         <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
                                             data-toggle="dropdown" href="#" role="button">
                                             <div class="media align-items-center">
-                                                <i class="fe fe-mail "></i>
+                                                <i class="fe fe-mail " id="adisyoncount"></i>
                                             </div>
                                         </a>
-                                        <div
+                                        <input type="hidden" id="currentAdisyon">
+                                        <div id="alarmadisyon"
                                             class="dropdown-menu  dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                            <a href="#" class="dropdown-item text-center">12 New Messages</a>
+                                            {{-- <a href="#" class="dropdown-item text-center">12 New Messages</a> --}}
                                             <div class="dropdown-divider"></div>
-                                            <a href="#" class="dropdown-item d-flex">
-                                                <span class="avatar brround mr-3 align-self-center"><img
-                                                        src="backend/img/faces/male/41.jpg" alt="img"></span>
-                                                <div>
-                                                    <strong>Madeleine</strong> Hey! there I' am available....
-                                                    <div class="small text-muted">3 hours ago</div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="dropdown-item d-flex">
-                                                <span class="avatar brround mr-3 align-self-center"><img
-                                                        src="{{asset('backend/img/faces/female/1.jpg')}}"
-                                                        alt="img"></span>
-                                                <div>
-                                                    <strong>Anthony</strong> New product Launching...
-                                                    <div class="small text-muted">5 hour ago</div>
-                                                </div>
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" class="dropdown-item text-center">See all Messages</a>
                                         </div>
                                     </li>
                                     <li class="nav-item dropdown d-none d-md-flex">
                                         <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
                                             data-toggle="dropdown" href="#" role="button">
                                             <div class="media align-items-center">
-                                                <i class="fe fe-bell f-30 "></i>
+                                                <i class="fe fe-bell fe-30 " id="bookingcount"></i>
                                             </div>
                                         </a>
-                                        <div
-                                            class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                            <a href="#" class="dropdown-item d-flex">
-                                                <div>
-                                                    <strong>Someone likes our posts.</strong>
-                                                    <div class="small text-muted">3 hours ago</div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="dropdown-item d-flex">
-                                                <div>
-                                                    <strong> 3 New Comments</strong>
-                                                    <div class="small text-muted">5 hour ago</div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="dropdown-item d-flex">
-                                                <div>
-                                                    <strong> Server Rebooted.</strong>
-                                                    <div class="small text-muted">45 mintues ago</div>
-                                                </div>
-                                            </a>
+                                        <div id="alarmbooking"
+                                            class="dropdown-menu  dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
+                                            {{-- <a href="#" class="dropdown-item text-center">12 New Messages</a> --}}
                                             <div class="dropdown-divider"></div>
-                                            <a href="#" class="dropdown-item text-center">View all Notification</a>
                                         </div>
                                     </li>
                                     <li class="nav-item dropdown">
@@ -552,6 +512,7 @@
     <script src="{{asset('backend//plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
     <!-- Ansta JS -->
     <script src="{{asset('backend/js/custom.js')}}"></script>
+    <script src="{{asset('backend/js/alert.js')}}"></script>
     <script>
         $(document).ready(function () {
                             function Delete(menid, mealid) {
