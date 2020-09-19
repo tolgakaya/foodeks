@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->unsignedBigInteger('restaurant_id')->nullable();
             $table->string('mobile')->nullable();
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

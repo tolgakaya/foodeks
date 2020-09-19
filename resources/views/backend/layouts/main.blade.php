@@ -27,7 +27,7 @@
 
     <!-- Custom scroll bar css-->
     <link href="{{asset('backend/plugins/customscroll/jquery.mCustomScrollbar.css')}}" rel="stylesheet" />
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Sidemenu Css -->
     <link href="{{asset('backend/plugins/toggle-sidebar/css/sidemenu.css')}}" rel="stylesheet">
@@ -41,11 +41,14 @@
             color: white;
         }
     </style>
+
     @yield('extracss')
 
 </head>
 
+
 <body class="app sidebar-mini rtl">
+    @include('sweet::alert')
     <audio id="notification" src="{{asset('backend/sounds/alert.wav')}}" muted></audio>
     {{-- <audio id="soundFX">
         <source src="{{asset('backend/sounds/alert.wav')}}">
@@ -59,9 +62,9 @@
             <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
             <aside class="app-sidebar ">
                 <div class="sidebar-img">
-                    <a class="navbar-brand" href="index-2.html"><img alt="..." class="navbar-brand-img main-logo"
-                            src="{{asset('backend/img/brand/logo-dark.png')}}"> <img alt="..."
-                            class="navbar-brand-img logo" src="{{asset('backend/img/brand/logo.png')}}"></a>
+                    <a class="navbar-brand" href="{{route('admin.orders.index')}}"><img alt="..."
+                            class="navbar-brand-img main-logo" src="{{asset('backend/img/brand/logo-dark.png')}}"> <img
+                            alt="..." class="navbar-brand-img logo" src="{{asset('backend/img/brand/logo.png')}}"></a>
                     <ul class="side-menu">
                         <li class="slide">
                             <a class="side-menu__item active" data-toggle="slide" href="#"><i
@@ -70,20 +73,11 @@
                                     class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
-                                    <a class="slide-item" href="{{route('admin.restaurant.index')}}">Restaurants</a>
+                                    <a class="slide-item" href="{{route('admin.restaurant.index')}}">Restaurantlar</a>
                                 </li>
                                 <li>
-                                    <a class="slide-item" href="{{route('admin.restaurant.create')}}">New Restaurant</a>
-                                </li>
-                                <li>
-                                    <a class="slide-item" href="dashboard-marketing.html">Marketing Dashboard</a>
-                                </li>
-                                <li>
-                                    <a class="slide-item" href="dashboard-it.html">IT Dashboard</a>
-                                </li>
-                                <li>
-                                    <a class="slide-item" href="dashboard-cryptocurrency.html">Cryptocurrency
-                                        Dashboard</a>
+                                    <a class="slide-item" href="{{route('admin.restaurant.create')}}">Yeni Restaurant
+                                        Ekle</a>
                                 </li>
 
                             </ul>
@@ -426,34 +420,42 @@
                                             <div class="dropdown-divider"></div>
                                         </div>
                                     </li>
+                                    @auth
                                     <li class="nav-item dropdown">
                                         <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-md-0"
                                             data-toggle="dropdown" href="#" role="button">
                                             <div class="media align-items-center">
                                                 <span class="avatar avatar-sm rounded-circle"><img
                                                         alt="Image placeholder"
-                                                        src="{{asset('backend/img/faces/female/32.jpg')}}"></span>
+                                                        src="{{Auth::user()->userAvatar() ?? asset('backend/img/faces/female/32.jpg')}}"></span>
                                                 <div class="media-body ml-2 d-none d-lg-block">
-                                                    <span class="mb-0 ">{{Auth::user()->name}}</span>
+                                                    <span class="mb-0 ">{{Auth::user()->adi}}</span>
                                                 </div>
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
                                             <div class=" dropdown-header noti-title">
-                                                <h6 class="text-overflow m-0">Welcome!</h6>
+                                                <h6 class="text-overflow m-0">Selam! {{Auth::user()->adi}}</h6>
                                             </div>
-                                            <a class="dropdown-item" href="user-profile.html"><i
-                                                    class="ni ni-single-02"></i> <span>My profile</span></a>
-                                            <a class="dropdown-item" href="#"><i class="ni ni-settings-gear-65"></i>
-                                                <span>Settings</span></a>
-                                            <a class="dropdown-item" href="#"><i class="ni ni-calendar-grid-58"></i>
-                                                <span>Activity</span></a>
-                                            <a class="dropdown-item" href="#"><i class="ni ni-support-16"></i>
-                                                <span>Support</span></a>
-                                            <div class="dropdown-divider"></div><a class="dropdown-item"
-                                                href="login.html"><i class="ni ni-user-run"></i> <span>Logout</span></a>
+                                            <a class="dropdown-item" href="{{route('admin.profile.index')}}"><i
+                                                    class="ni ni-single-02"></i> <span>Profilim</span></a>
+                                            <a class="dropdown-item" href="{{route('admin.change.password')}}"><i
+                                                    class="ni ni-settings-gear-65"></i>
+                                                <span>Şifre değiştir</span></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                                                                                         document.getElementById('logout-form').submit();">
+                                                <i class="icon-logout">Logout</i>
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
                                         </div>
                                     </li>
+                                    @endauth
+
                                 </ul>
                             </div>
                         </nav>
@@ -490,7 +492,6 @@
     <a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
 
     <!-- Ansta Scripts -->
-
     <!-- Core -->
     <script src="{{asset('backend/plugins/jquery/dist/jquery.min.js')}}"></script>
     <script src="{{asset('backend/js/popper.js')}}"></script>
@@ -513,6 +514,8 @@
     <!-- Ansta JS -->
     <script src="{{asset('backend/js/custom.js')}}"></script>
     <script src="{{asset('backend/js/alert.js')}}"></script>
+    {{-- <script src="{{asset('backend/js/sweet-alert.js')}}"></script> --}}
+
     <script>
         $(document).ready(function () {
                             function Delete(menid, mealid) {

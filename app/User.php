@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'adi', 'email', 'password', 'mobile', 'role', 'restaurant_id'
+        'adi', 'email', 'password', 'mobile', 'role', 'restaurant_id', 'avatar'
     ];
 
     /**
@@ -75,6 +75,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Order::class)
             ->using(OrderUser::class)
             ->withPivot(['id', 'order_id', 'user_id', 'begin_date', 'begin_date', 'begin_time', 'end_time', 'notes']);
+    }
+    public function userAvatar()
+    {
+        return  asset('images/' . $this->avatar);
     }
     public function getUserRoleAttribute()
     {

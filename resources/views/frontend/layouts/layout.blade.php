@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="Ansonika">
     <meta name="_token" content="{{csrf_token()}}" />
-    <title>QuickFood - Quality delivery or take away food</title>
+    <title>Adanadayım Kebap Izgara</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
@@ -21,7 +21,7 @@
     <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
         href="img/apple-touch-icon-144x144-precomposed.png">
     <link href="{{asset('frontend/css/loader.css')}}" rel="stylesheet">
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- GOOGLE WEB FONT -->
     <link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,400italic,700italic,300,300italic'
         rel='stylesheet' type='text/css'>
@@ -40,7 +40,7 @@
 
     <link href="{{asset('frontend/css/base.css')}}" rel="stylesheet">
 
-
+    <link href="{{asset('frontend/cart/css/style.css')}}" rel="stylesheet">
     {{-- <link href="css/skins/square/grey.css" rel="stylesheet">
     <link href="css/ion.rangeSlider.css" rel="stylesheet">
     <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet"> --}}
@@ -52,11 +52,113 @@
       <script src="js/html5shiv.min.js"></script>
       <script src="js/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .gizle {
+            display: none;
+        }
 
+        .goster {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
+    {{-- @if($quantity>0) --}}
+    <div class="cd-cart  js-cd-cart {{$quantity > 0 ? 'goster' : 'gizle'}}">
+        <a href="#0" class="cd-cart__trigger text-replace">
+            Cart
+            <ul class="cd-cart__count">
+                <!-- cart items count -->
+                <li id='quantity'>{{$quantity}}</li>
+                <li>0</li>
+            </ul> <!-- .cd-cart__count -->
+        </a>
 
+        <div class="cd-cart__content">
+            <div class="cd-cart__layout">
+                <header class="cd-cart__header">
+                    <h3>Siparişiniz</h3><i class="icon_cart_alt"></i>
+
+                </header>
+
+                <div class="cd-cart__body">
+
+                    <div class="table table-responsive" id="cart_box">
+
+                        <table class="table table_summary">
+                            <tbody id="cd_cartbody" class="cartbody">
+                                @foreach($cartItems as $rowid => $row)
+                                <tr class="info">
+                                    <td>
+                                        <a href="#0" class="remove_item" id="{{$row->id}}"><i
+                                                class="icon_minus_alt"></i></a>
+                                        <strong>{{$row->quantity}}X</strong>
+                                        @if($row->attributes['option']!==null)
+
+                                        <strong>{{$row->attributes['option']->option}}</strong>
+
+                                        @endif
+                                        {{$row->name}}
+                                    </td>
+                                    <td>
+                                        @if($row->attributes['option']!==null)
+                                        <strong
+                                            class="pull-right">{{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}
+                                            TL</strong>
+                                        @else
+                                        <strong class="pull-right">{{$row->quantity * $row->price}} TL</strong>
+                                        @endif
+                                    </td>
+
+                                </tr>
+                                @foreach($row->attributes['extras'] as $key => $extra)
+                                <tr>
+
+                                    <td class="pull-right">
+                                        {{-- <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a> --}}
+                                        <strong>Ekstra </strong>
+                                        {{$extra->extra}}
+                                    </td>
+                                    <td>
+                                        <strong class="pull-right">{{$extra->fee}}</strong>
+                                    </td>
+
+                                </tr>
+                                @endforeach
+
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <hr>
+                    </div><!-- End cart_box -->
+                </div>
+
+                <footer class="cd-cart__footer">
+                    @if($restaurant !=null)
+                    <a href="{{$restaurant->isAvailable()== true ? route('orders.create') : '#'}}"
+                        class="cd-cart__checkout">
+                        <em>Toplam <span
+                                class="total">{{$restaurant->isAvailable()== false ? 'Servis Zamanı Dışında' : $total}}</span>
+                            <svg class="icon icon--sm" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor">
+                                    <line stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="3" y1="12"
+                                        x2="21" y2="12" />
+                                    <polyline stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        points="15,6 21,12 15,18 " />
+                                </g>
+                            </svg>
+                        </em>
+                    </a>
+                    @endif
+
+                </footer>
+            </div>
+        </div> <!-- .cd-cart__content -->
+    </div> <!-- cd-cart -->
+    {{-- @endif --}}
+
+    @include('sweet::alert')
     <!--[if lte IE 8]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a>.</p>
     <![endif]-->
@@ -144,6 +246,9 @@
         </div>
     </div><!-- End modal -->
 
+
+
+
     <!-- Login modal -->
     <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myRegister" aria-hidden="true">
         <div class="modal-dialog">
@@ -195,6 +300,11 @@
     <script src="{{asset('frontend/js/common_scripts_min.js')}}"></script>
     <script src="{{asset('frontend/js/functions.js')}}"></script>
     <script src="{{asset('frontend/assets/validate.js')}}"></script>
+    <script src="{{asset('frontend/cart/js/util.js')}}"></script>
+    <script src="{{asset('frontend/cart/js/main.js')}}"></script>
+    <script src="{{asset('frontend/cart/js/cart.js')}}"></script>
+    <script src="{{asset('frontend/js/cat_nav_mobile.js')}}"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $("#btnLogin").click(function(e){

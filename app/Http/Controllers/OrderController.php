@@ -16,6 +16,9 @@ use Illuminate\Support\Str;
 use Psy\Util\Json;
 use Notification;
 use App\Helpers\SmsService;
+use UxWeb\SweetAlert\SweetAlert;
+use App\Helpers\CartService;
+
 
 class OrderController extends Controller
 {
@@ -37,26 +40,31 @@ class OrderController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $total = 0;
-        $cartItems = \Cart::getContent();
-        $quantity = 0;
-        foreach ($cartItems as   $row) {
-            $base = $row->quantity * $row->price;
-            $quantity += $row->quantity;
-            $opfee = 0;
-            $extfee = 0;
-            if ($row->attributes['option'] !== null) {
-                $opfee = $row->attributes['option']->fee * $row->quantity;
-            }
+        $cartContent = CartService::cartContent();
+        $cartItems = $cartContent['cartItems'];
+        $total = $cartContent['total'];
+        $quantity = $cartContent['quantity'];
+        $restaurant = $cartContent['restaurant'];
+        // $total = 0;
+        // $cartItems = \Cart::getContent();
+        // $quantity = 0;
+        // foreach ($cartItems as   $row) {
+        //     $base = $row->quantity * $row->price;
+        //     $quantity += $row->quantity;
+        //     $opfee = 0;
+        //     $extfee = 0;
+        //     if ($row->attributes['option'] !== null) {
+        //         $opfee = $row->attributes['option']->fee * $row->quantity;
+        //     }
 
 
-            if ($row->attributes['extras'] !== null) {
-                foreach ($row->attributes['extras']  as $ext) {
-                    $extfee += $ext->fee;
-                }
-            }
-            $total += $base + $extfee + $opfee;
-        }
+        //     if ($row->attributes['extras'] !== null) {
+        //         foreach ($row->attributes['extras']  as $ext) {
+        //             $extfee += $ext->fee;
+        //         }
+        //     }
+        //     $total += $base + $extfee + $opfee;
+        // }
         $addresses = null;
         $firstAdres = null;
         if ($user !== null) {
@@ -66,7 +74,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('frontend.orders.create', compact('cartItems', 'total', 'quantity', 'user', 'addresses', 'firstAdres'));
+        return view('frontend.orders.create', compact('cartItems', 'total', 'quantity', 'user', 'addresses', 'firstAdres', 'restaurant'));
     }
     public function address(Address $address)
     {
@@ -166,19 +174,21 @@ class OrderController extends Controller
         //mail
 
         //sepeti temizle
-        // \Cart::clear();
+        \Cart::clear();
 
         \Notification::route('mail', $request->email)->notify(new OrderCreated($order, ''));
 
         \Notification::route('mail',  $order->restaurant->email)->notify(new OrderCreated($order, 'mudur'));
 
-        $customerMessage = "Siparişiniz alındı. en kısa zamanda sipariş ettiğiniz lezzetlerle kapınızda olacağız. Afiyat olsun.";
+        $customerMessage = "Siparişiniz alındı. en kısa zamanda sipariş ettiğiniz lezzetlerle kapınızda olacağız. Afiyet olsun.";
         $mudurMessage = "Yeni sipariş alındı. sipariş linki: " . route('admin.orders.index', ['status' => 1]);
         $sms = new SmsService([$request->phone], $customerMessage);
         $sms->send();
 
         $smsMudur = new SmsService([$order->restaurant->phone], $mudurMessage);
         $smsMudur->send();
+        alert('Siparişiniz alındı. Siparişle ilgili sms ve ve mail adreslerinize sipariş bilgileri gönderildi. Afiyet olsun!', 'Adanadayım')->persistent("Tamam");
+        return redirect()->route('restaurants.menu', ['restaurant' => $restaurant_id]);
     }
 
     public function masaStore(Request $request, $masaid, $menuid)
@@ -186,7 +196,7 @@ class OrderController extends Controller
         //o masa için kapanmamış bir adisyon var mı bakacak
         //varsa o orderid için detail yazacak
         //orderı güncelleyecek
-        $cartSession = $menuid . $masaid;
+        $cartSession = $masaid . $menuid;
         $order = Order::where('kapandi', false)->where('masaid', $masaid)->first();
         $mevcutCart = \Cart::session($cartSession)->getContent();
         $first = $mevcutCart->first();
@@ -257,53 +267,7 @@ class OrderController extends Controller
         \Cart::session($cartSession)->clear();
         // \Notification::route('mail',  $order->restaurant->email)->notifyNow(new OrderCreated($order, 'mudur'));
         // \Notification::route('mail', $request->email)->notifyNow(new OrderCreated($order, ''));
-        return 'başarılı';
-        // dd($order);
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
-    {
-        //
+        alert()->info('Sipariş kaydı yapıldı', 'Başarılı')->autoclose(2000);
+        return redirect()->route('touchless.paging', ['masaid' => $masaid, 'restaurant' => $restaurant_id]);
     }
 }

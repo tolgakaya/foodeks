@@ -20,83 +20,15 @@
                     <a href="#" class="open_close" id="close_in"><i class="icon_close"></i></a>
                     <ul>
                         <li>
-                            <a href="{{route('home')}}">Home</a>
+                            <a href="{{route('home')}}">Ana Sayfa</a>
                         </li>
                         <li>
-                            <a href="{{route('restaurants.index')}}">Restaurants</a>
+                            <a href="{{route('restaurants.index')}}">Restaurantlar</a>
                         </li>
-                        <li><a href="{{route('about')}}">About us</a></li>
-                        <li><a href="{{route('faq')}}">Faq</a></li>
-
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> 7 -
-                                Items<span class="caret"></span></a>
-                            <ul class="dropdown-menu dropdown-cart" role="menu">
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="item">
-                                        <span class="item-left">
-                                            <img src="http://lorempixel.com/50/50/" alt="" />
-                                            <span class="item-info">
-                                                <span>Item name</span>
-                                                <span>23$</span>
-                                            </span>
-                                        </span>
-                                        <span class="item-right">
-                                            <button class="btn btn-xs btn-danger pull-right">x</button>
-                                        </span>
-                                    </span>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a class="text-center" href="">View Cart</a></li>
-                            </ul>
-                        </li>
-
+                        <li><a href="{{route('about')}}">Hakkımızda</a></li>
                         @guest
-                        <li><a href="#0" data-toggle="modal" data-target="#login_2">Login</a></li>
-                        <li><a href="{{route('register')}}">Register</a></li>
+                        <li><a href="#0" data-toggle="modal" data-target="#login_2">Giriş</a></li>
+                        <li><a href="#0" data-toggle="modal" data-target="#register">Üyelik</a></li>
                         @endguest
                         @auth
                         <li class="dropdown" style=" margin-right: 60px;">

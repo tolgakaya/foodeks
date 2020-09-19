@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\Category;
 use Darryldecode\Cart;
+use App\Helpers\CartService;
 
 class RestaurantController extends Controller
 {
@@ -29,7 +30,13 @@ class RestaurantController extends Controller
         //belli bir yarı çaptakileri arama
         // $restaurants = Restaurant::geofence($latitude, $longitude, 0, 5)->orderBy('distance', 'ASC')->get();
 
-        return view('frontend.restaurants.index', compact('restaurants', 'viewType'));
+        $cartContent = CartService::cartContent();
+        $cartItems = $cartContent['cartItems'];
+        $total = $cartContent['total'];
+        $quantity = $cartContent['quantity'];
+        $restaurant = $cartContent['restaurant'];
+
+        return view('frontend.restaurants.index', compact('restaurants', 'viewType', 'cartItems', 'total', 'quantity', 'restaurant'));
     }
     public function show(Restaurant $restaurant)
     {

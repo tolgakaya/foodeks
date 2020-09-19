@@ -3,29 +3,6 @@
 {{-- <link href="{{asset('backend/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css" /> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
 <link href="{{asset('backend/css/image-checkbox.css')}}" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
-<meta name="_token" content="{{csrf_token()}}" />
-@endsection
-@section('content')
-<div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
-    </ol>
-    {{-- <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="#"><i class="fas fa-plus mr-2"></i>Add new
-                Page</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-eye mr-2"></i>View the page
-                Details</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-edit mr-2"></i>Edit Page</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i> Settings</a>
-        </div>
-    </div> --}}
-</div>
 <style>
     .dz-message {
         text-align: center;
@@ -38,6 +15,18 @@
         object-fit: cover;
     }
 </style>
+
+<meta name="_token" content="{{csrf_token()}}" />
+@endsection
+@section('content')
+<div class="page-header mt-0 shadow p-3">
+    <ol class="breadcrumb mb-sm-0">
+        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
+    </ol>
+
+</div>
+
 <div class="container">
     <div class="card shadow">
         <div class="card-header">
@@ -130,7 +119,7 @@
             });
             var thisDropzone = this;
             
-            var image="{{ asset('images') }}/";
+            var image="{{ asset('/images') }}/";
             var i=$("#imagehdn").val();
             var defaultValue=image+i;
             //Call the action method to load the images from the server

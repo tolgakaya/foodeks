@@ -57,8 +57,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="custom-switch">
+                                        @if ($page !=null)
                                         <input type="checkbox" name="show_how" value="1" class="custom-switch-input"
                                             {{$page->show_how==true ? 'checked' :'' }}>
+                                        @else
+                                        <input type="checkbox" name="show_how" value="1" class="custom-switch-input">
+                                        @endif
+
                                         <span class="custom-switch-indicator"></span>
                                         <span class="custom-switch-description">Çalışma sistemini göster</span>
                                     </label>
@@ -67,8 +72,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="custom-switch">
+                                        @if ($page !=null)
                                         <input type="checkbox" name="menu_show" value="1" class="custom-switch-input"
                                             {{$page->menu_show==true ? 'checked' : '' }}>
+                                        @else
+                                        <input type="checkbox" name="menu_show" value="1" class="custom-switch-input">
+                                        @endif
+
                                         <span class="custom-switch-indicator"></span>
                                         <span class="custom-switch-description">Menüyü göster</span>
                                     </label>
@@ -77,8 +87,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="custom-switch">
+                                        @if ($page !=null)
                                         <input type="checkbox" name="paralax_show" value="1" class="custom-switch-input"
                                             {{$page->paralax_show==true ? 'checked'  :''}}>
+                                        @else
+                                        <input type="checkbox" name="paralax_show" value="1"
+                                            class="custom-switch-input">
+                                        @endif
                                         <span class="custom-switch-indicator"></span>
                                         <span class="custom-switch-description">Arkaplan resmini göster</span>
                                     </label>

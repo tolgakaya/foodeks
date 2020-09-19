@@ -28,14 +28,24 @@
     <!-- Custom scroll bar css-->
     <link href="{{asset('backend/plugins/customscroll/jquery.mCustomScrollbar.css')}}" rel="stylesheet" />
 
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Sidemenu Css -->
     <link href="{{asset('backend/plugins/toggle-sidebar/css/sidemenu.css')}}" rel="stylesheet">
+    {{-- <style>
+        .felan {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+        }
+    </style> --}}
+
+
     @yield('extracss')
 
 </head>
 
-<body class="app sidebar-mini rtl">
+<body class="app">
+    @include('sweet::alert')
     <div id="global-loader"></div>
     <div class="page">
         <div class="page-main">
@@ -73,7 +83,7 @@
                     <div class="app-content ">
                         <div class="side-app">
                             <div class="main-content">
-                                <div class="p-2 d-block d-sm-none navbar-sm-search">
+                                {{-- <div class="p-2 d-block d-sm-none navbar-sm-search">
                                     <!-- Form -->
                                     <form class="navbar-search navbar-search-dark form-inline ml-lg-auto">
                                         <div class="form-group mb-0">
@@ -84,7 +94,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                </div> --}}
                                 <!-- Top navbar -->
                                 <nav class="navbar navbar-top  navbar-expand-md navbar-dark" id="navbar-main">
                                     <div class="container-fluid">
@@ -92,7 +102,7 @@
                                             href="#"></a>
 
                                         <!-- Horizontal Navbar -->
-                                        <ul class="navbar-nav align-items-center d-none d-xl-block">
+                                        {{-- <ul class="navbar-nav align-items-center d-none d-xl-block">
                                             <li class="nav-item dropdown">
                                                 <a aria-expanded="false" aria-haspopup="true"
                                                     class="nav-link pr-md-0 d-none d-lg-block" data-toggle="dropdown"
@@ -121,15 +131,15 @@
                                                     <a class="dropdown-item" href="#"><span>Settings</span></a>
                                                 </div>
                                             </li>
-                                        </ul>
+                                        </ul> --}}
 
                                         <!-- Brand -->
                                         <a class="navbar-brand pt-0 d-md-none" href="index-2.html">
-                                            <img src="backend/img/brand/logo-light.png" class="navbar-brand-img"
-                                                alt="...">
+                                            <img src="{{asset('backend/img/brand/logo-light.png')}}"
+                                                class="navbar-brand-img" alt="...">
                                         </a>
                                         <!-- Form -->
-                                        <form class="navbar-search navbar-search-dark form-inline mr-3  ml-lg-auto">
+                                        {{-- <form class="navbar-search navbar-search-dark form-inline mr-3  ml-lg-auto">
                                             <div class="form-group mb-0">
                                                 <div class="input-group input-group-alternative">
                                                     <div class="input-group-prepend">
@@ -138,7 +148,7 @@
                                                     </div><input class="form-control" placeholder="Search" type="text">
                                                 </div>
                                             </div>
-                                        </form>
+                                        </form> --}}
                                         <!-- User -->
                                         <ul class="navbar-nav align-items-center ">
                                             <li class="nav-item d-none d-md-flex">
@@ -148,154 +158,14 @@
                                                             id="fullscreen-button"></i></a>
                                                 </div>
                                             </li>
-                                            <li class="nav-item dropdown d-none d-md-flex">
-                                                <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
-                                                    data-toggle="dropdown" href="#" role="button">
-                                                    <div class="media align-items-center">
-                                                        <i class="fe fe-user "></i>
-                                                    </div>
-                                                </a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                                    <a class="dropdown-item d-flex" href="#">
-                                                        <span class="avatar brround mr-3 align-self-center"> <img
-                                                                src="backend/img/faces/male/4.jpg" alt="imag"></span>
-                                                        <div>
-                                                            <strong>Madeleine Scott</strong> sent you friend request
-                                                            <div class=" mt-2 small text-muted">
-                                                                <span class="btn btn-sm btn-primary">Conform</span>
-                                                                <span
-                                                                    class="btn btn-sm btn-outline-primary">Delete</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item d-flex" href="#">
-                                                        <span class="avatar brround mr-3 align-self-center"><img
-                                                                src="{{asset('backend/img/faces/female/14.jpg')}}"
-                                                                alt="imag"></span>
-                                                        <div>
-                                                            <strong>rebica</strong> sent you friend request
-                                                            <div class=" mt-2 small text-muted">
-                                                                <span class="btn btn-sm btn-primary">Conform</span>
-                                                                <span
-                                                                    class="btn btn-sm btn-outline-primary">Delete</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item d-flex" href="#">
-                                                        <span class="avatar brround mr-3 align-self-center"><img
-                                                                src="{{asset('backend/img/faces/male/1.jpg')}}"
-                                                                alt="imag"></span>
-                                                        <div>
-                                                            <strong>Devid robott</strong> sent you friend request
-                                                            <div class=" mt-2 small text-muted">
-                                                                <span class="btn btn-sm btn-primary">Conform</span>
-                                                                <span
-                                                                    class="btn btn-sm btn-outline-primary">Delete</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <div class="dropdown-divider"></div><a
-                                                        class="dropdown-item text-center text-muted-dark" href="#">View
-                                                        all
-                                                        Requestes</a>
-                                                </div>
-                                            </li>
-
-                                            <li class="nav-item dropdown d-none d-md-flex">
-                                                <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
-                                                    data-toggle="dropdown" href="#" role="button">
-                                                    <div class="media align-items-center">
-                                                        <i class="fe fe-mail "></i>
-                                                    </div>
-                                                </a>
-                                                <div
-                                                    class="dropdown-menu  dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                                    <a href="#" class="dropdown-item text-center">12 New Messages</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a href="#" class="dropdown-item d-flex">
-                                                        <span class="avatar brround mr-3 align-self-center"><img
-                                                                src="backend/img/faces/male/41.jpg" alt="img"></span>
-                                                        <div>
-                                                            <strong>Madeleine</strong> Hey! there I' am available....
-                                                            <div class="small text-muted">3 hours ago</div>
-                                                        </div>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item d-flex">
-                                                        <span class="avatar brround mr-3 align-self-center"><img
-                                                                src="{{asset('backend/img/faces/female/1.jpg')}}"
-                                                                alt="img"></span>
-                                                        <div>
-                                                            <strong>Anthony</strong> New product Launching...
-                                                            <div class="small text-muted">5 hour ago</div>
-                                                        </div>
-                                                    </a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a href="#" class="dropdown-item text-center">See all Messages</a>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item dropdown d-none d-md-flex">
-                                                <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-0"
-                                                    data-toggle="dropdown" href="#" role="button">
-                                                    <div class="media align-items-center">
-                                                        <i class="fe fe-bell f-30 "></i>
-                                                    </div>
-                                                </a>
-                                                <div
-                                                    class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                                    <a href="#" class="dropdown-item d-flex">
-                                                        <div>
-                                                            <strong>Someone likes our posts.</strong>
-                                                            <div class="small text-muted">3 hours ago</div>
-                                                        </div>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item d-flex">
-                                                        <div>
-                                                            <strong> 3 New Comments</strong>
-                                                            <div class="small text-muted">5 hour ago</div>
-                                                        </div>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item d-flex">
-                                                        <div>
-                                                            <strong> Server Rebooted.</strong>
-                                                            <div class="small text-muted">45 mintues ago</div>
-                                                        </div>
-                                                    </a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a href="#" class="dropdown-item text-center">View all
-                                                        Notification</a>
-                                                </div>
-                                            </li>
-                                            <li class="nav-item dropdown">
+                                            <li class="nav-item ">
                                                 <a aria-expanded="false" aria-haspopup="true" class="nav-link pr-md-0"
-                                                    data-toggle="dropdown" href="#" role="button">
+                                                    data-toggle="modal" data-target="#exampleModal" role="button">
                                                     <div class="media align-items-center">
-                                                        <span class="avatar avatar-sm rounded-circle"><img
-                                                                alt="Image placeholder"
-                                                                src="{{asset('backend/img/faces/female/32.jpg')}}"></span>
-                                                        <div class="media-body ml-2 d-none d-lg-block">
-                                                            {{-- <span class="mb-0 ">{{Auth::user()->name}}</span> --}}
-                                                        </div>
+                                                        <i class="fe fe-bell "></i>
                                                     </div>
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
-                                                    <div class=" dropdown-header noti-title">
-                                                        <h6 class="text-overflow m-0">Welcome!</h6>
-                                                    </div>
-                                                    <a class="dropdown-item" href="user-profile.html"><i
-                                                            class="ni ni-single-02"></i> <span>My profile</span></a>
-                                                    <a class="dropdown-item" href="#"><i
-                                                            class="ni ni-settings-gear-65"></i>
-                                                        <span>Settings</span></a>
-                                                    <a class="dropdown-item" href="#"><i
-                                                            class="ni ni-calendar-grid-58"></i>
-                                                        <span>Activity</span></a>
-                                                    <a class="dropdown-item" href="#"><i class="ni ni-support-16"></i>
-                                                        <span>Support</span></a>
-                                                    <div class="dropdown-divider"></div><a class="dropdown-item"
-                                                        href="login.html"><i class="ni ni-user-run"></i>
-                                                        <span>Logout</span></a>
-                                                </div>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -304,7 +174,80 @@
 
                                 <!-- Page content -->
                                 <div class="container-fluid pt-8">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                {{-- <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Adisyon</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div> --}}
+                                                <div class="modal-body">
+                                                    @if ($order !=null)
+                                                    <div class="card shadow felan">
+                                                        <div class="card-header bg-gradient-primary">
+                                                            <h2 class="mb-0 text-white ">Masa No: {{$order->masaid}}
+                                                            </h2>
+                                                        </div>
+                                                        <div class="card-body text-center">
 
+                                                            <h4 class="h4 mb-0 mt-3 font-600">Adisyon Tutarı :
+                                                                {{$order->total}} TL</h4>
+                                                            <div class="">
+                                                                <div class="grid-margin">
+                                                                    <div class="">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table">
+                                                                                <thead class="thead-light">
+                                                                                    <tr>
+                                                                                        <th>Adet/Seçenek</th>
+                                                                                        <th>Ürün</th>
+                                                                                        <th>Tutar</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    @foreach ($order->orderdetails as
+                                                                                    $detail)
+                                                                                    <tr
+                                                                                        class="{{$detail->goruldu !=1 ? 'bg-info' :''}}">
+                                                                                        <td>{{$detail->quantity}} X
+                                                                                            {{$detail->option_name}}
+                                                                                        </td>
+                                                                                        <td
+                                                                                            class="text-sm font-weight-600">
+                                                                                            {{$detail->meal_name}}</td>
+                                                                                        <td class="text-nowrap">
+                                                                                            {{$detail->total}} TL</td>
+                                                                                    </tr>
+                                                                                    @endforeach
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <button type="button" class="btn btn-secondary btn-block"
+                                                                data-dismiss="modal">Kapat</button>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                                {{-- <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                </div> --}}
+                                            </div>
+                                        </div>
+                                    </div>
                                     @yield('content')
                                     <!-- Footer -->
                                     <footer class="footer">

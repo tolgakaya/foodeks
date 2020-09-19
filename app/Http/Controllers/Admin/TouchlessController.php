@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use Illuminate\Http\Request;
 use Darryldecode\Cart;
+use App\Order;
+use UxWeb\SweetAlert\SweetAlert;
 
 class TouchlessController extends Controller
 {
@@ -55,20 +57,12 @@ class TouchlessController extends Controller
             $beforeIndex = $index - 1;
         }
 
-        // return [
-        //     'before' => $beforeCategoryId,
-        //     'current' => $currentCategoryId,
-        //     'next' => $nextCategoryId,
-        //     'pluck' => $categories,
-        //     'category' => $category
-        // ];
-
         if ($category == null) {
             $category = $menu->categories()->first();
         }
         $meals = $menu->meals()->where('pasif', 0)->where('category_id', $currentCategoryId)->get();
 
-
+        $order = Order::where('masaid', '!=', null)->where('kapandi', '!=', true)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
 
         return view('backend.touchless.index', compact('menu', 'categories', 'meals', 'currentCategoryId', 'nextCategoryId', 'beforeCategoryId', 'kategoriler', 'currentIndex', 'beforeIndex', 'nextIndex', 'quantity', 'total'));
     }
@@ -81,7 +75,7 @@ class TouchlessController extends Controller
         $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
         $kategoriler = $menu->categories()->orderBy('category_id', 'asc')->get();
         // dd($kategoriler);
-
+        $cartSession = $masaid . $restaurant->id;
         $categories = $kategoriler->pluck('id')->toArray();
         if ($category == null) {
             $index = 0;
@@ -144,7 +138,7 @@ class TouchlessController extends Controller
             $category = $menu->categories()->first();
         }
         $meals = $menu->meals()->where('pasif', 0)->where('category_id', $currentCategoryId)->get();
-        $cartItems = \Cart::session($masaid)->getContent();
+        $cartItems = \Cart::session($cartSession)->getContent();
         $total = 0;
         $quantity = 0;
         foreach ($cartItems as   $row) {
@@ -162,7 +156,9 @@ class TouchlessController extends Controller
             }
             $total += $base + $extfee + $opfee;
         }
-        return view('backend.touchless.index', compact('menu', 'categories', 'meals', 'currentCategoryId', 'nextCategoryId', 'beforeCategoryId', 'kategoriler', 'currentIndex', 'beforeIndex', 'nextIndex', 'quantity', 'total', 'cartItems', 'masaid'));
+        $order = Order::where('masaid', $masaid)->where('restaurant_id', $restaurant->id)->where('kapandi', '!=', true)->with('orderdetails')->first();
+
+        return view('backend.touchless.index', compact('menu', 'categories', 'meals', 'currentCategoryId', 'nextCategoryId', 'beforeCategoryId', 'kategoriler', 'currentIndex', 'beforeIndex', 'nextIndex', 'quantity', 'total', 'cartItems', 'masaid', 'order'));
     }
     /**
      * Show the form for creating a new resource.

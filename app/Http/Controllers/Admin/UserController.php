@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Helpers\RoleConstant;
+use App\Helpers\SmsService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 
@@ -62,6 +63,12 @@ class UserController extends Controller
         );
         $data['validated'] = Hash::make($data['password']);
         User::create($data);
+        //sms ve email gönderelim
+        $userMessage = "Sn. " + $data['adi'] + " Üyeliğiniz başarılı bir şekilde gerçekleştirildi. Kullanıcı adınız: " + $data['email'] + " Şifreniz: " + $data['password'];
+        $sms = new SmsService([$data['mobile']], $userMessage);
+        $sms->send();
+
+
         return redirect()->route('admin.users.index');
     }
 

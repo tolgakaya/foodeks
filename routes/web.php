@@ -13,14 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view(env('THEME') . '.home');
-})->name('home');
+// Route::get('/', function () {
+//     return view(env('THEME') . '.home');
+// })->name('home');
 
 Route::get('/', function () {
     return view('frontend.home');
 })->name('home');
 
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('about', function () {
     return view('frontend.about');
 })->name('about');
@@ -61,6 +62,9 @@ Route::get('modal', function () {
 Auth::routes();
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::get('change-password', 'ChangePasswordController@index');
+    Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
+
     Route::get('dashboard', 'AdminController@index')->name('dashboard');
     Route::get('alert/paket', 'AlertController@index')->name('alert.paket');
     Route::post('sms', 'AdminController@nida')->name('sms');
@@ -116,6 +120,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('users', 'UserController@store')->name('users.store');
     Route::get('users', 'UserController@index')->name('users.index');
     Route::get('users/delete/{user}', 'UserController@destroy')->name('users.delete');
+
+    Route::post('profile', 'ProfileController@store')->name('profile.store');
+    Route::get('profile', 'ProfileController@index')->name('profile.index');
 
     Route::get('library/{chcbox?}', 'MediaController@index')->name('media.index');
     Route::get('library/detail/{filename}', 'MediaController@show')->name('media.show');

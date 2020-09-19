@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\User;
 use App\Helpers\RoleConstant;
+use UxWeb\SweetAlert\SweetAlert;
+use Darryldecode\Cart;
 
 class RestaurantController extends Controller
 {
@@ -27,12 +29,6 @@ class RestaurantController extends Controller
         } else {
             $restaurants = Restaurant::where('id', '=', $user->restaurant_id)->get();
         }
-
-        // $restaurants = $query->orderBy('distance', 'asc')->get();
-        // dd($restaurants);
-        //belli bir yarı çaptakileri arama
-        // $restaurants = Restaurant::geofence($latitude, $longitude, 0, 5)->orderBy('distance', 'ASC')->get();
-
         return view('backend.restaurant.index', compact('restaurants'));
     }
 
@@ -62,11 +58,12 @@ class RestaurantController extends Controller
             'longitude' => 'required',
             'latitude' => 'required',
             'phone' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'email' => 'required'
         ]);
 
         Restaurant::create($validated);
-
+        alert()->success('Yeni restaurant başarı ile kaydedildi', 'Kayıt Başarılı');
         return redirect()->route('admin.restaurant.index');
     }
 

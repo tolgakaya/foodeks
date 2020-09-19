@@ -18,6 +18,7 @@ use App\MealMenu;
 use App\Extra;
 use App\Notifications\OrderCreated;
 use Notification;
+use UxWeb\SweetAlert\SweetAlert;
 
 class OrderController extends Controller
 {
@@ -52,6 +53,8 @@ class OrderController extends Controller
                 $orders = Order::where('restaurant_id', '=', $user->restaurant_id)->where('masaid', null)->where('status', $status)->with('orderdetails')->orderByDesc('updated_at')->paginate(20);
             }
         }
+        // SweetAlert::message('Robots are working!');
+        // alert()->message('Message', 'Optional Title');
         return view('backend.orders.index', compact('orders', 'users', 'restaurants'));
     }
 
@@ -216,12 +219,13 @@ class OrderController extends Controller
         $order->save();
         //sms
         //mail
-
+        alert()->success('Sipariş kaydı başarıyla oluşturuldu', 'Sipariş oluşturuldu');
         //sepeti temizle
         \Cart::clear();
         \Notification::route('mail',  $order->restaurant->email)->notifyNow(new OrderCreated($order, 'mudur'));
         \Notification::route('mail', $request->email)->notifyNow(new OrderCreated($order, ''));
-        return 'başarılı';
+
+        return redirect()->route('admin.orders.index');
         // dd($order);
 
     }
@@ -362,6 +366,7 @@ class OrderController extends Controller
 
                         $order->save();
                     }
+                    // alert()->success('Sipariş kaydı başarıyla oluşturuldu', 'Sipariş oluşturuldu');
                     return $orders;
                 }
             }
@@ -426,6 +431,10 @@ class OrderController extends Controller
     {
         request()->validate(['detailid' => 'required']);
         $detail = OrderDetail::find($request->detailid);
+        $detailTotal = $detail->total;
+        $order = $detail->order;
+        $order->total = $order->total - $detailTotal;
+        $order->save();
         $detail->delete();
         return ['message' => 'ok'];
     }
@@ -471,7 +480,7 @@ class OrderController extends Controller
         $total = ($request->quantity) * ($meal_price + $option->fee + $extFee);
         $detail->total = $total;
         $detail->save();
-        $order->total = $total;
+        $order->total += $total;
         $order->save();
 
         $orderWithDetails = $order->orderdetails;

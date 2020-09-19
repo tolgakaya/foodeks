@@ -17,7 +17,7 @@ $(document).ready(function () {
                 var currentPaket = $('#currentPaket').val();
                 $.each(response.orders, function (index, value) {
                     paket = paket + 1;
-                    console.log(value);
+                    // console.log(value);
                     _html += '<div class="col-lg-3 satir">';
                     _html += '<a class="dropdown-item d-flex" href="/admin/orders/">';
                     _html += ' <div>';
@@ -26,7 +26,7 @@ $(document).ready(function () {
                 });
 
                 if (paket > 0) {
-                    console.log('1. paket sıfırdan büyük');
+                    // console.log('1. paket sıfırdan büyük');
                     $('#paketcount').empty();
                     paketCountHtml += ' <span  class="badge badge-danger">' + paket + '</span>';
                     $("#paketcount").append(paketCountHtml);
@@ -45,7 +45,9 @@ $(document).ready(function () {
                 var adisyon = 0;
                 var adisyonCountHtml = '';
                 $.each(response.adisyons, function (index, value) {
-                    adisyon = adisyon + 1;
+                    $.each(value.orderdetails, function (i, v) {
+                        adisyon = adisyon + 1;
+                    });
                     console.log(value);
                     // adisyonHtml += '<h3>' + value.id + '</h3>';
                     adisyonHtml += '<div class="col-lg-3 satir">';
@@ -80,7 +82,7 @@ $(document).ready(function () {
                 var bookingHtml = '';
                 $.each(response.bookings, function (index, value) {
                     booking = booking + 1;
-                    console.log(value);
+                    // console.log(value);
                     // adisyonHtml += '<h3>' + value.id + '</h3>';
                     bookingHtml += '<div class="col-lg-3 satir">';
                     bookingHtml += '<a class="dropdown-item d-flex" href="/admin/bookings/">';
