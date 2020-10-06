@@ -114,13 +114,13 @@ class MenuController extends Controller
 
     public function details(Menu $menu)
     {
-        $restaurants = Restaurant::all();
+        // $restaurants = Restaurant::all();
 
         $categories = Category::all();
 
         $meals = $menu->meals()->with('options', 'extras', 'category')->get();
 
-        return view('backend.menus..details', compact('menu', 'restaurants', 'meals', 'categories'));
+        return view('backend.menus..details', compact('menu',  'meals', 'categories'));
     }
     // public function mealUpdate(Menu $menu)
     // {

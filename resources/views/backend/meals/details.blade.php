@@ -2,7 +2,6 @@
 @section('extracss')
 <meta name="_token" content="{{csrf_token()}}" />
 <link rel="stylesheet" href="{{asset('backend//plugins/select2/select2.css')}}">
-<!-- Data table css -->
 <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="{{asset('backend/plugins/datatable/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
 @endsection
@@ -12,6 +11,7 @@
 
 <div class="row">
     <div class="col-md-12">
+        <input type="hidden" id="mealid" value="{{$meal->id}}">
         <div class="card" id="cat{{$meal->id}}">
             <div class="card-header">
                 <div class="row">
@@ -57,11 +57,10 @@
                                         </thead>
                                         <tbody class="options">
                                             @forelse($options as $option)
-                                            <tr>
-                                                <td><a href="#" class="btn btn-danger btn-sm"><i
+                                            <tr id="op{{$option->id}}">
+                                                <td><a href="#" class="btn btn-danger btn-sm delete"
+                                                        data-optionid="{{$option->id}}"><i
                                                             class="fa fa-trash">Sil</i></a>
-                                                    <a href="#" class="btn btn-primary btn-sm"><i
-                                                            class="fa fa-pen ">Düzenle</i></a>
                                                 </td>
                                                 <td class="text-sm font-weight-600">
                                                     {{$option->option}}</td>
@@ -94,19 +93,17 @@
                                             </tr>
                                         </thead>
                                         <tbody class="extras">
-                                            {{-- @foreach($details->extras as $extra)
-                                            <tr>
-                                                <td><a href="#" class="btn btn-danger btn-sm"><i
-                                                            class="fa fa-trash">Sil</i></a>
-                                                    <a href="#" class="btn btn-primary btn-sm"><i
-                                                            class="fa fa-pen ">Düzenle</i></a>
+                                            @foreach($details->extras as $extra)
+                                            <tr id="ex{{$extra->id}}">
+                                                <td><a href="#" class="btn btn-danger btn-sm deletex"
+                                                        data-extraid="{{$extra->id}}"><i class="fa fa-trash">Sil</i></a>
                                                 </td>
                                                 <td class="text-sm font-weight-600">
-                                                    {{$option->extra}}</td>
-                                            <td class="text-nowrap">+ {{$option->extra}}
-                                            </td>
+                                                    {{$extra->extra}}</td>
+                                                <td class="text-nowrap">+ {{$option->fee}} TL
+                                                </td>
                                             </tr>
-                                            @endforeach --}}
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -120,81 +117,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="optionModal" tabindex="-1" role="dialog" aria-labelledby="optionModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="optionModalLabel">Ürün Seçenek Bilgisi</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <div class="form-group">
-                        <label for="option">Seçenek</label>
-                        <input type="text" class="form-control" id="option" aria-describedby="optionHelp"
-                            placeholder="Seçenek giriniz">
-                        <small id="optioHelp" class="form-text text-muted">Seçenek
-                            giriniz</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="optionFee">Fiyat</label>
-                        <input type="number" class="form-control" id="optionFee" aria-describedby=" optionFeeHelp"
-                            placeholder="Seçenek ekstra fiyat giriniz">
-                        <small id="optionFeeHelp" class="form-text text-muted">Seçenek
-                            ekstra fiyat
-                            giriniz</small>
-                    </div>
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" id="btnOptionSave" class="btn btn-primary">Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="extraModal" tabindex="-1" role="dialog" aria-labelledby="extraModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="extraModalLabel">Ürün Ekstra Bilgisi</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <div class="form-group">
-                        <label for="extra">Eksta</label>
-                        <input type="text" class="form-control" id="extra" aria-describedby="
-                                                        extraHelp" placeholder="Ekstra giriniz">
-                        <small id="extraHelp" class="form-text text-muted">Ürün yanında
-                            verilebilecek extra ürün bilgisi giriniz.Örnek, salata
-                            vb</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="extraFee">Fiyat</label>
-                        <input type="number" class="form-control" id="extraFee" aria-describedby="extraFeeHelp"
-                            placeholder="Ekstra fiyat giriniz">
-                        <small id="extraFeeHelp" class="form-text text-muted">Burada
-                            girdiğiniz fiyat extra ürün seçilmesi halinde ürün fiyatına
-                            eklenecektir.</small>
-                    </div>
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                <button type="button" id="btnExtraSave" class="btn btn-primary">Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
+@include('backend.meals.modal')
 @endsection
 
 @section('extrascript')
@@ -206,6 +129,63 @@
 <script src="{{asset('backend/plugins/datatable/dataTables.bootstrap4.min.js')}}"></script>
 <script>
     $(document).ready(function() {
+$('body').on('click', '.delete', function () {
+
+    var silinecekOption=$(this).data('optionid');
+    var mealid = $('#mealid').val();
+    var ans = confirm("Kaydı silmek istiyor musunuz?");
+    if (ans) {
+    var optionModel = {
+    optionid: silinecekOption
+    };
+    $.ajax({
+    headers: {
+    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+    },
+    url: "/admin/meals/option/delete/" + mealid,
+    data:JSON.stringify( optionModel),
+    type: "POST",
+    contentType: "application/json;charset=UTF-8",
+    dataType: "json",
+    success: function (result) {
+    var bosalt=$('#op'+silinecekOption);
+    bosalt.empty();
+    },
+    error: function (errormessage) {
+    alert(errormessage.responseText);
+    }
+    });
+    }
+    });
+
+$('body').on('click', '.deletex', function () {
+
+var silinecekEx=$(this).data('extraid');
+var mealid = $('#mealid').val();
+var ans = confirm("Kaydı silmek istiyor musunuz?");
+if (ans) {
+var extraModel = {
+extraid: silinecekEx
+};
+$.ajax({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+},
+url: "/admin/meals/extra/delete/" + mealid,
+data:JSON.stringify( extraModel),
+type: "POST",
+contentType: "application/json;charset=UTF-8",
+dataType: "json",
+success: function (result) {
+var bosalt=$('#ex'+silinecekEx);
+bosalt.empty();
+},
+error: function (errormessage) {
+alert(errormessage.responseText);
+}
+});
+}
+});
 
 //option modal işlemleri
 $('#optionModal').on('show.bs.modal', function(event) {
@@ -233,10 +213,9 @@ $('#optionModal').on('show.bs.modal', function(event) {
        var secenekAlani=$('.options');
        var html ='';
        $.each(result,function(index,value){
-  html+='<tr>';
-           html+= '<td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash">Sil</i></a>';
-                html+='<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-pen ">Düzenle</i></a>';
-           html+= '</td>';
+  html+='<tr  id="op'+value.id+'">';
+           html+= '<td><a href="#" class="btn btn-danger btn-sm delete" data-optionid="'+value.id+'"><i class="fa fa-trash">Sil</i></a>';
+                  html+= '</td>';
             html+='<td class="text-sm font-weight-600">';
               html+=  value.option;
                html+= '</td>';
@@ -281,9 +260,9 @@ console.log(result);
 var extraAlani=$('.extras');
 var html ='';
 $.each(result,function(index,value){
-html+='<tr>';
-    html+= '<td><a href="#" class="btn btn-danger btn-sm"><i class="fa fa-trash">Sil</i></a>';
-        html+='<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-pen ">Düzenle</i></a>';
+html+='<tr id="ex'+value.id+'">';
+html+= '<td><a href="#" class="btn btn-danger btn-sm deletex" data-extraid="'+value.id+'"><i class="fa fa-trash">Sil</i></a>';
+ 
         html+= '</td>';
     html+='<td class="text-sm font-weight-600">';
         html+= value.extra;

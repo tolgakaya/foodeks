@@ -9,24 +9,10 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item active">
-            <select name="restaurant_id" id="restaurant" class="form-control select2 "
-                data-placeholder="Restaurant seçiniz...." style="min-width: 250px;">
-                @foreach ($restaurants as $restaurant)
-                <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
-                @endforeach
-            </select>
-        </li>
-    </ol>
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <input type="hidden" id="menuid" value="{{$menu->id}}">
 
-    </div>
+    <h1>{{$menu->restaurant->name }} - {{$menu->name}}</h1>
+    <input type="hidden" value="{{$menu->id}}" id="menuid">
 </div>
-
 <div class="row">
     <div class="col-md-12">
         @foreach ($categories as $category)
@@ -79,8 +65,9 @@
                     <div id="tekil{{$meal->id}}">
                         <div id="accordion">
                             <div class="accordion">
-                                <div class="accordion-header" data-toggle="collapse"
-                                    data-target="#panel{{$category->id}}{{$meal->id}}">
+                                <div class="accordion-header collapsed" data-toggle="collapse"
+                                    data-target="#panel{{$category->id}}{{$meal->id}}" aria-expanded="false"
+                                    role="button">
                                     {{-- #urun-mealid --}}
                                     <div class="row">
                                         <div class="col md-3 text-left ">
@@ -109,7 +96,8 @@
                                     </div>
                                 </div>
                                 <div class="accordion-body collapse show border border-top-0 text-sm"
-                                    id="panel{{$category->id}}{{$meal->id}}" data-parent="#accordion">
+                                    id="panel{{$category->id}}{{$meal->id}}" data-parent="#accordion"
+                                    data-toggle="collapse">
 
                                     <h2 class=" mb-0">Ürün Bilgileri</h2>
 
@@ -135,7 +123,7 @@
                                                                     <a class="avatar avatar-md" data-toggle="tooltip"
                                                                         href="#"><img alt="Image placeholder"
                                                                             class="rounded-circle"
-                                                                            src="assets/img/faces/female/8.jpg"></a>
+                                                                            src="{{$meal->path()}}"></a>
                                                                 </div>
                                                             </td>
                                                             <td class="text-sm font-weight-600">
@@ -275,7 +263,8 @@
 <script>
     $(document).ready(function () {
 
- 
+ $('.collapse').collapse();
+
         $('body').on('click', '.deletebutton', function () {
         var silinecekMeal=$(this).attr('id');
         var menuid = $('#menuid').val();

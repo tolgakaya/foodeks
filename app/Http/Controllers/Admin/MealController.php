@@ -6,6 +6,8 @@ use App\Meal;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Option;
+use App\Extra;
 
 class MealController extends Controller
 {
@@ -46,7 +48,6 @@ class MealController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $validated = request()->validate([
             'category_id' => 'required',
             'name' => 'required',
@@ -54,8 +55,8 @@ class MealController extends Controller
             'image' => 'required'
         ]);
         $meal = Meal::create($validated);
-        $meals = Meal::all();
-        return redirect()->route('admin.meals.index', compact('meals'));
+
+        return redirect()->route('admin.meals.index');
     }
     public function MediaUpdate(Request $request)
     {
@@ -134,7 +135,7 @@ class MealController extends Controller
         $details = $meal->with(['options', 'extras'])->firstOrFail();
         $options = $meal->options()->get();
         // dd($options);
-        return view('backend.meals.details', compact('options', 'meal'));
+        return view('backend.meals.details', compact('options', 'meal', 'details'));
     }
 
     public function addOption(Meal $meal)
@@ -147,6 +148,16 @@ class MealController extends Controller
         return $meal->options()->get();
     }
 
+    public function deleteOption(Meal $meal)
+    {
+        $validated = request()->validate([
+            'optionid' => 'required',
+        ]);
+        $opt = Option::find($validated['optionid']);
+        $opt->delete();
+        return $meal->options()->get();
+    }
+
     public function addExtra(Meal $meal)
     {
         $validated = request()->validate([
@@ -154,6 +165,15 @@ class MealController extends Controller
             'fee' => 'required',
         ]);
         $meal->extras()->create($validated);
+        return $meal->extras()->get();
+    }
+    public function deleteExtra(Meal $meal)
+    {
+        $validated = request()->validate([
+            'extraid' => 'required',
+        ]);
+        $opt = Extra::find($validated['extraid']);
+        $opt->delete();
         return $meal->extras()->get();
     }
     public function options(Meal $meal)

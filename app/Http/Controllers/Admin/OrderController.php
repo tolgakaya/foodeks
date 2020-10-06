@@ -130,7 +130,7 @@ class OrderController extends Controller
             }
             $total += $base + $extfee + $opfee;
         }
-        return view('backend.orders.create', compact('restaurants', 'menu', 'cartItems', 'quantity', 'total', 'users'));
+        return view('backend.orders.create', compact('restaurants', 'menu', 'cartItems', 'quantity', 'total', 'users', 'restaurant'));
     }
     public function addresses(User $user)
     {
@@ -312,8 +312,11 @@ class OrderController extends Controller
                 $addressid = $adres->id;
                 $order->address_id = $addressid;
             }
+            alert()->success('Sipariş kaydı başarıyla güncellendi', 'Sipariş güncellendi');
+            return back();
         }
-        return back();
+        return redirect()->route('admin.orders.indexMasa');
+        alert()->success('Sipariş kaydı başarıyla güncellendi', 'Sipariş güncellendi');
     }
 
     public function statusUpdate(Request $request)
@@ -361,16 +364,24 @@ class OrderController extends Controller
                 if ($orders !== null) {
                     foreach ($orders as   $order) {
 
-                        $order->carriers()->attach($paketciId, ['restaurant_id' => $order->restaurant->id, 'order_id' => $order->id, 'begin_date' => $tarih, 'begin_time' => $saat]);
-                        $order->status = 3;
+                        if ($order->status == 1) {
+                            $order->carriers()->attach($paketciId, ['restaurant_id' => $order->restaurant->id, 'order_id' => $order->id, 'begin_date' => $tarih, 'begin_time' => $saat]);
+                            $order->status = 3;
 
-                        $order->save();
+                            $order->save();
+                        } else {
+                            alert()->error('Geçersiz bir sipariş göndermeye çalışıyorsunuz', 'Sipariş geçersiz')->persistent();
+                            return $orders;
+                        }
                     }
-                    // alert()->success('Sipariş kaydı başarıyla oluşturuldu', 'Sipariş oluşturuldu');
+                    alert()->success('Sipariş yola çıktı', 'Kayıt Başarılı')->persistent();
                     return $orders;
                 }
             }
+            alert()->error('Geçersiz bir sipariş göndermeye çalışıyorsunuz', 'Sipariş geçersiz')->persistent();
+            return null;
         }
+        alert()->success('Seçili sipariş çoktan yola çıkmış görünüyor', 'Sipariş zaten serviste')->persistent();
         return response()->json(['error' => 'Seçili sipariş çoktan yola çıkmış görünüyor']);
 
 

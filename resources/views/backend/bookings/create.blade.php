@@ -1,9 +1,5 @@
 @extends('backend/layouts/main')
 @section('extracss')
-{{-- <link href="{{asset('backend/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css" /> --}}
-{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css"> --}}
-{{-- <link href="{{asset('backend/css/image-checkbox.css')}}" rel="stylesheet" /> --}}
-{{-- <link href="{{asset('frontend/css/date_time_picker.css')}}" rel="stylesheet"> --}}
 
 <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
@@ -13,10 +9,6 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
-    </ol>
 
 </div>
 <div class="container">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\RoleConstant;
 use App\User;
+use UxWeb\SweetAlert\SweetAlert;
 
 class ProfileController extends Controller
 {
@@ -40,51 +41,7 @@ class ProfileController extends Controller
         ]);
 
         User::find(auth()->user()->id)->update(['adi' => $request->adi, 'email' => $request->email, 'mobile' => $request->mobile, 'avatar' => $request->avatar]);
-        dd('Password change successfully.');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->route('admin.profile.index');
+        alert()->success('Profil Başarıyla Güncellendi', 'Profil güncellendi');
     }
 }

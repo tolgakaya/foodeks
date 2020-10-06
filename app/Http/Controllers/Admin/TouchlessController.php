@@ -7,26 +7,12 @@ use App\Restaurant;
 use Illuminate\Http\Request;
 use Darryldecode\Cart;
 use App\Order;
+use App\PageSettings;
 use UxWeb\SweetAlert\SweetAlert;
 
 class TouchlessController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function indexOld(Restaurant $restaurant, $category = null)
-    {
-        $menu = $restaurant->menus()->with('meals', 'meals.options', 'meals.extras', 'meals.category')->first();
-        // $menu=
-        if ($category == null) {
-            $category = $menu->categories()->first();
-        }
-        $meals = $menu->meals()->where('pasif', 0)->where('category_id', $category)->get();
-        $categories = $menu->categories;
-        return view('backend.touchless.index', compact('menu', 'categories', 'meals'));
-    }
+
     public function index(Restaurant $restaurant, $category)
     {
         //burada gelen categoriyi istiyor 
@@ -126,13 +112,6 @@ class TouchlessController extends Controller
                 $beforeIndex = $index - 2;
             }
         }
-        // return [
-        //     'before' => $beforeCategoryId,
-        //     'current' => $currentCategoryId,
-        //     'next' => $nextCategoryId,
-        //     'pluck' => $categories,
-        //     'category' => $category
-        // ];
 
         if ($category == null) {
             $category = $menu->categories()->first();
@@ -157,8 +136,8 @@ class TouchlessController extends Controller
             $total += $base + $extfee + $opfee;
         }
         $order = Order::where('masaid', $masaid)->where('restaurant_id', $restaurant->id)->where('kapandi', '!=', true)->with('orderdetails')->first();
-
-        return view('backend.touchless.index', compact('menu', 'categories', 'meals', 'currentCategoryId', 'nextCategoryId', 'beforeCategoryId', 'kategoriler', 'currentIndex', 'beforeIndex', 'nextIndex', 'quantity', 'total', 'cartItems', 'masaid', 'order'));
+        $settings = PageSettings::first();
+        return view('backend.touchless.index', compact('menu', 'categories', 'meals', 'currentCategoryId', 'nextCategoryId', 'beforeCategoryId', 'kategoriler', 'currentIndex', 'beforeIndex', 'nextIndex', 'quantity', 'total', 'cartItems', 'masaid', 'order', 'settings'));
     }
     /**
      * Show the form for creating a new resource.

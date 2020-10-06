@@ -117,15 +117,33 @@
                                 placeholder="Lütfen bir başlık giriniz" \>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group mb-0">
+                            <label class="form-label">Arkaplan başlık 2 (Resim üstünde gözükecek)</label>
+                            <input class="form-control" name="paralax_text2"
+                                value="{{$page !=null ?  $page->paralax_text2: ''}}"
+                                placeholder="Lütfen bir cümle giriniz" \>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <div class="form-group mb-0">
+                            <label class="form-label">Alt Başlık 2(Başlığın altında gözükecek)</label>
+                            <input class="form-control" name="paralax_sub_text2"
+                                value="{{$page !=null ?  $page->paralax_sub_text2 : ''}}"
+                                placeholder="Lütfen bir başlık giriniz" \>
+                        </div>
+                    </div>
                     <input type="hidden" name="video" value="{{$page !=null ?  $page->video : ''}}" id='video'>
                     <input type="hidden" name="paralax_image" id='paralax_image'
-                        value="{{$page !=null ?  $page->paralax_image : ''}}">
+                        value="{{$page !=null ?  $page->paralax_image2: ''}}">
                 </div>
+                <input type="hidden" name="paralax_image2" id='paralax_image2'
+                    value="{{$page !=null ?  $page->paralax_image2 : ''}}">
             </form>
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-6 pull-left">
+                <div class="col-md-12">
                     <div class="form-group mb-0">
                         <label class="form-label">Slider Video</label>
                         <form method="post" action="{{route('admin.meals.media.store')}}" enctype="multipart/form-data"
@@ -134,11 +152,22 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-md-6 pull-right ">
+            </div>
+            <div class="row">
+                <div class="col-md-6 pull-left">
                     <div class="form-group mb-0">
-                        <label class="form-label">Arkaplan Resim</label>
+                        <label class="form-label">Arkaplan Birinci Görseli</label>
                         <form method="post" action="{{route('admin.meals.media.store')}}" enctype="multipart/form-data"
                             class="dropzone" id="imagezone">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right ">
+                    <div class="form-group mb-0">
+                        <label class="form-label">Arkaplan İkinci Görseli</label>
+                        <form method="post" action="{{route('admin.meals.media.store')}}" enctype="multipart/form-data"
+                            class="dropzone" id="imagezonesecond">
                             @csrf
                         </form>
                     </div>
@@ -304,6 +333,81 @@
                 var image="{{ asset('images') }}/";
        
         $('#paralax_image').val(response.success);
+     
+        },
+        error: function(file, response)
+        {
+        return false;
+        }
+};
+</script>
+<script type="text/javascript">
+    // Dropzone.autoDiscover = false;
+    Dropzone.options.imagezonesecond =
+         {
+            maxFilesize: 12,
+            maxFiles:1,
+            renameFile: function(file) {
+                var dt = new Date();
+                var time = dt.getTime();
+               return time+file.name;
+            },
+            acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            addRemoveLinks: true,
+            timeout: 5000,
+            init: function() {
+                    this.on("maxfilesexceeded", function(file){
+                    alert("Yalnızca tek dosya yükleyebilirsiniz!");
+                    this.removeFile(file);
+                    });
+                    var thisDropzone = this;
+                            
+                            var image="{{ asset('images') }}/";
+                            var i=$("#paralax_image2").val();
+                            var defaultValue=image+i;
+                            //Call the action method to load the images from the server
+                            //// Create the mock file:
+                            var mockFile = {
+                            name: i,
+                            size: 123456
+                            };
+                            
+                            // Call the default addedfile event handler
+                            thisDropzone.emit("addedfile", mockFile);
+                            
+                            // And optionally show the thumbnail of the file:
+                            thisDropzone.emit("thumbnail", mockFile,defaultValue);
+            },
+          removedfile: function(file)
+        {
+        // var name = file.upload.filename;
+        var name=$("#paralax_image").val();
+        $.ajax({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        },
+        type: 'POST',
+        url: '{{ url("admin/meals/media/delete") }}',
+        data: {filename: name},
+        success: function (data){
+ 
+        // $('#'+name).remove();
+        $('#paralax_image2').val('');
+  
+        },
+        error: function(e) {
+        console.log(e.message);
+        }});
+        var fileRef;
+        return (fileRef = file.previewElement) != null ?
+        fileRef.parentNode.removeChild(file.previewElement) : void 0;
+        },
+
+        success: function(file,response){
+                var _html='';
+                var image="{{ asset('images') }}/";
+       
+        $('#paralax_image2').val(response.success);
      
         },
         error: function(file, response)

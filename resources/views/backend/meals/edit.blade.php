@@ -20,17 +20,12 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
-    </ol>
-
 </div>
 
 <div class="container">
     <div class="card shadow">
         <div class="card-header">
-            <h2 class="mb-0">Yeni F&B Ekleyin</h2>
+            <h2 class="mb-0">F&B Bilgileri</h2>
         </div>
         <div class="card-body">
             <form action="{{route('admin.meals.update',['meal'=>$meal->id])}}" method="post" id='haberForm'>
@@ -41,7 +36,7 @@
                     @csrf
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="form-label">Category</label>
+                            <label class="form-label">Kategori</label>
                             <select class="selectpicker form-control" name="category_id">
                                 @foreach ($categories as $category)
                                 <option value="{{$category->id}}"

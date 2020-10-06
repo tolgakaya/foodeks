@@ -2,162 +2,9 @@
 <!--[if IE 9]><html class="ie ie9"> <![endif]-->
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="pizza, delivery food, fast food, sushi, take away, chinese, italian food">
-    <meta name="description" content="">
-    <meta name="author" content="Ansonika">
-    <meta name="_token" content="{{csrf_token()}}" />
-    <title>Adanadayım Kebap Izgara</title>
-
-    <!-- Favicons-->
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
-        href="img/apple-touch-icon-114x114-precomposed.png">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
-        href="img/apple-touch-icon-144x144-precomposed.png">
-    <link href="{{asset('frontend/css/loader.css')}}" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <!-- GOOGLE WEB FONT -->
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,400italic,700italic,300,300italic'
-        rel='stylesheet' type='text/css'>
-
-    <!-- BASE CSS -->
-    {{-- <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/menu.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/responsive.css" rel="stylesheet">
-    <link href="css/elegant_font/elegant_font.css" rel="stylesheet">
-    <link href="css/fontello/css/fontello.min.css" rel="stylesheet">
-    <link href="css/magnific-popup.css" rel="stylesheet">
-    <link href="css/pop_up.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet"> --}}
-
-    <link href="{{asset('frontend/css/base.css')}}" rel="stylesheet">
-
-    <link href="{{asset('frontend/cart/css/style.css')}}" rel="stylesheet">
-    {{-- <link href="css/skins/square/grey.css" rel="stylesheet">
-    <link href="css/ion.rangeSlider.css" rel="stylesheet">
-    <link href="css/ion.rangeSlider.skinFlat.css" rel="stylesheet"> --}}
-    <!-- Modernizr -->
-    <script src="{{asset('frontend/js/modernizr.js')}}"></script>
-    @yield('extracss')
-
-    <!--[if lt IE 9]>
-      <script src="js/html5shiv.min.js"></script>
-      <script src="js/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        .gizle {
-            display: none;
-        }
-
-        .goster {
-            display: block;
-        }
-    </style>
-</head>
+@include('frontend.layouts.head')
 
 <body>
-    {{-- @if($quantity>0) --}}
-    <div class="cd-cart  js-cd-cart {{$quantity > 0 ? 'goster' : 'gizle'}}">
-        <a href="#0" class="cd-cart__trigger text-replace">
-            Cart
-            <ul class="cd-cart__count">
-                <!-- cart items count -->
-                <li id='quantity'>{{$quantity}}</li>
-                <li>0</li>
-            </ul> <!-- .cd-cart__count -->
-        </a>
-
-        <div class="cd-cart__content">
-            <div class="cd-cart__layout">
-                <header class="cd-cart__header">
-                    <h3>Siparişiniz</h3><i class="icon_cart_alt"></i>
-
-                </header>
-
-                <div class="cd-cart__body">
-
-                    <div class="table table-responsive" id="cart_box">
-
-                        <table class="table table_summary">
-                            <tbody id="cd_cartbody" class="cartbody">
-                                @foreach($cartItems as $rowid => $row)
-                                <tr class="info">
-                                    <td>
-                                        <a href="#0" class="remove_item" id="{{$row->id}}"><i
-                                                class="icon_minus_alt"></i></a>
-                                        <strong>{{$row->quantity}}X</strong>
-                                        @if($row->attributes['option']!==null)
-
-                                        <strong>{{$row->attributes['option']->option}}</strong>
-
-                                        @endif
-                                        {{$row->name}}
-                                    </td>
-                                    <td>
-                                        @if($row->attributes['option']!==null)
-                                        <strong
-                                            class="pull-right">{{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}
-                                            TL</strong>
-                                        @else
-                                        <strong class="pull-right">{{$row->quantity * $row->price}} TL</strong>
-                                        @endif
-                                    </td>
-
-                                </tr>
-                                @foreach($row->attributes['extras'] as $key => $extra)
-                                <tr>
-
-                                    <td class="pull-right">
-                                        {{-- <a href="#0" class="remove_item"><i class="icon_minus_alt"></i></a> --}}
-                                        <strong>Ekstra </strong>
-                                        {{$extra->extra}}
-                                    </td>
-                                    <td>
-                                        <strong class="pull-right">{{$extra->fee}}</strong>
-                                    </td>
-
-                                </tr>
-                                @endforeach
-
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <hr>
-                    </div><!-- End cart_box -->
-                </div>
-
-                <footer class="cd-cart__footer">
-                    @if($restaurant !=null)
-                    <a href="{{$restaurant->isAvailable()== true ? route('orders.create') : '#'}}"
-                        class="cd-cart__checkout">
-                        <em>Toplam <span
-                                class="total">{{$restaurant->isAvailable()== false ? 'Servis Zamanı Dışında' : $total}}</span>
-                            <svg class="icon icon--sm" viewBox="0 0 24 24">
-                                <g fill="none" stroke="currentColor">
-                                    <line stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="3" y1="12"
-                                        x2="21" y2="12" />
-                                    <polyline stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        points="15,6 21,12 15,18 " />
-                                </g>
-                            </svg>
-                        </em>
-                    </a>
-                    @endif
-
-                </footer>
-            </div>
-        </div> <!-- .cd-cart__content -->
-    </div> <!-- cd-cart -->
-    {{-- @endif --}}
-
     @include('sweet::alert')
     <!--[if lte IE 8]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a>.</p>
@@ -176,7 +23,7 @@
     @include('frontend.layouts.header')
 
     @yield('subheader')
-
+    @include('frontend.Cart.index');
     @yield('main')
 
     @include('frontend.layouts.footer')
@@ -202,99 +49,7 @@
         </div>
     </div>
     <div class="layer"></div><!-- Mobile menu overlay mask -->
-
-    <!-- Login modal -->
-    <div class="modal fade" id="login_2" tabindex="-1" role="dialog" aria-labelledby="myLogin" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content modal-popup">
-                <a href="#" class="close-link"><i class="icon_close_alt2"></i></a>
-                <form class="popup-form" id="myLogin">
-                    {{-- {{ csrf_field() }} --}}
-                    @csrf
-                    <div class="login_icon"><i class="icon_lock_alt"></i></div>
-                    <input id="email" name="email" type="text"
-                        class="form-control form-white @error('email') is-invalid @enderror" placeholder="email"
-                        value="{{ old('email') }}" required autocomplete="email" autofocus>
-                    <span class="invalid-feedback" role="alert">
-                        <strong id="email-error"></strong>
-                    </span>
-                    <input type="password"
-                        class="form-control form-white form-control @error('password') is-invalid @enderror"
-                        placeholder="Password" id="password" name="password" required autocomplete="current-password">
-                    <span class="invalid-feedback" role="alert">
-                        <strong id="password-error"></strong>
-                    </span>
-
-                    <div class="form-group row">
-                        <div class="col-md-6 offset-md-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                    {{ old('remember') ? 'checked' : '' }}>
-
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-left">
-                        <a href="#">Forgot Password?</a>
-                    </div>
-                    <button type="submit" id="btnLogin" class="btn btn-submit">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div><!-- End modal -->
-
-
-
-
-    <!-- Login modal -->
-    <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myRegister" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content modal-popup">
-                <a href="#" class="close-link"><i class="icon_close_alt2"></i></a>
-                <form class="popup-form" id="myRegister">
-                    {{ csrf_field() }}
-                    @csrf
-                    <div class="login_icon"><i class="icon_lock_alt"></i></div>
-                    <input id="register_name" type="text" class="form-control @error('name') is-invalid @enderror"
-                        name="name" value="{{ old('name') }}" required autocomplete="name"
-                        placeholder="İsminizi giriniz" autofocus>
-                    <span class="invalid-feedback" role="alert">
-                        <strong id="name-error"></strong>
-                    </span>
-                    <input id="register_email" type="email" class="form-control @error('email') is-invalid @enderror"
-                        name="email" value="{{ old('email') }}" required autocomplete="email"
-                        placeholder="Eposta adresinizi giriniz">
-                    <span class="invalid-feedback" role="alert">
-                        <strong id="email-error"></strong>
-                    </span>
-                    <input id="register_password" type="password"
-                        class="form-control @error('password') is-invalid @enderror" name="password" required
-                        autocomplete="new-password" placeholder="Bir şifre giriniz">
-                    <span class="invalid-feedback" role="alert">
-                        <strong id="password-error"></strong>
-                    </span>
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
-                        required autocomplete="new-password" placeholder="Şifrenizi tekrar giriniz">
-                    <input id="mobile" type="text" class="form-control @error('mobile') is-invalid @enderror"
-                        name="mobile" value="{{ old('mobile') }}" required autocomplete="mobile"
-                        placeholder="Telefon giriniz" autofocus>
-                    <input id="register_city" type="text"
-                        class="form-control @error('register_city') is-invalid @enderror" name="mobile"
-                        value="{{ old('register_city') }}" required autocomplete="register_city"
-                        placeholder="Semtinizi giriniz" autofocus>
-                    <textarea class="form-control" style="height:150px" placeholder="Adresinzi giriniz" name="notes"
-                        id="register_address"></textarea>
-                    <div class="text-left">
-                        <a href="#">Forgot Password?</a>
-                    </div>
-                    <button type="submit" id="btnRegister" class="btn btn-submit">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div><!-- End modal -->
+    @include('frontend.layouts.modal')
     <!-- COMMON SCRIPTS -->
     <script src="{{asset('frontend/js/jquery-2.2.4.min.js')}}"></script>
     <script src="{{asset('frontend/js/common_scripts_min.js')}}"></script>
@@ -310,7 +65,7 @@
             $("#btnLogin").click(function(e){
                 e.preventDefault();
                 var password = $("#password").val();
-                        var email = $("#email").val();
+                        var email = $("#login_email").val();
                         var authModel={
                         email:email,
                         password:password
@@ -396,6 +151,54 @@
                     });
         });
 
+    </script>
+    {{-- <script>
+        $(function() {
+         var logolrg = $(".lrglogo");
+         var logosml = $(".smllogo");
+         $(window).scroll(function() {
+        var scroll = $(window).scrollTop();
+        
+        if (scroll >= 200) {
+            logolrg.hide().fadeIn( "slow");
+            logosml.show().fadeIn( "slow");
+        // if(!logo.hasClass("sml-logo")) {
+        // logo.hide();
+        // logo.removeClass('lrg-logo').addClass("sml-logo").fadeIn( "slow");
+        // }
+        } else {
+            logolrg.show().fadeIn( "slow");
+                        logosml.hide().fadeIn( "slow");
+        // if(!logo.hasClass("lrg-logo")) {
+        // logo.hide();
+        // logo.removeClass("sml-logo").addClass('lrg-logo').fadeIn( "slow");
+        // }
+        }
+        
+        });
+        });
+    </script> --}}
+    <script>
+        $(function() {
+             var logolrg = $(".lrglogo");
+             var logosml = $(".smllogo");
+             $(window).scroll(function() {
+            var scroll = $(window).scrollTop();
+            
+            if (scroll >= 200) {
+                logolrg.css("display","none")
+                logosml.css("display","block")
+ 
+            // }
+            } else {
+                logolrg.css("display","block")
+                logosml.css("display","none")
+ 
+            // }
+            }
+            
+            });
+            });
     </script>
     @yield('specialscript')
 

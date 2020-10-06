@@ -25,6 +25,9 @@ class CreatePageHomesTable extends Migration
             $table->string('paralax_image')->nullable();
             $table->string('paralax_text')->nullable();
             $table->string('paralax_sub_text')->nullable();
+            $table->string('paralax_image2')->nullable();
+            $table->string('paralax_text2')->nullable();
+            $table->string('paralax_sub_text2')->nullable();
             $table->timestamps();
         });
     }

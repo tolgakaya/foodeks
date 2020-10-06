@@ -28,6 +28,24 @@
                                 required>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label">Genel tema rengi</label>
+                            @if ($page!=null)
+                            <select name="style" class="form-control select2 w-100">
+                                <option value="style_brand" {{$page->style !=null ?'selected': ''}}>Gri/Altın</option>
+                                <option value="style_red" {{$page->style !=null ?'selected': ''}}>Kırmızı</option>
+                            </select>
+                            @else
+                            <select name="style" class="form-control select2 w-100">
+                                <option value="style_brand">Gri/Altın</option>
+                                <option value="style_red">Kırmızı</option>
+                            </select>
+                            @endif
+
+
+                        </div>
+                    </div>
                     <div class="col-md-12 mt-2">
                         <div class="form-group">
                             <label class="custom-switch">

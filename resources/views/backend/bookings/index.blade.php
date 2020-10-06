@@ -9,21 +9,7 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    {{-- <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item active">
-            <select name="restaurant_id" id="restaurant" class="form-control select2 "
-                data-placeholder="Restaurant seçiniz...." style="min-width: 250px;">
-                @foreach ($restaurants as $restaurant)
-                <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
-    @endforeach
-    </select>
-    </li>
-    </ol> --}}
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <input type="hidden" id="restaurantid" value="">
-    </div>
+
 </div>
 
 <div class="row">
@@ -95,15 +81,21 @@
                                                                 {{$booking->time}}
                                                             </td>
                                                             <td class="text-nowrap">
-                                                                {{$booking->status}}
+                                                                {{$booking->bookStatus()}}
                                                             </td>
                                                             <td>
+                                                                @if ($booking->status == 0)
                                                                 <a class="btn btn-primary btn-sm"
                                                                     href="{{route('admin.bookings.edit',['booking'=>$booking->id])}}"><i
-                                                                        class="fas fa-plus mr-2"></i>Düzenle</a>
+                                                                        class="fas fa-pen mr-2"></i>Düzenle</a>
+                                                                <a class="btn btn-success btn-sm"
+                                                                    href="{{route('admin.bookings.close',['booking'=>$booking->id])}}"><i
+                                                                        class="fas fa-check mr-2"></i>Kapat</a>
                                                                 <a class="btn btn-danger btn-sm"
                                                                     href="{{route('admin.bookings.delete',['booking'=>$booking->id])}}"><i
-                                                                        class="fas fa-plus mr-2"></i>Sil</a>
+                                                                        class="fas fa-minus mr-2"></i>İptal</a>
+                                                                @endif
+
                                                             </td>
                                                         </tr>
                                                         @endforeach

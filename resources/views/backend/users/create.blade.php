@@ -8,11 +8,6 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
-    </ol>
-
 </div>
 <div class="container">
     <div class="card shadow">

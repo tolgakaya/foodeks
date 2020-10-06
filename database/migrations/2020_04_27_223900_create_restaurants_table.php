@@ -23,6 +23,7 @@ class CreateRestaurantsTable extends Migration
             $table->string('coordinate')->default('36.896893, 30.713324');
             $table->double('longitude')->default(30.713324);
             $table->double('latitude')->default(36.896893);
+            $table->string('avatar')->nullable();
             $table->timestamps();
         });
     }

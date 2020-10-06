@@ -43,7 +43,10 @@ class PageHomeController extends Controller
             'sub_slogan' => 'required',
             'paralax_image' => 'required',
             'paralax_text' => 'required',
-            'paralax_sub_text' => 'required'
+            'paralax_sub_text' => 'required',
+            'paralax_image2' => 'required',
+            'paralax_text2' => 'required',
+            'paralax_sub_text2' => 'required'
         ]);
         if (isset($request->show_how)) {
             $validated['show_how'] = true;

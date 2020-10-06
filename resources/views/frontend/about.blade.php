@@ -5,12 +5,13 @@
 @endsection
 @section('subheader')
 <!-- SubHeader =============================================== -->
-<section class="parallax-window" id="short" data-parallax="scroll" data-image-src="img/sub_header_cart.jpg"
+<section class="parallax-window" id="short" data-parallax="scroll"
+    data-image-src="{{$paralax !=null ? $paralax->paralax() : asset('frontend/img/adana_web.jpg')}}"
     data-natural-width="1400" data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>About us</h1>
-            <p>Qui debitis meliore ex, tollit debitis conclusionemque te eos.</p>
+            <h1>{{$settings->company ?? 'Hakkımızda'}}</h1>
+            <p>{{$page->title ?? 'Eşsiz Adana Lezzetleri'}}</p>
             <p></p>
         </div><!-- End sub_content -->
     </div><!-- End subheader -->
@@ -19,153 +20,80 @@
 @endsection
 
 @section('main')
-<div id="position">
-    <div class="container">
-        <ul>
-            <li><a href="#0">Home</a></li>
-            <li><a href="#0">Category</a></li>
-            <li>Page active</li>
-        </ul>
-        <a href="#0" class="search-overlay-menu-btn"><i class="icon-search-6"></i> Search</a>
-    </div>
-</div><!-- Position -->
 
-<!-- Content ================================================== -->
-<div class="container margin_60_35">
+<div class="collapse" id="collapseMap">
+    <div id="map" class="map"></div>
+</div><!-- End Map -->
+
+<div class="container">
     <div class="row">
+
         <div class="col-md-4">
-            <h3 class="nomargin_top">Some words about us</h3>
             <p>
-                Id pri consul aeterno petentium. Vivendo abhorreant et vim, et quot persecuti mel. Libris hendrerit ex
-                sea. Duo legere evertitur an, pri hinc <strong>doctus definitiones</strong> an, vix id dicam putent. Ius
-                ornatus instructior in.
+                <a class="btn_map" data-toggle="collapse" href="#collapseMap" aria-expanded="false"
+                    aria-controls="collapseMap">Haritada Gör</a>
             </p>
-            <p>
-                Id pri consul aeterno petentium. Vivendo abhorreant et vim, et quot persecuti mel. Libris hendrerit ex
-                sea. Duo legere evertitur an, pri hinc doctus definitiones an, vix id dicam putent. Ius ornatus
-                instructior in.
-            </p>
-            <h4>Mission</h4>
-            <p>
-                Id pri consul aeterno petentium. Vivendo abhorreant et vim, et quot persecuti mel. <strong>Libris
-                    hendrerit</strong> ex sea. Duo legere evertitur an, pri hinc doctus definitiones an, vix id dicam
-                putent. Ius ornatus instructior in.
-            </p>
-            <p>
-                Id pri consul aeterno petentium. Vivendo abhorreant et vim, et quot persecuti mel. Libris hendrerit ex
-                sea. Duo legere evertitur an, pri hinc doctus definitiones an, vix id dicam putent. Ius ornatus
-                instructior in.
-            </p>
-            <h4>Filosofy</h4>
-            <p>
-                Id pri consul aeterno petentium. Vivendo abhorreant et vim, et quot persecuti mel. <strong>Libris
-                    hendrerit</strong> ex sea. Duo legere evertitur an, pri hinc doctus definitiones an, vix id dicam
-                putent. Ius ornatus instructior in.
-            </p>
-        </div>
-        <div class="col-md-7 col-md-offset-1 text-right hidden-sm hidden-xs">
-            <img src="img/devices.jpg" alt="" class="img-responsive">
-        </div>
-    </div><!-- End row -->
-    <hr class="more_margin">
-    <div class="main_title">
-        <h2 class="nomargin_top">Quick food quality feautures</h2>
-        <p>
-            Cum doctus civibus efficiantur in imperdiet deterruisset.
-        </p>
-    </div>
-    <div class="row">
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.1s">
-            <div class="feature">
-                <i class="icon_building"></i>
-                <h3><span>+ 1000</span> Restaurants</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
+            <div class="box_style_2">
+                <h4 class="nomargin_top">Servis Zamanları <i class="icon_clock_alt pull-right"></i></h4>
+                <ul class="opening_list">
+
+                    @if (!empty($bookRestaurant->RestaurantTimes))
+                    @for($i = 1; $i <= count($bookRestaurant->RestaurantTimes); $i++)
+
+                        <li>{{$bookRestaurant->dayName($i)}}<span>
+                                {{$bookRestaurant->RestaurantTimes[$i-1]->openning_time}} -
+                                {{$bookRestaurant->RestaurantTimes[$i-1]->closing_time}}
+                            </span></li>
+                        @endfor
+                        @endif
+                </ul>
+            </div>
+            <div class="box_style_2 hidden-xs" id="help">
+                <i class="icon_lifesaver"></i>
+                <h4>Yardıma mı <span>İhtiyacınız var?</span></h4>
+                <a href="tel://{{$bookRestaurant->phone}}" class="phone">{{$bookRestaurant->phone}}</a>
+                @if (count($bookRestaurant->RestaurantTimes)>0)
+                <small>{{$bookRestaurant->RestaurantTimes[0]->openning_time}} -
+                    {{$bookRestaurant->RestaurantTimes[0]->closing_time}}</small>
+                @endif
             </div>
         </div>
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.2s">
-            <div class="feature">
-                <i class="icon_documents_alt"></i>
-                <h3><span>+1000</span> Food Menu</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
-            </div>
-        </div>
-    </div><!-- End row -->
-    <div class="row">
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.3s">
-            <div class="feature">
-                <i class="icon_bag_alt"></i>
-                <h3><span>Delivery</span> or Takeaway</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
-            </div>
-        </div>
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.4s">
-            <div class="feature">
-                <i class="icon_mobile"></i>
-                <h3><span>Mobile</span> support</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
-            </div>
-        </div>
-    </div><!-- End row -->
-    <div class="row">
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.5s">
-            <div class="feature">
-                <i class="icon_wallet"></i>
-                <h3><span>Cash</span> payment</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
-            </div>
-        </div>
-        <div class="col-md-6 wow fadeIn" data-wow-delay="0.6s">
-            <div class="feature">
-                <i class="icon_creditcard"></i>
-                <h3><span>Secure card</span> payment</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, vix erat audiam ei. Cum doctus civibus efficiantur in. Nec id tempor
-                    imperdiet deterruisset, doctus volumus explicari qui ex, appareat similique an usu.
-                </p>
-            </div>
+
+        <div class="col-md-8">
+            <div class="box_style_2">
+                <h2 class="inner">{{$page !=null ? $page->title: '%100 Adana Lezzetleri'}}</h2>
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        @foreach ($medias as $key=> $media)
+                        <li data-target="#myCarousel" data-slide-to="{{$key}}" class="{{$key==0 ? 'active' : ''}}"></li>
+                        @endforeach
+                    </ol>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        @foreach ($medias as $key =>$media)
+                        <div class="item {{$key==0 ? 'active': ''}}">
+                            <img src="{{$media->path()}}" alt="Adanadayım">
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Geri</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">İleri</span>
+                    </a>
+                </div>
+                {!! $page->text ?? 'Hakkımızda' !!}
+            </div><!-- End box_style_1 -->
         </div>
     </div><!-- End row -->
 </div><!-- End container -->
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6 nopadding features-intro-img">
-            <div class="features-bg">
-                <div class="features-img">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 nopadding">
-            <div class="features-content">
-                <h3>"Ex vero mediocrem"</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a lorem quis neque interdum consequat
-                    ut sed sem. Duis quis tempor nunc. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                </p>
-                <p>
-                    Per ea erant aeque corpora, an agam tibique nec. At recusabo expetendis vim. Tractatos principes mel
-                    te, dolor solet viderer usu ad.
-                </p>
-            </div>
-        </div>
-    </div>
-</div><!-- End container-fluid  -->
-<!-- End Content =============================================== -->
 
 <!-- Search Menu -->
 <div class="search-overlay-menu">
@@ -177,4 +105,23 @@
     </form>
 </div>
 <!-- End Search Menu -->
+@endsection
+@section('specialscript')
+<!--GMap Plugin -->
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyDudjGDbcq3lKGFqFsHdGWZNgWOsNX4gjs"></script>
+<script src="{{asset('frontend/js/restaurants.js')}}"></script>
+<script>
+    $( document ).ready(function() {
+                    // console.log( "document loaded" );
+                    // initializeMusteriler();
+                });
+             $('#collapseMap').on('shown.bs.collapse', function (e) {
+            initializeMusteriler();
+            
+        });
+                // $( window ).on( "load", function() {
+                //     console.log( "window loaded" );
+                //     initializeMusteriler();
+                // });
+</script>
 @endsection

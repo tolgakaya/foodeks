@@ -56,6 +56,11 @@ class Order extends Model
             return 'İptal Edildi';
         }
     }
+    public function tarih()
+    {
+        // return  $this->created_at->diffForHumans();
+        return $this->created_at->toDateTimeString()->format('DD/MM/Y hh:i:s');
+    }
     public function statusStyle()
     {
         $status = $this->status;

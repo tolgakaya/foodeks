@@ -12,14 +12,15 @@
 @endsection
 @section('subheader')
 <!-- SubHeader =============================================== -->
-<section class="parallax-window" id="short" data-parallax="scroll" data-image-src="img/sub_header_cart.jpg"
+<section class="parallax-window" id="short" data-parallax="scroll"
+    data-image-src="{{$paralax !=null ? $paralax->paralax() : asset('frontend/img/adana_web.jpg')}}"
     data-natural-width="1400" data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>Place your order</h1>
+            <h1>Restaurantınızı Seçin</h1>
             <div class="bs-wizard">
                 <div class="col-xs-4 bs-wizard-step active">
-                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Your details</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Bilgilerinizi Girin</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -27,7 +28,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong> Payment</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong>Lezzete Hazırlanın</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -35,7 +36,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Finish!</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Afiyet Olsun!</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -49,22 +50,11 @@
 @endsection
 
 @section('main')
-<div id="position">
-    <div class="container">
-        <ul>
-            <li><a href="#0">Home</a></li>
-            <li><a href="#0">Category</a></li>
-            <li>Page active</li>
-        </ul>
-        <a href="#0" class="search-overlay-menu-btn"><i class="icon-search-6"></i> Search</a>
-    </div>
-</div><!-- Position -->
-
 <!-- Content ================================================== -->
-<div class="container margin_60_35">
+<div class="container">
     <div class="row">
 
-        <div class="col-md-5">
+        <div class="col-md-3">
             @guest
             <div class="box_style_2 hidden-xs info">
                 <h4 class="nomargin_top">Üye misiniz?<i class="icon_clock_alt pull-right"></i></h4>
@@ -83,6 +73,24 @@
                 </p>
             </div><!-- End box_style_2 -->
             @endguest
+            @if (!empty($bookRestaurant->RestaurantTimes))
+
+            <div class="box_style_2 hidden-xs info">
+                <div class="row">
+                    @for($i = 1; $i <= count($bookRestaurant->RestaurantTimes); $i++)
+                        <div class="col-md-4 col-sm-4">
+                            {{$bookRestaurant->dayName($i)}}
+                        </div>
+                        <div class="col-md-8 col-sm-8">
+                            {{$bookRestaurant->RestaurantTimes[$i-1]->openning_time}} -
+                            {{$bookRestaurant->RestaurantTimes[$i-1]->closing_time}}
+                        </div>
+                        @endfor
+                </div>
+            </div><!-- End box_style_1 -->
+
+            @endif
+
             <div class="box_style_2 hidden-xs" id="help">
                 <i class="icon_lifesaver"></i>
                 <h4>Need <span>Help?</span></h4>
@@ -91,12 +99,12 @@
             </div>
         </div><!-- End col-md-3 -->
 
-        <div class="col-md-7">
+        <div class="col-md-9">
             <div class="box_style_2" id="order_process">
                 <h2 class="inner">Rezervasyon Bilgileri</h2>
                 <form action="{{route('bookings.store')}}" method="post">
                     @csrf
-                    <input type="hidden" name="restaurant_id" value="{{$restaurant->id}}">
+                    <input type="hidden" name="restaurant_id" value="{{$bookRestaurant->id}}">
                     <div class="form-group">
                         <label>İsminiz</label>
                         <input type="text" class="form-control" id="name" name="name" placeholder="İsminizi giriniz">

@@ -10,11 +10,6 @@
 @section('content')
 <div class="page-header mt-0 shadow p-3">
 
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <input type="hidden" id="restaurantid" value="">
-    </div>
 </div>
 
 <div class="d-flex justify-content-center">
@@ -172,10 +167,9 @@
                             </p>
                         </div>
 
-
+                        @endforeach
                         <button class="btn  btn-sm btn-success yazdir pull-left"
                             data-yazdir="row{{$order->id}}">Yazdır</button>
-                        @endforeach
                     </div>
                 </div>
             </li>
@@ -252,6 +246,7 @@
 <!-- Data tables -->
 <script src="{{asset('backend/plugins/datatable/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('backend/plugins/datatable/dataTables.bootstrap4.min.js')}}"></script>
+
 {{-- <script src="{{asset('backend/js/menu.js')}}"></script> --}}
 <script>
     $(document).ready(function () {
@@ -263,7 +258,9 @@ $('.yazdir').on('click',function () {
     var WinPrint = window.open();
     WinPrint.document.write('<link rel="stylesheet" href="http://foodeks/backend/plugins/bootstrap/css/bootstrap.min.css">');
     WinPrint.document.write('<link href="http://foodeks/backend/css/dashboard.css" rel="stylesheet" type="text/css">');
-
+    WinPrint.document.write('<link href="http://foodeks/backend/plugins/select2/select2.css" rel="stylesheet" type="text/css">');
+    WinPrint.document.write('<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800" rel="stylesheet" type="text/css">');
+    WinPrint.document.write('<link href="http://foodeks/backend/css/icons.css" rel="stylesheet" type="text/css">');
     WinPrint.document.write(prtContent.innerHTML);
     WinPrint.document.close();
     WinPrint.focus();
@@ -317,6 +314,11 @@ dataType: "json",
 success: function (result) {
 if(result.error){
     alert(result.error);
+    // Swal.fire(
+    // 'Good job!',
+    // 'Paketçoktan yola çıkmış görünüyor',
+    // 'error'
+    // )
 }
 location.reload();
 $('#userModal').modal('hide');
@@ -354,9 +356,10 @@ console.log('Lütfen bir servis elemanı seçiniz.');
         // var ans = confirm("Seçli siparişin durumunu değiştirmek istiyor musunuz?");
                          
                            var felan = { 
-                               orders:ids,
+                               orders:ids.get(),
                               status:status
                               };
+                            //   console.log('felanimiz' + felan);
                             $.ajax({
                             headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

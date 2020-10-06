@@ -9,30 +9,7 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    {{-- <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item active">
-            <select name="restaurant_id" id="restaurant" class="form-control select2 "
-                data-placeholder="Restaurant seçiniz...." style="min-width: 250px;">
-                @foreach ($restaurants as $restaurant)
-                <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
-    @endforeach
-    </select>
-    </li>
-    </ol> --}}
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <input type="hidden" id="restaurantid" value="{{$restaurant->id}}">
-        {{-- <div class="dropdown-menu">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mealModal"><i
-                    class="fas fa-plus mr-2"></i>Ürün Ekle</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-eye mr-2"></i>View the page
-                Details</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-edit mr-2"></i>Edit Page</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i> Settings</a>
-        </div> --}}
-    </div>
+
 </div>
 
 <div class="row">
@@ -43,22 +20,11 @@
                 <div class="row">
                     <div class="col md-3 text-left ">
                         <div class="btn-group mb-0">
-                            {{-- <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">İşlemler</button> --}}
-                            {{-- <div class="dropdown-menu"> --}}
+
                             <a class="btn btn-primary btn-sm dropdown-toggle" href="#" data-toggle="modal"
                                 data-target="#userModal" data-val={{$restaurant->id}}><i
                                     class="fas fa-plus mr-2"></i>Kullanıcı ekle</a>
-                            {{-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#optionModal"><i
-                                        class="fas fa-plus mr-2"></i>Ürün
-                                    seçeneği ekle</a>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#extraModal"><i
-                                        class="fas fa-plus mr-2"></i>Ürün
-                                    ekstrası ekle</a> --}}
-                            {{-- <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>
-                                    Sil</a> --}}
-                            {{-- </div> --}}
+
                         </div>
                     </div>
                     <div class="col md-9 text-right">
@@ -76,12 +42,10 @@
                     <div id="tekil{{$restaurant->id}}">
                         <div id="accordion">
                             <div class="accordion">
-                                <div class="accordion-header" data-toggle="collapse"
-                                    data-target="#panel{{$restaurant->id}}">
-                                    {{-- #urun-mealid --}}
+                                <div class="accordion-header" data-toggle="collapse" data-target="#panel{{$restaurant->id}}
 
                                 </div>
-                                <div class="accordion-body collapse show border border-top-0 text-sm"
+                                <div class=" accordion-body collapse show border border-top-0 text-sm"
                                     id="panel{{$restaurant->id}}" data-parent="#accordion">
 
                                     <h2 class=" mb-0">Kullanıcı Bilgileri</h2>
@@ -111,7 +75,7 @@
                                                                     <a class="avatar avatar-md" data-toggle="tooltip"
                                                                         href="#"><img alt="Image placeholder"
                                                                             class="rounded-circle"
-                                                                            src="assets/img/faces/female/8.jpg"></a>
+                                                                            src="{{$user->userAvatar()}}"></a>
                                                                 </div>
                                                             </td>
                                                             <td class="text-sm font-weight-600">
@@ -151,6 +115,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <input type="hidden" id="restaurantid" value="{{$restaurant->id}}">
             <div class="modal-body">
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered w-100 text-nowrap" id="example2">
@@ -158,8 +123,8 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Resim</th>
-                                <th>isim</th>
-                                <th>role</th>
+                                <th>İsim</th>
+                                <th>Görev</th>
 
                             </tr>
                         </thead>

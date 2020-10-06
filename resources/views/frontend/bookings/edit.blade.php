@@ -3,8 +3,7 @@
 <meta name="_token" content="{{csrf_token()}}" />
 <!-- Radio and check inputs -->
 <link href="{{asset('frontend/css/skins/square/grey.css')}}" rel="stylesheet">
-{{-- <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="{{asset('backend/plugins/datatable/dataTables.bootstrap4.min.css')}}" rel="stylesheet" /> --}}
+
 <link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,400italic,700italic,300,300italic' rel='stylesheet'
     type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Gochi+Hand' rel='stylesheet' type='text/css'>

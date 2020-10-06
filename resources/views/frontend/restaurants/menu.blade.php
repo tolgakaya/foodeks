@@ -20,28 +20,18 @@
 @section('subheader')
 <!-- SubHeader =============================================== -->
 <section class="parallax-window" id="short" data-parallax="scroll"
-    data-image-src="{{asset('img/sub_header_short.jpg')}}" data-natural-width="1400" data-natural-height="350">
+    data-image-src="{{$page !=null ? $page->paralax() : asset('frontend/img/adana_web.jpg')}}" data-natural-width="1400"
+    data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>24 results in your zone</h1>
-            <div><i class="icon_pin"></i> 135 Newtownards Road, Belfast, BT4 1AB</div>
+            <h1>{{strtoupper($restaurant->name)}} Aktif Menüsü</h1>
+            <div><i class="icon_pin"></i> {{$restaurant->address}}</div>
         </div><!-- End sub_content -->
     </div><!-- End subheader -->
 </section><!-- End section -->
 <!-- End SubHeader ============================================ -->
 @endsection
 @section('main')
-<div id="position">
-    <div class="container">
-        <ul>
-            <li><a href="#0">Home</a></li>
-            <li><a href="#0">Category</a></li>
-            <li>Page active</li>
-        </ul>
-        <a href="#0" class="search-overlay-menu-btn"><i class="icon-search-6"></i> Search</a>
-    </div>
-</div><!-- Position -->
-
 <!-- Content ================================================== -->
 <div class="container margin_60_35">
     <div class="row">
@@ -65,6 +55,7 @@
         </div>
     </div>
     <div class="row">
+        <input type="hidden" value="{{$restaurant->isAvailable()}}" id="isAvailable">
         <input type="hidden" value="{{$menu->id}}" id="menuid">
         <div class="col-md-7">
             <div class="box_style_2" id="main_menu">
@@ -74,21 +65,20 @@
 
                 <h3 class="nomargin_top" id="{{$category}}">{{$category}}</h3>
                 <p>
-                    Te ferri iisque aliquando pro, posse nonumes efficiantur in cum. Sensibus reprimique eu pro.
-                    Fuisset mentitum deleniti sit ea.
+                    Aşağıda + butonunu kullanarak {{$category}} kategorisnden sepete ekleme yapabilirsiniz.
                 </p>
 
                 <table class="table table-striped cart-list">
                     <thead>
                         <tr>
                             <th>
-                                Item
+                                Ürün
                             </th>
                             <th>
-                                Price
+                                Fiyat
                             </th>
                             <th>
-                                Order
+                                Sipariş
                             </th>
                         </tr>
                     </thead>
@@ -96,7 +86,7 @@
                         @foreach ($meal as $m)
                         <tr>
                             <td>
-                                <figure class="thumb_menu_list"><img src="img/menu-thumb-1.jpg" alt="thumb">
+                                <figure class="thumb_menu_list"><img src="{{$m->path()}}" alt="thumb">
                                 </figure>
                                 <h5>{{$m->name}}</h5>
                                 <p>
@@ -172,10 +162,10 @@
                     <table class="table table_summary">
                         <tbody id="cartbody" class="cartbody">
                             @foreach($cartItems as $rowid => $row)
-                            <tr class="info">
+                            <tr style="background: #ccc">
                                 <td>
-                                    <a href="#0" class="remove_item" id="{{$row->id}}"><i
-                                            class="icon_minus_alt"></i></a>
+                                    <a href="#0" class="remove_item" id="{{$row->id}}"><i class="icon_minus_alt"
+                                            style="color: #db1919"></i></a>
                                     <strong>{{$row->quantity}}X</strong>
                                     @if($row->attributes['option']!==null)
 
@@ -219,16 +209,18 @@
                     <table class="table table_summary">
                         <tbody>
                             <tr>
-                                <td class="total">
+                                <td class="totalsabit">
                                     TOPLAM <span class="pull-right">{{$total}} TL</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <hr>
-
+                    {{-- @if ($restaurant !=null) --}}
                     <a class="btn_full"
                         href="{{$restaurant->isAvailable()== true ? route('orders.create') : '#'}}">{{$restaurant->isAvailable()== false ? 'Servis Zamanı Dışında' : 'Sipariş Ver'}}</a>
+                    {{-- @endif --}}
+
                 </div><!-- End cart_box -->
             </div><!-- End theiaStickySidebar -->
         </div><!-- End col-md-3 -->

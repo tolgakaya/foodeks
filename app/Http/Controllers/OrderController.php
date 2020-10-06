@@ -18,6 +18,7 @@ use Notification;
 use App\Helpers\SmsService;
 use UxWeb\SweetAlert\SweetAlert;
 use App\Helpers\CartService;
+use App\PageRestaurant;
 
 
 class OrderController extends Controller
@@ -40,31 +41,7 @@ class OrderController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $cartContent = CartService::cartContent();
-        $cartItems = $cartContent['cartItems'];
-        $total = $cartContent['total'];
-        $quantity = $cartContent['quantity'];
-        $restaurant = $cartContent['restaurant'];
-        // $total = 0;
-        // $cartItems = \Cart::getContent();
-        // $quantity = 0;
-        // foreach ($cartItems as   $row) {
-        //     $base = $row->quantity * $row->price;
-        //     $quantity += $row->quantity;
-        //     $opfee = 0;
-        //     $extfee = 0;
-        //     if ($row->attributes['option'] !== null) {
-        //         $opfee = $row->attributes['option']->fee * $row->quantity;
-        //     }
-
-
-        //     if ($row->attributes['extras'] !== null) {
-        //         foreach ($row->attributes['extras']  as $ext) {
-        //             $extfee += $ext->fee;
-        //         }
-        //     }
-        //     $total += $base + $extfee + $opfee;
-        // }
+        $page = PageRestaurant::first();
         $addresses = null;
         $firstAdres = null;
         if ($user !== null) {
@@ -74,7 +51,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('frontend.orders.create', compact('cartItems', 'total', 'quantity', 'user', 'addresses', 'firstAdres', 'restaurant'));
+        return view('frontend.orders.create', compact('user', 'addresses', 'firstAdres', 'page'));
     }
     public function address(Address $address)
     {
@@ -89,6 +66,8 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+
+        //TODOBlade::include('CHECK RESTAURANT AVALİBALİTY');
         $validated = request()->validate([
             'address_name' => 'required',
             'city' => 'required',
@@ -110,6 +89,7 @@ class OrderController extends Controller
             //user varsa usera set edelim
             if ($user !== null) {
                 $adres->user_id = $addressid;
+                $adres->save();
             }
         }
         $mevcutCart = \Cart::getContent();
@@ -117,6 +97,11 @@ class OrderController extends Controller
         $mevcutMenu = $first->attributes['menuid'];
         $menu = Menu::find($mevcutMenu);
         $restaurant_id = $menu->restaurant->id;
+        $restaurant = $menu->restaurant;
+        if ($restaurant->isAvailable() != 1) {
+            alert('Servis zamanı dışında. Seçtiğiniz restaurant paket servis zamanı dışında. Lütfen servis zamanı içinde tekrar deneyiniz.')->persistent("Tamam");
+            return redirect()->route('restaurants.menu', ['restaurant' => $restaurant_id]);
+        }
         $order = new Order();
         $order->restaurant_id = $restaurant_id;
         $order->menu_id = $menu->id;

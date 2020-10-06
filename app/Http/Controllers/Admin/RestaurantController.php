@@ -61,6 +61,9 @@ class RestaurantController extends Controller
             'address' => 'required',
             'email' => 'required'
         ]);
+        if (!empty($request->avatar)) {
+            $validated['avatar'] = $request->avatar;
+        }
 
         Restaurant::create($validated);
         alert()->success('Yeni restaurant başarı ile kaydedildi', 'Kayıt Başarılı');
@@ -130,10 +133,9 @@ class RestaurantController extends Controller
             'phone' => 'required',
             'address' => 'required'
         ]);
-
+        $validated['avatar'] = $request->avatar;
 
         $restaurant->update($validated);
-        // Restaurant::create($validated);
         return redirect()->route('admin.restaurant.index');
     }
 

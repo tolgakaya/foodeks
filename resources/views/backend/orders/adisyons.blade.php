@@ -10,11 +10,6 @@
 @section('content')
 <div class="page-header mt-0 shadow p-3">
 
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-        <input type="hidden" id="restaurantid" value="">
-    </div>
 </div>
 <div class="row">
     @foreach ($orders as $order)

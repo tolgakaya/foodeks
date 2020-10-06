@@ -48,6 +48,9 @@ class PageSettingsController extends Controller
         if ($request->payment_setcard) {
             $validated['payment_setcard'] = $request->payment_setcard;
         }
+        if ($request->style) {
+            $validated['style'] = $request->style;
+        }
         if ($request->payment_ticket) {
             $validated['payment_ticket'] = $request->payment_ticket;
         }

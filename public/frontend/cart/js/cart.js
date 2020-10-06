@@ -26,6 +26,7 @@ $(document).ready(function () {
                     $('.cartbody').empty();
                     // $('#cd_cartbody').empty();
                     $('.total').empty();
+                    $('.totalsabit').empty();
                     var html = '';
                     var htmlTotal = '';
                     var htmlQuantity = '';
@@ -39,9 +40,9 @@ $(document).ready(function () {
 
                         }
 
-                        html += '<tr class="info">';
+                        html += '<tr style="background:#ccc">';
                         html += '<td>';
-                        html += '<a href="#0" class="remove_item" id="' + item.id + '"><i class="icon_minus_alt"></i></a>';
+                        html += '<a href="#0" class="remove_item" id="' + item.id + '"><i class="icon_minus_alt" style="color: #db1919"></i></a>';
                         html += '<strong>' + item.quantity + 'X</strong>;'
                         if (item.attributes.option) {
                             html += '<strong>' + item.attributes.option.option + '</strong>';
@@ -83,7 +84,9 @@ $(document).ready(function () {
                     $('#quantity').empty();
                     $('#quantity').append(htmlQuantity);
                     $('.total').append(htmlTotal);
+                    $('.totalsabit').append(htmlTotal);
                     $('.cartbody').append(html);
+
                 },
                 complete: function (data) {
                     // Hide image container
@@ -144,7 +147,8 @@ $(document).ready(function () {
                     }
                 }
                 $('.cartbody').empty();
-                $('.total').empty();
+                $('.mycart-footer').empty();
+                $('.totalsabit').empty();
 
                 //   addToCart();
                 var html = '';
@@ -160,9 +164,9 @@ $(document).ready(function () {
 
                     }
 
-                    html += '<tr class="info">';
+                    html += '<tr style="background:#ccc">';
                     html += '<td>';
-                    html += '<a href="#0" class="remove_item" id="' + item.id + '"><i class="icon_minus_alt"></i></a>';
+                    html += '<a href="#0" class="remove_item" id="' + item.id + '"><i class="icon_minus_alt" style="color: #db1919"></i></a>';
                     html += '<strong>' + item.quantity + 'X</strong>;'
                     if (item.attributes.option) {
                         html += '<strong>' + item.attributes.option.option + '</strong>';
@@ -190,9 +194,31 @@ $(document).ready(function () {
 
 
                 });
-
-                htmlTotal += '<span class="pull-right">' + result.total + 'TL</span>';
-                $('.total').append(htmlTotal);
+                var isAvailable = $('#isAvailable').val();
+                console.log('restaurant durumu: ' + isAvailable);
+                if (isAvailable == 1) {
+                    htmlTotal += ' <a href="/orders/create"' + 'class="cd-cart__checkout">';
+                }
+                else {
+                    htmlTotal += ' <a href="#"' + 'class="cd-cart__checkout">';
+                }
+                htmlTotal += '<em>Toplam <span class="total">';
+                if (isAvailable == 1) {
+                    htmlTotal += result.total;
+                } else {
+                    htmlTotal += 'Servis Zamanı Dışında';
+                }
+                htmlTotal += '  TL</span >';
+                htmlTotal += '<svg class="icon icon--sm" viewBox="0 0 24 24">';
+                htmlTotal += '<g fill="none" stroke="currentColor">';
+                htmlTotal += '<line stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x1="3" y1="12" x2="21" y2="12" />';
+                htmlTotal += '<polyline stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  points="15,6 21,12 15,18 " />';
+                htmlTotal += '</g ></svg > </em ></a >';
+                // htmlTotal += '<span class="pull-right">' + result.total + 'TL</span>';
+                $('.mycart-footer').append(htmlTotal);
+                htmlTotalSabit = '';
+                htmlTotalSabit += ' <span class="pull-right">' + result.total + 'TL</span>';
+                $('.totalsabit').append(htmlTotalSabit);
                 htmlQuantity += result.quantity;
                 if (result.quantity > 0) {
                     $('.cd-cart').removeClass('gizle');

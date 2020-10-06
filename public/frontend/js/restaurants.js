@@ -98,25 +98,20 @@ function initializeMusteriler() {
 
 
     for (var musteri in musteriler) {
+        // console.log(musteriler[musteri].id);
+        html = '';
+        html += "<div class='panel panel-primary'>";
+        html += "<div class='panel-heading'>";
+        html += musteriler[musteri].name;
+        html += "</div>";
+        html += "<div class='panel-body'>";
+        html += "<div class='table-responsive'>";
+        html += "<div class='btn btn-xs-group'>";
+        html += "<a href='javascript:map.setCenter(new google.maps.LatLng(" + musteriler[musteri].center.toUrlValue(6) + "));map.setZoom(20);'><i class='btn btn-xs btn-success '>Yaklaş</i></a> <a href='javascript:map.fitBounds(bounds);'><i class='btn btn-xs btn-danger'>Uzaklaş</i></a>";
+        html += '<a href="restaurants/menu/' + musteriler[musteri].id + '" ><i class="btn btn - xs btn - primary btn - block">Menüye Bakın</i> </a>';
+        html += "</div ></div ></div ></div ></div >";
 
-        createMarkerM(musteriler[musteri].center, "<div class='panel panel-primary'>" +
-
-            "<div class='panel-heading'>" +
-            musteriler[musteri].name +
-            "</div>" +
-            "<div class='panel-body'>" +
-            "<div class='table-responsive'>" +
-            "<div class='btn btn-xs-group'>" +
-            "<a href='javascript:map.setCenter(new google.maps.LatLng(" + musteriler[musteri].center.toUrlValue(6) + "));map.setZoom(20);'><i class='btn btn-xs btn-success '>Yaklaş</i></a> <a href='javascript:map.fitBounds(bounds);'><i class='btn btn-xs btn-danger'>Uzaklaş</i></a>" +
-            "<a href='../MusteriDetayBilgileri.aspx?custID=" + musteriler[musteri].id + "'><i class='btn btn-xs btn-primary btn-block'>Müşteri Detay</i> </a>" +
-            "<a href='MusteriYolu.aspx?id=" + musteriler[musteri].id + "'><i class='btn btn-xs btn-info btn-block'>Navigasyon</i> </a>" +
-            "</div>" +
-            "</div>" +
-
-            "</div>" +
-
-            " </div>");
-
+        createMarkerM(musteriler[musteri].center, html);
     };
 
     map.fitBounds(bounds);

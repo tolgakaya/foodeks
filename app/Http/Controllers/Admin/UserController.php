@@ -61,49 +61,16 @@ class UserController extends Controller
                 'mobile' => ['required']
             ]
         );
-        $data['validated'] = Hash::make($data['password']);
+        $password = $data['password'];
+        $data['password'] = Hash::make($data['password']);
         User::create($data);
         //sms ve email gönderelim
-        $userMessage = "Sn. " + $data['adi'] + " Üyeliğiniz başarılı bir şekilde gerçekleştirildi. Kullanıcı adınız: " + $data['email'] + " Şifreniz: " + $data['password'];
+        $userMessage = "Sn. " . $data['adi']  . " Üyeliğiniz başarılı bir şekilde gerçekleştirildi. Kullanıcı adınız: " . $data['email'] . "Şifreniz: " .  $password;
         $sms = new SmsService([$data['mobile']], $userMessage);
         $sms->send();
 
 
         return redirect()->route('admin.users.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**

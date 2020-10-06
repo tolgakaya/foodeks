@@ -9,21 +9,6 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item active">
-            <select name="restaurant_id" id="restaurant" class="form-control select2 "
-                data-placeholder="Restaurant seçiniz...." style="min-width: 250px;">
-                @foreach ($restaurants as $restaurant)
-                <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
-                @endforeach
-            </select>
-        </li>
-    </ol>
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
-
-    </div>
 </div>
 
 <div class="row">
@@ -35,8 +20,7 @@
                         <div class="btn-group mb-0">
                             <a class="btn btn-primary btn-sm dropdown-toggle" href="#" data-toggle="modal"
                                 data-target="#mealModal" data-val={{$restaurant->id}}><i
-                                    class="fas fa-plus mr-2"></i>Ürün
-                                ekle</a>
+                                    class="fas fa-plus mr-2"></i>Ürün ekle</a>
                         </div>
                     </div>
                     <div class="col md-9 text-right">
@@ -62,9 +46,22 @@
                         @foreach ($cartItems as $rowid => $row)
                         <tr id="row{{$row->id}}">
                             <td>{{$row->quantity}} X</td>
+                            @if ($row->attributes['option']!=null)
                             <td> {{$row->attributes['option']->option}}</td>
+                            @else
+                            <td></td>
+                            @endif
+
                             <td>{{$row->name}} </td>
-                            <td>{{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}</td>
+                            <td>
+                                @if ($row->attributes['option']!=null)
+                                {{ $row->quantity * ($row->price + $row->attributes['option']->fee)}}
+                                @else
+                                {{ $row->quantity * ($row->price)}}
+                                @endif
+
+
+                            </td>
                             <td>
                                 @foreach($row->attributes['extras'] as $key => $extra)
 
@@ -181,15 +178,21 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Resim</th>
-                                <th>isim</th>
-                                <th>Açıklama</th>
+                                <th>İsim</th>
+                                <th>Fiyat</th>
                             </tr>
                         </thead>
                         <tbody id="mealbody">
                             @foreach ($menu->meals as $meal)
                             <tr>
                                 <td> {{$meal->id}}</td>
-                                <td> {{$meal->image}}</td>
+                                <td>
+                                    <div class="avatar-group">
+                                        <a class="avatar avatar-md" data-toggle="tooltip" href="#"><img
+                                                alt="Image placeholder" class="rounded-circle"
+                                                src="{{$meal->path()}}"></a>
+                                    </div>
+                                </td>
                                 <td> {{$meal->name}}</td>
                                 <td> {{$meal->pivot->fee}}</td>
                             </tr>
@@ -197,7 +200,7 @@
                         </tbody>
                     </table>
                     <div class="form-group">
-                        <input type="number" class="form-control" name="fee" id="mealfee" placeholder="Fiyat giriniz">
+                        {{-- <input type="number" class="form-control" name="fee" id="mealfee" placeholder="Fiyat giriniz"> --}}
                         <input type="hidden" id="mealcat">
                     </div>
                     <form>
@@ -305,6 +308,9 @@ dataArr.push(value); //"name" being the value of your first column.
 });
 var mealid = dataArr[0][0];
 var fiyat=dataArr[0][3];
+// if($('#mealfee').val()){
+//     fiyat=$('#mealfee').val();
+// }
 console.log('fiyatimiz '+fiyat);
 var menuid= $('#menuid').val();
 // var optionid=$("input[name = " + idd+ "]:checked").val();
@@ -437,9 +443,12 @@ function sepetEkle(mealid,menuid,fiyat,optionid,extras) {
     }
     //////sepeeti güncellemede kaldım
     html+='<tr id="row'+item.id+'">';
-    html+='<td>'+item.quantity+'</td>';
+    html+='<td>'+item.quantity+'X</td>';
         if(item.attributes.option){
         html+= '<td>'+item.attributes.option.option+'</td>';
+        }
+        else{
+         html+=   '<td></td>';
         }
 
    html+='<td>'+item.name+'</td>';
@@ -553,7 +562,7 @@ $('#contact_name').val(contact_name);
 $('#userid').val(userid);
 $('#address_id').val(ad_id);
 $('#userModal').modal('hide');
-// console.log('userid ' + userid + ' city ' + city);
+console.log('userid ' + userid + ' city ' + city);
 // sepetEkle(mealid, menuid, fiyat, optionid, extras.get());
 });
 
@@ -604,5 +613,9 @@ alert(errormessage.error);
 
 
 });
+
+// $('#extraModal').on('show.bs.modal', function(event) {
+//     $('#mealfee').val('');
+// });
 </script>
 @endsection

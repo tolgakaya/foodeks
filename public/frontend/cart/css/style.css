@@ -3422,7 +3422,7 @@ mark {
 .cd-cart__trigger, .cd-cart__content {
     position: fixed;
     bottom: 40px;
-    right: 10%;
+    right: 5%;
     transition: -webkit-transform .2s;
     transition: transform .2s;
     transition: transform .2s, -webkit-transform .2s;
@@ -3623,10 +3623,11 @@ mark {
     align-items: center;
     border-radius: 0.25em 0.25em 0 0;
     border-radius: var(--radius) var(--radius) 0 0;
-    height: 40px;
+    height: 50px;
     line-height: 40px;
     background-color: hsl(0, 0%, 100%);
     background-color: var(--cd-color-3);
+    background: #2a6df4 !important;
     transition: opacity .2s 0s;
     border-bottom: 1px solid hsl(0, 0%, 90%);
     border-bottom: 1px solid hsl(var(--cd-color-3-h), var(--cd-color-3-s), calc(var(--cd-color-3-l)*0.9))

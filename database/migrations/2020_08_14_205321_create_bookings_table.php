@@ -20,7 +20,7 @@ class CreateBookingsTable extends Migration
             $table->date('date');
             $table->time('time');
             $table->unsignedInteger('quantity')->default(1);
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->string('name');
             $table->string('phone');
             $table->string('email')->nullable();

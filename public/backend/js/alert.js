@@ -2,7 +2,7 @@ $(document).ready(function () {
     fetch();
     setInterval(function () {
         fetch();
-    }, 5000);
+    }, 500000);
     function fetch() {
         $.ajax({
             url: '/admin/alert/paket',
@@ -18,11 +18,11 @@ $(document).ready(function () {
                 $.each(response.orders, function (index, value) {
                     paket = paket + 1;
                     // console.log(value);
-                    _html += '<div class="col-lg-3 satir">';
+                    // _html += '<div class="col-lg-3 satir">';
                     _html += '<a class="dropdown-item d-flex" href="/admin/orders/">';
-                    _html += ' <div>';
+                    // _html += ' <div>';
                     _html += '<strong>' + 'Paket ' + value.id + '</strong>' + ' ' + value.address.contact_name + ' ' + value.address.phone;
-                    _html += '</div ></a >';
+                    _html += '</a >';
                 });
 
                 if (paket > 0) {
@@ -50,11 +50,11 @@ $(document).ready(function () {
                     });
                     console.log(value);
                     // adisyonHtml += '<h3>' + value.id + '</h3>';
-                    adisyonHtml += '<div class="col-lg-3 satir">';
+                    // adisyonHtml += '<div class="col-lg-3 satir">';
                     adisyonHtml += '<a class="dropdown-item d-flex" href="/admin/orders/masa/adisyons/">';
-                    adisyonHtml += ' <div>';
+                    // adisyonHtml += ' <div>';
                     adisyonHtml += '<strong>' + 'Masa ' + value.masaid + '</strong> Yeni sipariş geldi';
-                    adisyonHtml += '</div ></a >';
+                    adisyonHtml += '</a >';
                 });
 
                 var currentAdisyon = $('#currentAdisyon').val();
@@ -84,11 +84,11 @@ $(document).ready(function () {
                     booking = booking + 1;
                     // console.log(value);
                     // adisyonHtml += '<h3>' + value.id + '</h3>';
-                    bookingHtml += '<div class="col-lg-3 satir">';
+                    // bookingHtml += '<div class="col-lg-3 satir">';
                     bookingHtml += '<a class="dropdown-item d-flex" href="/admin/bookings/">';
-                    bookingHtml += ' <div>';
+                    // bookingHtml += ' <div>';
                     bookingHtml += '<strong>' + 'Rezervasyon ' + value.name + '</strong>' + ' ' + value.phone + ' ' + value.quantity + ' kişi';
-                    bookingHtml += '</div ></a >';
+                    bookingHtml += '</a >';
                 });
 
                 if (booking > 0) {

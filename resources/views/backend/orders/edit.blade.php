@@ -9,21 +9,7 @@
 @endsection
 @section('content')
 <div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item active">
-            {{-- <select name="restaurant_id" id="restaurant" class="form-control select2 "
-                data-placeholder="Restaurant seçiniz...." style="min-width: 250px;">
-                @foreach ($restaurants as $restaurant)
-                <option value="{{$restaurant->id}}">{{$restaurant->name}}</option>
-            @endforeach
-            </select> --}}
-        </li>
-    </ol>
-    <div class="btn-group mb-0">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Actions</button>
 
-    </div>
 </div>
 
 <div class="row">
@@ -97,6 +83,7 @@
 
             </div>
             <div class="card-body">
+                @if ($order->masaid ==null)
                 <form action="{{route('admin.orders.update',['order'=>$order->id])}}" method="POST"
                     style="{{$order->masaid != null ? 'display:none' : ''}}">
                     @csrf
@@ -123,7 +110,8 @@
                         <label>Teslimat adresi</label>
 
                         <textarea class="form-control" style="height:150px" id="address"
-                            placeholder="Ex. Allergies, cash change..." name="address" id="address"></textarea>
+                            placeholder="Ex. Allergies, cash change..." name="address"
+                            id="address">{{$order->address->address}}</textarea>
                         <input type="hidden" name="address_id" id="address_id" value="{{$order->address_id}}">
                         <input type="hidden" name="userid" id="userid" value="{{$order->user_id}}">
                         <a href="#" data-toggle="modal" data-target="#userModal" class="btn btn-primary">Müşteri
@@ -131,20 +119,14 @@
                         </a>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-12 col-sm-12">
                             <div class="form-group">
                                 <label>City</label>
                                 <input type="text" id="city_order" name="city" class="form-control"
-                                    placeholder="Semtinizi giriniz" value="{{$order->city}}">
+                                    placeholder="Semtinizi giriniz" value="{{$order->address->city}}">
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Postal code</label>
-                                <input type="text" id="pcode_oder" name="pcode_oder" class="form-control"
-                                    placeholder=" Your postal code" value="1234567">
-                            </div>
-                        </div>
+
                     </div>
                     <hr>
 
@@ -158,10 +140,12 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="submit" id="gonder" class="btn btn-primary btn-block" value="Gönder">
+                            <input type="submit" id="gonderr" class="btn btn-primary btn-block" value="Gönder">
                         </div>
                     </div>
                 </form>
+                @endif
+
                 @if ($order->masaid != null )
                 <form action="{{route('admin.orders.update',['order'=>$order->id])}}" method="POST">
                     @csrf
@@ -610,7 +594,7 @@ alert(errormessage.error);
 
 });
 </script>
-<script>
+{{-- <script>
     $(document).ready(function () {
         $('#gonder').click(function (e) {
             e.preventDefault();
@@ -621,5 +605,5 @@ alert(errormessage.error);
     });
 });
 
-</script>
+</script> --}}
 @endsection

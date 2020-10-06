@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 //     return view(env('THEME') . '.home');
 // })->name('home');
 
-Route::get('/', function () {
-    return view('frontend.home');
-})->name('home');
+// Route::get('/', function () {
+//     return view('frontend.home');
+// })->name('home');
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('about', function () {
-    return view('frontend.about');
-})->name('about');
+// Route::get('about', function () {
+//     return view('frontend.about');
+// })->name('about');
 
 Route::get('faq', function () {
     return view('frontend.faq');
@@ -80,6 +80,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('restaurants/users/unsign/{restaurant}', 'RestaurantController@unsign')->name('restaurant.unsign');
 
 
+    Route::get('restaurants/times/{restaurant}', 'RestaurantTimeController@index')->name('restaurants.times.index');
+    Route::post('restaurants/times/{restaurant}', 'RestaurantTimeController@store')->name('restaurants.times.store');
 
     Route::get('categories', 'CategoryController@index')->name('categories.index');
     Route::get('categories/create', 'CategoryController@create')->name('categories.create');
@@ -102,7 +104,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 
     Route::get('meals/details/{meal}', 'MealController@details')->name('meals.details');
     Route::post('meals/details/option/{meal}', 'MealController@addOption')->name('meals.details.option');
+    Route::post('meals/option/delete/{meal}', 'MealController@deleteOption')->name('meals.details.option.delete');
     Route::post('meals/details/extra/{meal}', 'MealController@addExtra')->name('meals.details.extra');
+    Route::post('meals/extra/delete/{meal}', 'MealController@deleteExtra')->name('meals.details.extra.delete');
 
     Route::get('menus/list/', 'MenuController@index')->name('menus.index');
     Route::get('menus/sil/{menu}', 'MenuController@sil')->name('menus.sil');
@@ -135,13 +139,22 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 
     //admin tarafında rezervasyon işlemleri
     Route::get('bookings', 'BookingController@index')->name('bookings.index');
+    Route::get('bookings/cali', 'BookingController@cali')->name('bookings.cali.index');
+    Route::get('bookings/calendar', 'BookingController@calendar')->name('bookings.calendar');
     Route::get('bookings/current', 'BookingController@gunluk')->name('bookings.gunluk');
     Route::get('bookings/yarin', 'BookingController@yarin')->name('bookings.yarin');
     Route::get('bookings/create', 'BookingController@create')->name('bookings.create');
     Route::post('bookings', 'BookingController@store')->name('bookings.store');
     Route::get('bookings/edit/{booking}', 'BookingController@edit')->name('bookings.edit');
     Route::get('bookings/delete/{booking}', 'BookingController@destroy')->name('bookings.delete');
+    Route::get('bookings/close/{booking}', 'BookingController@kapat')->name('bookings.close');
     Route::post('bookings/{booking}', 'BookingController@update')->name('bookings.update');
+    Route::post('bookings/update/{booking}', 'BookingController@updateAjax')->name('bookings.update.ajax');
+    Route::get('fullcalendar', 'FullCalendarController@index');
+    Route::post('fullcalendar/create', 'FullCalendarController@create');
+    Route::post('fullcalendar/update', 'FullCalendarController@update');
+    Route::post('fullcalendar/delete', 'FullCalendarController@destroy');
+
 
     Route::get('orders/{status?}', 'OrderController@index')->name('orders.index');
     Route::get('orders/goruldu/{order}', 'OrderController@goruldu')->name('orders.goruldu');
@@ -160,6 +173,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 
     Route::get('pages/home', 'PageHomeController@index')->name('pages.home.index');
     Route::post('pages/home', 'PageHomeController@store')->name('pages.home.store');
+
+    Route::get('pages/restaurant', 'PageRestaurantController@index')->name('pages.restaurant.index');
+    Route::post('pages/restaurant', 'PageRestaurantController@store')->name('pages.restaurant.store');
+
 
     Route::get('pages/settings', 'PageSettingsController@index')->name('pages.settings.index');
     Route::post('pages/settings', 'PageSettingsController@store')->name('pages.settings.store');
@@ -183,16 +200,21 @@ Route::get('api/restaurant/{restaurant}', 'Api\RestaurantController@show');
 Route::get('api/restaurants/', 'Api\RestaurantController@index');
 Route::get('api/orders/{order}', 'Api\RestaurantController@address')->name('api.orders.address');
 
+Route::get('profile/', 'ProfileController@index')->middleware((['auth']))->name('customer.dashboard');
+
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('dashboard', 'CustomerController@index')->name('dashboard');
     Route::get('create', 'CustomerController@create')->name('create');
 });
 
+Route::get('about', 'PageAboutController@index')->name('about');
+
 Route::get('/restaurants/{viewType?}', 'RestaurantController@index')->name('restaurants.index');
 Route::post('/restaurant/search', 'RestaurantController@index')->name('searchresult');
 Route::get('restaurants/{restaurant}', 'RestaurantController@show')->name('restaurants.show');
 Route::get('restaurants/menu/{restaurant}', 'RestaurantController@menu')->name('restaurants.menu');
+
 
 Route::get('/cart', 'CartController@index')->name('cart.index');
 Route::post('/cart/add/{masaid?}/{menuid?}', 'CartController@store')->name('cart.add');
@@ -204,10 +226,11 @@ Route::post('orders', 'OrderController@store')->name('orders.store');
 Route::get('orders/masa/{masaid}/{menuid}', 'OrderController@masaStore')->name('orders.masaStore');
 Route::get('/address/{address}', 'OrderController@address')->name('orders.address');
 
-Route::get('/bookings/create/{restaurant}', 'BookingController@create')->name('bookings.create');
+Route::get('/bookings/create/{id}', 'BookingController@create')->name('bookings.create');
 Route::post('/bookings', 'BookingController@store')->name('bookings.store');
 Route::get('/bookings/edit/{booking}', 'BookingController@edit')->name('bookings.edit');
 Route::post('/bookings/{booking}', 'BookingController@update')->name('bookings.update');
+
 Route::get('/touchless', 'Admin\TouchlessController@index')->name('touchless.index');
 Route::get('/touchless/{masaid}/{restaurant}/{category?}/{next?}', 'Admin\TouchlessController@nextBefore')->name('touchless.paging');
 

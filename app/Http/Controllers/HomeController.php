@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use  App\Helpers\CartService;
+use App\PageHome;
+use App\Restaurant;
 
 class HomeController extends Controller
 {
 
     public function index()
     {
-        $cartContent = CartService::cartContent();
-        $cartItems = $cartContent['cartItems'];
-        $total = $cartContent['total'];
-        $quantity = $cartContent['quantity'];
-        $restaurant = $cartContent['restaurant'];
+        $page = PageHome::first();
+        $restaurants = null;
+        if ($page == null || $page->restaurant_list_show) {
+            $restaurants = Restaurant::take(6)->get();
+        }
 
-        return view('frontend.home', compact('cartItems', 'total', 'quantity', 'restaurant'));
+
+        return view('frontend.home', compact('page', 'restaurants'));
     }
 }

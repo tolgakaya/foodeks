@@ -8,7 +8,7 @@
     <meta content="Spruko" name="author">
 
     <!-- Title -->
-    <title>Ansta - Responsive Multipurpose Admin Dashboard Template</title>
+    <title>{{$settings !=null ?  $settings->company : 'Adanadayım Sipariş Yönetim Paneli'}}</title>
 
     <!-- Favicon -->
     <link href="{{asset('backend/img/brand/favicon.png')}}" rel="icon" type="image/png">
@@ -41,7 +41,18 @@
             color: white;
         }
     </style>
+    <style>
+        .dz-message {
+            text-align: center;
+            font-size: 28px;
+        }
 
+        .dz-preview .dz-image img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+        }
+    </style>
     @yield('extracss')
 
 </head>
@@ -50,11 +61,6 @@
 <body class="app sidebar-mini rtl">
     @include('sweet::alert')
     <audio id="notification" src="{{asset('backend/sounds/alert.wav')}}" muted></audio>
-    {{-- <audio id="soundFX">
-        <source src="{{asset('backend/sounds/alert.wav')}}">
-    </source>
-    </audio> --}}
-    {{-- var mp3Source = '<source src="' + filename + '.mp3" type="audio/mpeg">'; --}}
     <div id="global-loader"></div>
     <div class="page">
         <div class="page-main">
@@ -63,8 +69,10 @@
             <aside class="app-sidebar ">
                 <div class="sidebar-img">
                     <a class="navbar-brand" href="{{route('admin.orders.index')}}"><img alt="..."
-                            class="navbar-brand-img main-logo" src="{{asset('backend/img/brand/logo-dark.png')}}"> <img
-                            alt="..." class="navbar-brand-img logo" src="{{asset('backend/img/brand/logo.png')}}"></a>
+                            class="navbar-brand-img main-logo"
+                            src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}">
+                        <img alt="..." class="navbar-brand-img logo"
+                            src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}"></a>
                     <ul class="side-menu">
                         <li class="slide">
                             <a class="side-menu__item active" data-toggle="slide" href="#"><i
@@ -143,6 +151,11 @@
                                     <a href="{{route('admin.bookings.create')}}" class="slide-item">Yeni rezervasyon</a>
                                 </li>
                                 <li>
+                                    <a href="{{route('admin.bookings.calendar')}}" class="slide-item">Rezervasyon
+                                        Takvimi
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{route('admin.bookings.index')}}" class="slide-item">Rezervasyon
                                         listesi</a>
                                 </li>
@@ -183,106 +196,13 @@
                                         Ayarları</a>
                                 </li>
                                 <li>
-                                    <a href="icons-materialdesign.html" class="slide-item">Sıkça Sorular Sorular</a>
+                                    <a href="{{route('admin.pages.restaurant.index')}}" class="slide-item">Restaurant
+                                        Listesi Sayfası</a>
                                 </li>
 
                             </ul>
                         </li>
-                        <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-underline"></i><span class="side-menu__label">Ui
-                                    Elements</span><i class="angle fa fa-angle-right"></i></a>
-                            <ul class="slide-menu">
-                                <li>
-                                    <a href="accordion.html" class="slide-item">Accordion</a>
-                                </li>
-                                <li>
-                                    <a href="alerts.html" class="slide-item">Alerts</a>
-                                </li>
-                                <li>
-                                    <a href="badges.html" class="slide-item">Badges</a>
-                                </li>
-                                <li>
-                                    <a href="buttons.html" class="slide-item">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="carousel.html" class="slide-item">Carousels</a>
-                                </li>
-                                <li>
-                                    <a href="colors.html" class="slide-item">Colors</a>
-                                </li>
-                                <li>
-                                    <a href="dropdowns.html" class="slide-item">Drop downs</a>
-                                </li>
-                                <li>
-                                    <a href="grids.html" class="slide-item">Grids</a>
-                                </li>
-                                <li>
-                                    <a href="modal.html" class="slide-item">Modal</a>
-                                </li>
-                                <li>
-                                    <a href="navigation.html" class="slide-item">Navigation</a>
-                                </li>
-                                <li>
-                                    <a href="pagination.html" class="slide-item">Pagination</a>
-                                </li>
-                                <li>
-                                    <a href="popovers.html" class="slide-item">Popovers</a>
-                                </li>
-                                <li>
-                                    <a href="progress.html" class="slide-item">Progress</a>
-                                </li>
-                                <li>
-                                    <a href="tabs.html" class="slide-item">Tabs</a>
-                                </li>
-                                <li>
-                                    <a href="tooltip.html" class="slide-item">Tooltip</a>
-                                </li>
-                                <li>
-                                    <a href="typography.html" class="slide-item">Typography</a>
-                                </li>
-                            </ul>
-                        </li>
 
-                        <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-user"></i><span
-                                    class="side-menu__label">Account</span><i class="angle fa fa-angle-right"></i></a>
-                            <ul class="slide-menu">
-                                <li>
-                                    <a href="login.html" class="slide-item">Login</a>
-                                </li>
-                                <li>
-                                    <a href="register.html" class="slide-item">Register</a>
-                                </li>
-                                <li>
-                                    <a href="forgot.html" class="slide-item">Forgot password</a>
-                                </li>
-                                <li>
-                                    <a href="lockscreen.html" class="slide-item">Lock screen</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#"><i
-                                    class="side-menu__icon fe fe-shopping-cart"></i><span
-                                    class="side-menu__label">E-commerce</span><i
-                                    class="angle fa fa-angle-right"></i></a>
-                            <ul class="slide-menu">
-                                <li>
-                                    <a href="shop.html" class="slide-item">Products</a>
-                                </li>
-                                <li>
-                                    <a href="cart.html" class="slide-item">Shopping Cart</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a class="side-menu__item" href="https://themeforest.net/user/sprukosoft/portfolio"><i
-                                    class="side-menu__icon fa fa-question-circle"></i><span
-                                    class="side-menu__label">Help & Support</span></a>
-                        </li>
                     </ul>
                 </div>
             </aside>
@@ -314,37 +234,26 @@
                                 <ul class="navbar-nav align-items-center d-none d-xl-block">
                                     <li class="nav-item dropdown">
                                         <a aria-expanded="false" aria-haspopup="true"
-                                            class="nav-link pr-md-0 d-none d-lg-block" data-toggle="dropdown" href="#"
+                                            class="nav-link  d-none d-lg-block" data-toggle="dropdown" href="#"
                                             role="button">
-                                            Default Settings <span class="fas fa-caret-down"></span>
+                                            Hızlı Erişim<span class="fas fa-caret-down"></span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><span>Manage Profile</span></a>
-                                            <a class="dropdown-item" href="#"><span>Themes</span></a>
-                                            <a class="dropdown-item" href="#"><span>Passwords</span></a>
-                                            <a class="dropdown-item" href="#"><span>Payment methods</span></a>
-                                            <a class="dropdown-item" href="#"><span>Other Settings</span></a>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a aria-expanded="false" aria-haspopup="true"
-                                            class="nav-link pr-md-0 d-none d-lg-block" data-toggle="dropdown" href="#"
-                                            role="button">
-                                            Projects <span class="fas fa-caret-down"></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><span>Active</span></a>
-                                            <a class="dropdown-item" href="#"><span>Marketing</span></a>
-                                            <a class="dropdown-item" href="#"><span>Users</span></a>
-                                            <a class="dropdown-item" href="#"><span>Development</span></a>
-                                            <a class="dropdown-item" href="#"><span>Settings</span></a>
+                                            <a class="dropdown-item"
+                                                href="{{route('admin.orders.index')}}"><span>Sipariş Listesi</span></a>
+                                            <a class="dropdown-item"
+                                                href="{{route('admin.bookings.calendar')}}"><span>Rezervasyonlar</span></a>
+                                            <a class="dropdown-item"
+                                                href="{{route('admin.orders.indexMasa')}}"><span>Açık
+                                                    Adisyonlar</span></a>
                                         </div>
                                     </li>
                                 </ul>
 
                                 <!-- Brand -->
-                                <a class="navbar-brand pt-0 d-md-none" href="{{route('admin.dashboard')}}">
-                                    <img src="backend/img/brand/logo-light.png" class="navbar-brand-img" alt="...">
+                                <a class="navbar-brand pt-0 d-md-none" href="{{route('admin.orders.index')}}">
+                                    <img src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}"
+                                        class="navbar-brand-img" alt="">
                                 </a>
                                 <!-- Form -->
                                 <form class="navbar-search navbar-search-dark form-inline mr-3  ml-lg-auto">
@@ -376,20 +285,8 @@
                                         <input type="hidden" id="currentPaket">
                                         <div id='alarmpaket'
                                             class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                            {{-- <a class="dropdown-item d-flex" href="#">
-                                                <span class="avatar brround mr-3 align-self-center"> <img
-                                                        src="backend/img/faces/male/4.jpg" alt="imag"></span>
-                                                <div>
-                                                    <strong>Madeleine Scott</strong> sent you friend request
-                                                    <div class=" mt-2 small text-muted">
-                                                        <span class="btn btn-sm btn-primary">Conform</span>
-                                                        <span class="btn btn-sm btn-outline-primary">Delete</span>
-                                                    </div>
-                                                </div>
-                                            </a> --}}
-                                            <div class="dropdown-divider"></div><a
-                                                class="dropdown-item text-center text-muted-dark" href="#">View all
-                                                Requestes</a>
+
+                                            <div class="dropdown-divider"></div>
                                         </div>
                                     </li>
 
@@ -403,7 +300,7 @@
                                         <input type="hidden" id="currentAdisyon">
                                         <div id="alarmadisyon"
                                             class="dropdown-menu  dropdown-menu-lg dropdown-menu-arrow dropdown-menu-right">
-                                            {{-- <a href="#" class="dropdown-item text-center">12 New Messages</a> --}}
+
                                             <div class="dropdown-divider"></div>
                                         </div>
                                     </li>
@@ -470,13 +367,13 @@
                                 <div class="row align-items-center justify-content-xl-between">
                                     <div class="col-xl-6">
                                         <div class="copyright text-center text-xl-left text-muted">
-                                            <p class="text-sm font-weight-500">Copyright 2018 © All Rights
-                                                Reserved.Dashboard Template</p>
+                                            <p class="text-sm font-weight-500">© {{$settings->company ?? 'ADANADAYIM'}}
+                                                - {{ now()->year }}</p>
                                         </div>
                                     </div>
                                     <div class="col-xl-6">
                                         <p class="float-right text-sm font-weight-500"><a
-                                                href="www.templatespoint.net">Templates Point</a></p>
+                                                href="www.10loop.com">10Loop</a></p>
                                     </div>
                                 </div>
                             </footer>

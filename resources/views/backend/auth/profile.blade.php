@@ -3,18 +3,7 @@
 {{-- <link href="{{asset('backend/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css" /> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
 <link href="{{asset('backend/css/image-checkbox.css')}}" rel="stylesheet" />
-<style>
-    .dz-message {
-        text-align: center;
-        font-size: 28px;
-    }
 
-    .dz-preview .dz-image img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover;
-    }
-</style>
 <meta name="_token" content="{{csrf_token()}}" />
 @endsection
 @section('content')
