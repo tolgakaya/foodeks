@@ -58,8 +58,8 @@ class Order extends Model
     }
     public function tarih()
     {
-        // return  $this->created_at->diffForHumans();
-        return $this->created_at->toDateTimeString()->format('DD/MM/Y hh:i:s');
+        return  $this->created_at->diffForHumans();
+        // return $this->created_at->format('DD/MM/Y hh:i:s');
     }
     public function statusStyle()
     {

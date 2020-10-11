@@ -51,10 +51,11 @@
 
 @section('main')
 <!-- Content ================================================== -->
-<div class="container margin_60_35">
+<div class="container">
     <div class="row">
 
         <div class="col-md-4">
+
             @guest
             <div class="box_style_2 hidden-xs info">
                 <h4 class="nomargin_top">Üye misiniz?<i class="icon_clock_alt pull-right"></i></h4>
@@ -73,12 +74,44 @@
                 </p>
             </div><!-- End box_style_2 -->
             @endguest
+            <div class="box_style_2 hidden-xs info">
+                @if (isset($adds))
+                <div>
+                    <a href="{{$adds->link ?? '#'}}">
+                        <img src="{{$adds->filename !=null ? '/images/'.$adds->filename : asset('frontend/img/reklam-durum.gif')}}"
+                            alt="">
+                    </a>
+                </div>
+                <br>
+                <br>
+
+                @else
+                <div class="filter_type">
+                    <img src="{{asset('frontend/img/reklam-durum.gif')}}" alt="">
+                </div>
+                <br>
+                <br>
+                @endif
+            </div>
+
         </div><!-- End col-md-3 -->
 
 
         <div class="col-md-8">
+            {{-- <div class="text-center">
+            <div class="btn-group">
+                <a href="#" data-toggle="modal" data-target="#login_2" class="btn btn-primary">Giriş</a>
+                <a href="#" data-toggle="modal" data-target="#register" class="btn btn-primary">Üyelik</a>
+            </div>
+        </div> --}}
             <div class="box_style_2" id="order_process">
-                <h2 class="inner">Sipariş Bilgileri</h2>
+                <h2 class="inner">Sipariş
+                    <div class="btn-group pull-right">
+                        <a href="#" data-toggle="modal" data-target="#login_2" class="btn btn-default btn-xs">Giriş</a>
+                        <a href="#" data-toggle="modal" data-target="#register"
+                            class="btn btn-default btn-xs">Üyelik</a>
+                    </div>
+                </h2>
                 <form action="{{route('orders.store')}}" method="POST">
                     @csrf
                     <div class="form-group">

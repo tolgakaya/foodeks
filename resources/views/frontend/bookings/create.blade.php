@@ -20,7 +20,7 @@
             <h1>Restaurantınızı Seçin</h1>
             <div class="bs-wizard">
                 <div class="col-xs-4 bs-wizard-step active">
-                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Bilgilerinizi Girin</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Bilgiler</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong>Lezzete Hazırlanın</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong>Hazırlan</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Afiyet Olsun!</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Gel</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -54,7 +54,7 @@
 <div class="container">
     <div class="row">
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             @guest
             <div class="box_style_2 hidden-xs info">
                 <h4 class="nomargin_top">Üye misiniz?<i class="icon_clock_alt pull-right"></i></h4>
@@ -99,9 +99,15 @@
             </div>
         </div><!-- End col-md-3 -->
 
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="box_style_2" id="order_process">
-                <h2 class="inner">Rezervasyon Bilgileri</h2>
+                <h2 class="inner">Rezervasyon
+                    <div class="btn-group pull-right">
+                        <a href="#" data-toggle="modal" data-target="#login_2" class="btn btn-default btn-xs">Giriş</a>
+                        <a href="#" data-toggle="modal" data-target="#register"
+                            class="btn btn-default btn-xs">Üyelik</a>
+                    </div>
+                </h2>
                 <form action="{{route('bookings.store')}}" method="post">
                     @csrf
                     <input type="hidden" name="restaurant_id" value="{{$bookRestaurant->id}}">

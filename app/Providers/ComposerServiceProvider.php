@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Http\ViewComposers\FooterComposer;
 use App\Http\ViewComposers\CartComposer;
 use App\Http\ViewComposers\StyleComposer;
+use App\Http\ViewComposers\AdComposer;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,10 @@ class ComposerServiceProvider extends ServiceProvider
             FooterComposer::class
         );
         view()->composer(
+            'frontend.restaurant.index',
+            AdComposer::class
+        );
+        view()->composer(
             'backend.layouts.main',
             FooterComposer::class
         );
@@ -40,6 +45,10 @@ class ComposerServiceProvider extends ServiceProvider
         );
         view()->composer(
             'frontend.layouts.layout',
+            CartComposer::class
+        );
+        view()->composer(
+            'frontend.restaurants.sidecart',
             CartComposer::class
         );
         view()->composer(

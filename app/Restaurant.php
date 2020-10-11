@@ -83,6 +83,9 @@ class Restaurant extends Model
             if ($zamanlar != null && $openning <= $time && $closing >= $time) {
                 return true;
             }
+            return false;
+        } else {
+            return true;
         }
 
         return false;
@@ -101,7 +104,6 @@ class Restaurant extends Model
         }
         return $available;
     }
-
     public function isAvailable()
     {
         //kullanıcının current timeına göre paket servisinin yapıldığı saatleri gösterir

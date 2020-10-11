@@ -78,7 +78,10 @@ class User extends Authenticatable
     }
     public function userAvatar()
     {
-        return  asset('images/' . $this->avatar);
+        if ($this->avatar) {
+            return  asset('images/' . $this->avatar);
+        }
+        return asset('frontend/img/nouser.png');
     }
     public function getUserRoleAttribute()
     {

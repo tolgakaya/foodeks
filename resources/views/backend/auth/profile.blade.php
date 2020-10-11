@@ -7,13 +7,6 @@
 <meta name="_token" content="{{csrf_token()}}" />
 @endsection
 @section('content')
-<div class="page-header mt-0 shadow p-3">
-    <ol class="breadcrumb mb-sm-0">
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Empty Page</li>
-    </ol>
-
-</div>
 <div class="container">
     <div class="card shadow">
         <div class="card-header">
@@ -28,7 +21,7 @@
                             <label class="form-label">Kullanıcı Görevi</label>
                             <select class="selectpicker form-control" name="role" disabled>
                                 @foreach ($roles as $key => $role)
-                                <option value="{{$key}}">{{$role}}</option>
+                                <option value="{{$key}}" {{$key==$user->role ? 'selected' : ''}}>{{$role}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -78,7 +71,7 @@
             </form>
             <div class="col-md-12 ">
                 <div class="form-group mb-0">
-                    <label class="form-label">Arkaplan Resim</label>
+                    <label class="form-label">Kullanıcı Resmi</label>
                     <form method="post" action="{{route('admin.meals.media.store')}}" enctype="multipart/form-data"
                         class="dropzone" id="imagezone">
                         @csrf

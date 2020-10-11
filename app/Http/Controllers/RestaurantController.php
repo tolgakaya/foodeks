@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\PageRestaurant;
 use App\Helpers\CartService;
+use App\RestaurantAd;
 
 class RestaurantController extends Controller
 {
@@ -30,8 +31,8 @@ class RestaurantController extends Controller
         //belli bir yarı çaptakileri arama
         // $restaurants = Restaurant::geofence($latitude, $longitude, 0, 5)->orderBy('distance', 'ASC')->get();
         $page = PageRestaurant::first();
-
-        return view('frontend.restaurants.index', compact('restaurants', 'viewType', 'page', 'adres'));
+        $adds = RestaurantAd::first();
+        return view('frontend.restaurants.index', compact('restaurants', 'viewType', 'page', 'adres', 'adds'));
     }
     public function show(Restaurant $restaurant)
     {
@@ -50,11 +51,13 @@ class RestaurantController extends Controller
 
         $meals = $menu->meals()->where('pasif', 0)->get()->groupBy('category.category');
 
-        $cartContent = CartService::cartContent();
-        $cartItems = $cartContent['cartItems'];
-        $total = $cartContent['total'];
-        $quantity = $cartContent['quantity'];
+        // $cartContent = CartService::cartContent();
+        // $cartItems = $cartContent['cartItems'];
+        // $total = $cartContent['total'];
+        // $quantity = $cartContent['quantity'];
         $page = PageRestaurant::first();
-        return view('frontend.restaurants.menu', compact('menu', 'meals', 'cartItems', 'total', 'quantity', 'restaurant', 'page'));
+        // return view('frontend.restaurants.menu', compact('menu', 'meals', 'cartItems', 'total', 'quantity', 'restaurant', 'page'));
+        $restaurantMenu = $restaurant;
+        return view('frontend.restaurants.menu', compact('menu', 'meals', 'restaurantMenu', 'page'));
     }
 }

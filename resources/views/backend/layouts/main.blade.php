@@ -66,10 +66,12 @@
         <div class="page-main">
             <!-- Sidebar menu-->
             <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+            @if (Auth::user()->role !=4)
             <aside class="app-sidebar ">
                 <div class="sidebar-img">
-                    <a class="navbar-brand" href="{{route('admin.orders.index')}}"><img alt="..."
-                            class="navbar-brand-img main-logo"
+                    <a class="navbar-brand"
+                        href="{{Auth::user()->role == 4 ? route('carrier.dashboard') : route('admin.orders.index')}}"><img
+                            alt="..." class="navbar-brand-img main-logo"
                             src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}">
                         <img alt="..." class="navbar-brand-img logo"
                             src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}"></a>
@@ -183,7 +185,8 @@
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#"><i
                                     class="side-menu__icon fe fe-italic"></i><span
-                                    class="side-menu__label">Sayfalar</span><i class="angle fa fa-angle-right"></i></a>
+                                    class="side-menu__label">Sayfa/Ayar</span><i
+                                    class="angle fa fa-angle-right"></i></a>
                             <ul class="slide-menu">
                                 <li>
                                     <a href="{{route('admin.pages.home.index')}}" class="slide-item">Ana Sayfa<a>
@@ -199,7 +202,9 @@
                                     <a href="{{route('admin.pages.restaurant.index')}}" class="slide-item">Restaurant
                                         Listesi Sayfası</a>
                                 </li>
-
+                                <li>
+                                    <a href="{{route('admin.pages.ad.index')}}" class="slide-item">Sidebar Reklam<a>
+                                </li>
                             </ul>
                         </li>
 
@@ -207,6 +212,8 @@
                 </div>
             </aside>
             <!-- Sidebar menu-->
+            @endif
+
 
             <!-- app-content-->
             <div class="app-content ">
@@ -251,7 +258,8 @@
                                 </ul>
 
                                 <!-- Brand -->
-                                <a class="navbar-brand pt-0 d-md-none" href="{{route('admin.orders.index')}}">
+                                <a class="navbar-brand pt-0 d-md-none"
+                                    href="{{Auth::user()->role == 4 ? route('carrier.dashboard') : route('admin.orders.index')}}">
                                     <img src="{{$settings !=null ? $settings->companyLogo() :  asset('backend/img/brand/logo-light.png')}}"
                                         class="navbar-brand-img" alt="">
                                 </a>
@@ -373,7 +381,7 @@
                                     </div>
                                     <div class="col-xl-6">
                                         <p class="float-right text-sm font-weight-500"><a
-                                                href="www.10loop.com">10Loop</a></p>
+                                                href="http://www.10loop.com">10Loop</a></p>
                                     </div>
                                 </div>
                             </footer>

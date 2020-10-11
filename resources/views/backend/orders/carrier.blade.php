@@ -10,13 +10,14 @@
 @section('content')
 <div class="page-header mt-0 shadow p-3">
 
-    <div class="btn-group mb-0">
+    {{-- <div class="btn-group mb-0">
         <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">Actions</button>
-        <input type="hidden" id="restaurantid" value="">
-    </div>
+
+    </div> --}}
 </div>
 <div class="row">
+    <input type="hidden" id="restaurantid" value="">
     @foreach ($orders as $order)
     <div class="col-sm-12 col-md-6 col-lg-4">
         <div class="snip1492 card shadow">
@@ -36,15 +37,19 @@
             </div>
             {{-- <a href="tel:{{$order->address->phone}}">Ara {{$order->address->phone}}</a> --}}
             {{-- <i class="ion-ios-cart"></i> --}}
-            <div class="btn-group">
-                <button id="btnTeslim" data-status="teslim" data-order="{{$order->id}}"
-                    class="btn btn-sm btn-primary status" href="cart.html">Teslim Edildi</button>
-                <button id="btnIptal" data-status="iptal" data-order="{{$order->id}}"
-                    class="btn btn-sm btn-danger status">İptal Edildi</button>
-                <form method="GET" action="{{route('carriers.orders.addshow',['order'=>$order->id])}}">
-                    <button type="submit" class="btn btn-sm btn-success">Harita</button>
-                </form>
+            <div class="text-center">
+                <div class="btn-group">
+                    <button id="btnTeslim" data-status="teslim" data-order="{{$order->id}}"
+                        class="btn btn-sm btn-primary status" href="cart.html">Teslim Edildi</button>
+                    <button id="btnIptal" data-status="iptal" data-order="{{$order->id}}"
+                        class="btn btn-sm btn-danger status">İptal
+                        Edildi</button>
+                    <form method="GET" action="{{route('carriers.orders.addshow',['order'=>$order->id])}}">
+                        <button type="submit" class="btn btn-sm btn-success">Harita</button>
+                    </form>
+                </div>
             </div>
+
         </div>
     </div>
     @endforeach

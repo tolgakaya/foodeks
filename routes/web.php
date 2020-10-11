@@ -17,14 +17,9 @@ use Illuminate\Support\Facades\Route;
 //     return view(env('THEME') . '.home');
 // })->name('home');
 
-// Route::get('/', function () {
-//     return view('frontend.home');
-// })->name('home');
 
 Route::get('/', 'HomeController@index')->name('home');
-// Route::get('about', function () {
-//     return view('frontend.about');
-// })->name('about');
+Route::get('/home', 'HomeController@index')->name('home.home');
 
 Route::get('faq', function () {
     return view('frontend.faq');
@@ -34,10 +29,6 @@ Route::get('contact', function () {
     return view('frontend.contact');
 })->name('contact');
 
-
-// Route::get('restaurants/show/{restaurant?}', function () {
-//     return view('frontend.restaurants.show');
-// })->name('restaurants.show');
 
 Route::get('restaurants/test', function () {
     return view('frontend.restaurants.test');
@@ -62,8 +53,8 @@ Route::get('modal', function () {
 Auth::routes();
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
-    Route::get('change-password', 'ChangePasswordController@index');
-    Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
+    // Route::get('change-password', 'ChangePasswordController@index');
+    // Route::post('change-password', 'ChangePasswordController@store')->name('change.password');
 
     Route::get('dashboard', 'AdminController@index')->name('dashboard');
     Route::get('alert/paket', 'AlertController@index')->name('alert.paket');
@@ -125,8 +116,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::get('users', 'UserController@index')->name('users.index');
     Route::get('users/delete/{user}', 'UserController@destroy')->name('users.delete');
 
-    Route::post('profile', 'ProfileController@store')->name('profile.store');
-    Route::get('profile', 'ProfileController@index')->name('profile.index');
+    // Route::post('profile', 'ProfileController@store')->name('profile.store');
+    // Route::get('profile', 'ProfileController@index')->name('profile.index');
 
     Route::get('library/{chcbox?}', 'MediaController@index')->name('media.index');
     Route::get('library/detail/{filename}', 'MediaController@show')->name('media.show');
@@ -174,6 +165,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::get('pages/home', 'PageHomeController@index')->name('pages.home.index');
     Route::post('pages/home', 'PageHomeController@store')->name('pages.home.store');
 
+    Route::get('pages/ad', 'AdController@index')->name('pages.ad.index');
+    Route::post('pages/ad', 'AdController@store')->name('pages.ad.store');
+
     Route::get('pages/restaurant', 'PageRestaurantController@index')->name('pages.restaurant.index');
     Route::post('pages/restaurant', 'PageRestaurantController@store')->name('pages.restaurant.store');
 
@@ -190,6 +184,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     Route::post('pages/about/media/delete/mass', 'PageAboutController@destroymass')->name('about.media.delete.mass');
     Route::post('pages/about/media/search', 'PageAboutController@search')->name('about.media.search');
 });
+
+Route::post('admin/profile', 'Admin\ProfileController@store')->middleware((['auth']))->name('admin.profile.store');
+Route::get('admin/profile', 'Admin\ProfileController@index')->middleware((['auth']))->name('admin.profile.index');
+Route::get('admin/change-password', 'Admin\ChangePasswordController@index')->middleware((['auth']));
+Route::post('admin/change-password', 'Admin\ChangePasswordController@store')->middleware((['auth']))->name('admin.change.password');
+
 Route::get('carriers/orders/{status?}', 'CarrierController@index')->middleware((['auth', 'carrier']))->name('carrier.dashboard');
 Route::post('carriers/orders/status/{order}', 'CarrierController@status')->middleware((['auth', 'carrier']))->name('carrier.status');
 Route::get('carriers/orders/show/{order}', 'CarrierController@addshow')->name('carriers.orders.addshow');
@@ -200,8 +200,9 @@ Route::get('api/restaurant/{restaurant}', 'Api\RestaurantController@show');
 Route::get('api/restaurants/', 'Api\RestaurantController@index');
 Route::get('api/orders/{order}', 'Api\RestaurantController@address')->name('api.orders.address');
 
-Route::get('profile/', 'ProfileController@index')->middleware((['auth']))->name('customer.dashboard');
-
+Route::get('profile/', 'ProfileController@index')->middleware((['auth']))->name('customer.profile.index');
+Route::post('profile/chanegepassword', 'ProfileController@store')->middleware((['auth']))->name('profile.changepassword');
+Route::post('profile/chanegeemail', 'ProfileController@emailUpdate')->middleware((['auth']))->name('profile.changeemail');
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('dashboard', 'CustomerController@index')->name('dashboard');

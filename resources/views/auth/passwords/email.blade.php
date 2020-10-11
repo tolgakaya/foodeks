@@ -16,10 +16,11 @@
     data-image-src="{{asset('frontend/img/adana_web.jpg')}}" data-natural-width="1400" data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>Siparişi Tamamlayın</h1>
+            {{-- <h1></h1> --}}
+
             <div class="bs-wizard">
                 <div class="col-xs-4 bs-wizard-step active">
-                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Bilgileriniz</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>1.</strong> Emailinizi yazın</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -27,7 +28,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong>Kapıda Ödeme</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>2.</strong>Gelen bağlantıya tıklayın</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -35,7 +36,7 @@
                 </div>
 
                 <div class="col-xs-4 bs-wizard-step disabled">
-                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Afiyet Olsun</div>
+                    <div class="text-center bs-wizard-stepnum"><strong>3.</strong> Yeni şifrenizi belirleyin</div>
                     <div class="progress">
                         <div class="progress-bar"></div>
                     </div>
@@ -50,50 +51,45 @@
 
 @section('main')
 <!-- Content ================================================== -->
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email"
-                                class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+<div class="container bg-faded">
+    <h1 class="text-center">Şifre Sıfırlama</h1>
+    <div class="row text-center">
+        <div class="col-xs-6 col-xs-offset-3">Kayıtlı <code>emailinizi</code>aşağıdaki kutucuğa girip butona tıklayınız.
+            Size şifrenizi değiştirebileceğiniz bir bağlantı göndereceğiz.</div>
+    </div>
+    <hr>
+    <div class="row text-center">
+        <div class="col-xs-6  col-xs-offset-3 ">
+            @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
             </div>
+            @endif
+
+            <form method="POST" action="{{ route('password.email') }}" class="form-inline">
+                @csrf
+
+                <div class="form-group">
+                    <label for="email" class="col-form-label text-md-right">Email:</label>
+
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                        name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Gönder
+                </button>
+
+            </form>
         </div>
     </div>
+    <hr>
 </div>
 <!-- End Content =============================================== -->
 

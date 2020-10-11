@@ -19,7 +19,7 @@ use App\Helpers\SmsService;
 use UxWeb\SweetAlert\SweetAlert;
 use App\Helpers\CartService;
 use App\PageRestaurant;
-
+use App\RestaurantAd;
 
 class OrderController extends Controller
 {
@@ -50,8 +50,9 @@ class OrderController extends Controller
                 $firstAdres = $addresses[0];
             }
         }
+        $adds = RestaurantAd::first();
 
-        return view('frontend.orders.create', compact('user', 'addresses', 'firstAdres', 'page'));
+        return view('frontend.orders.create', compact('user', 'addresses', 'firstAdres', 'page', 'adds'));
     }
     public function address(Address $address)
     {

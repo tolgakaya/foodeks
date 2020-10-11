@@ -14,8 +14,8 @@
     data-natural-width="1400" data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>{{$settings->company ?? 'Hakkımızda'}}</h1>
-            <p>{{$page->title ?? 'Eşsiz Adana Lezzetleri'}}</p>
+            <h1>{{Auth::user()->adi}}</h1>
+            <p>Profil Bilgileri</p>
             <p></p>
         </div><!-- End sub_content -->
     </div><!-- End subheader -->
@@ -26,7 +26,7 @@
 @section('main')
 
 <!-- Content ================================================== -->
-<div class="container margin_60">
+<div class="container">
     <div id="tabs" class="tabs">
         <nav>
             <ul>
@@ -41,7 +41,11 @@
         <div class="content">
 
             <section id="section-1">
-                <h1>Rezervasyonlarım</h1>
+                <div class="indent_title_in">
+                    <i class="icon_clock_alt"></i>
+                    <h3>Rezervasyonlarım</h3>
+
+                </div>
                 <div class="grid-margin">
                     <div class="">
                         <div class="table-responsive">
@@ -56,7 +60,7 @@
                                         <th>Tarih</th>
                                         <th>Saat</th>
                                         <th>Durum</th>
-                                        <th>İşlem</th>
+                                        {{-- <th>İşlem</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody id="staffbody">
@@ -79,20 +83,20 @@
                                         <td class="text-nowrap">
                                             {{$booking->bookStatus()}}
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             @if ($booking->status == 0)
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{route('admin.bookings.edit',['booking'=>$booking->id])}}"><i
-                                                    class="fas fa-pen mr-2"></i>Düzenle</a>
-                                            <a class="btn btn-success btn-sm"
-                                                href="{{route('admin.bookings.close',['booking'=>$booking->id])}}"><i
-                                                    class="fas fa-check mr-2"></i>Kapat</a>
-                                            <a class="btn btn-danger btn-sm"
-                                                href="{{route('admin.bookings.delete',['booking'=>$booking->id])}}"><i
-                                                    class="fas fa-minus mr-2"></i>İptal</a>
-                                            @endif
+                                            class="fas fa-pen mr-2"></i>Düzenle</a>
+                                        <a class="btn btn-success btn-sm"
+                                            href="{{route('admin.bookings.close',['booking'=>$booking->id])}}"><i
+                                                class="fas fa-check mr-2"></i>Kapat</a>
+                                        <a class="btn btn-danger btn-sm"
+                                            href="{{route('admin.bookings.delete',['booking'=>$booking->id])}}"><i
+                                                class="fas fa-minus mr-2"></i>İptal</a>
+                                        @endif
 
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -103,11 +107,14 @@
             </section><!-- End section 1 -->
 
             <section id="section-1">
-                <h1>Siparişlerim</h1>
+                <div class="indent_title_in">
+                    <i class="icon_check_alt2"></i>
+                    <h3>Paket Siparişlerim</h3>
+                </div>
                 <div class="grid-margin">
                     <div class="">
                         <div class="table-responsive">
-                            <table id="stafftable"
+                            <table id="ordertable"
                                 class="table card-table table-vcenter text-nowrap  align-items-center">
                                 <thead class="thead-light">
                                     <tr>
@@ -119,8 +126,8 @@
                                         <th>Durum</th>
                                     </tr>
                                 </thead>
-                                <tbody id="staffbody">
-                                    @foreach($orders as $order)
+                                <tbody id="orderbody">
+                                    @foreach($userOrders as $order)
                                     <tr>
                                         <td>
                                             {{$order->id}}</td>
@@ -172,144 +179,64 @@
                     <div class="col-md-6 col-sm-6 add_bottom_15">
                         <div class="indent_title_in">
                             <i class="icon_lock_alt"></i>
-                            <h3>Change your password</h3>
-                            <p>
-                                Mussum ipsum cacilds, vidis litro abertis.
-                            </p>
+                            <h3>Şifreyi değiştirin</h3>
+
                         </div>
-                        <div class="wrapper_indent">
-                            <div class="form-group">
-                                <label>Old password</label>
-                                <input class="form-control" name="old_password" id="old_password" type="password">
-                            </div>
-                            <div class="form-group">
-                                <label>New password</label>
-                                <input class="form-control" name="new_password" id="new_password" type="password">
-                            </div>
-                            <div class="form-group">
-                                <label>Confirm new password</label>
-                                <input class="form-control" name="confirm_new_password" id="confirm_new_password"
-                                    type="password">
-                            </div>
-                            <button type="submit" class="btn_1 green">Update Password</button>
-                        </div><!-- End wrapper_indent -->
+                        <form method="POST" action="{{ route('profile.changepassword') }}">
+                            @csrf
+                            <div class="wrapper_indent">
+                                @foreach ($errors->all() as $error)
+                                <p class="text-danger">{{ $error }}</p>
+                                @endforeach
+                                <div class="form-group">
+                                    <label>Şimdiki şifreniz</label>
+                                    <input class="form-control" name="current_password" id="password" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni şifre girin</label>
+                                    <input class="form-control" name="new_password" id="new_password" type="password">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni şifreyi tekrar girin</label>
+                                    <input class="form-control" name="new_confirm_password" id="new_confirm_password"
+                                        type="password">
+                                </div>
+                                <button type="submit" class="btn_1 green">Şifreyi Güncelle</button>
+                            </div><!-- End wrapper_indent -->
+                        </form>
                     </div>
 
                     <div class="col-md-6 col-sm-6 add_bottom_15">
                         <div class="indent_title_in">
                             <i class="icon_mail_alt"></i>
-                            <h3>Change your email</h3>
-                            <p>
-                                Mussum ipsum cacilds, vidis litro abertis.
-                            </p>
+                            <h3>Bilgilerinizi Güncelleyin</h3>
+
                         </div>
-                        <div class="wrapper_indent">
-                            <div class="form-group">
-                                <label>Old email</label>
-                                <input class="form-control" name="old_email" id="old_email" type="email">
-                            </div>
-                            <div class="form-group">
-                                <label>New email</label>
-                                <input class="form-control" name="new_email" id="new_email" type="email">
-                            </div>
-                            <div class="form-group">
-                                <label>Confirm new email</label>
-                                <input class="form-control" name="confirm_new_email" id="confirm_new_email"
-                                    type="email">
-                            </div>
-                            <button type="submit" class="btn_1 green">Update Email</button>
-                        </div><!-- End wrapper_indent -->
+                        <form method="POST" action="{{ route('profile.changeemail') }}">
+                            @csrf
+                            <div class="wrapper_indent">
+                                @foreach ($errors->all() as $error)
+                                <p class="text-danger">{{ $error }}</p>
+                                @endforeach
+                                <div class="form-group">
+                                    <label>Email adresiniz</label>
+                                    <input class="form-control" name="old_email" id="old_email" type="email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni email adresiniz</label>
+                                    <input class="form-control" name="new_email" id="new_email" type="email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni email adresinizi tekrar girin</label>
+                                    <input class="form-control" name="confirm_new_email" id="confirm_new_email"
+                                        type="email">
+                                </div>
+                                <button type="submit" class="btn_1 green">Kaydet</button>
+                            </div><!-- End wrapper_indent -->
+                        </form>
                     </div>
 
                 </div><!-- End row -->
-
-                <hr class="styled_2">
-
-                <div class="indent_title_in">
-                    <i class="icon_shield"></i>
-                    <h3>Notification settings</h3>
-                    <p>
-                        Mussum ipsum cacilds, vidis litro abertis.
-                    </p>
-                </div>
-                <div class="row">
-
-                    <div class="col-md-6 col-sm-6">
-                        <div class="wrapper_indent">
-                            <table class="table table-striped notifications">
-                                <tbody>
-                                    <tr>
-                                        <td style="width:5%">
-                                            <i class="icon_pencil-edit_alt"></i>
-                                        </td>
-                                        <td style="width:65%">
-                                            New orders
-                                        </td>
-                                        <td style="width:35%">
-                                            <label>
-                                                <input type="checkbox" name="option_1_settings" checked class="icheck"
-                                                    value="yes">Yes</label>
-                                            <label class="margin_left">
-                                                <input type="checkbox" name="option_1_settings" class="icheck"
-                                                    value="no">No</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <i class="icon_pencil-edit_alt"></i>
-                                        </td>
-                                        <td>
-                                            Modified orders
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" name="option_2_settings" checked class="icheck"
-                                                    value="yes">Yes</label>
-                                            <label class="margin_left">
-                                                <input type="checkbox" name="option_2_settings" class="icheck"
-                                                    value="no">No</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <i class="icon_pencil-edit_alt"></i>
-                                        </td>
-                                        <td>
-                                            New user registration
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" name="option_3_settings" checked class="icheck"
-                                                    value="yes">Yes</label>
-                                            <label class="margin_left">
-                                                <input type="checkbox" name="option_3_settings" class="icheck"
-                                                    value="no">No</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <i class="icon_pencil-edit_alt"></i>
-                                        </td>
-                                        <td>
-                                            New comments
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" name="option_4_settings" checked class="icheck"
-                                                    value="yes">Yes</label>
-                                            <label class="margin_left">
-                                                <input type="checkbox" name="option_4_settings" class="icheck"
-                                                    value="no">No</label>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <button type="submit" class="btn_1 green">Update notifications settings</button>
-                        </div>
-
-                    </div><!-- End row -->
-                </div><!-- End wrapper_indent -->
-
             </section><!-- End section 3 -->
 
         </div><!-- End content -->
@@ -339,7 +266,18 @@
 {{-- <script src="{{asset('backend/js/menu.js')}}"></script> --}}
 <script>
     $(document).ready(function () {
-var table= $('#stafftable').DataTable();
+                var table= $('#stafftable').DataTable({
+                "order": [[ 1, "desc" ]],
+                "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Turkish.json"
+                }
+                });
+                var table= $('#ordertable').DataTable({
+               "order": [[ 1, "desc" ]],
+                "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Turkish.json"
+                }
+                });
 });
 </script>
 

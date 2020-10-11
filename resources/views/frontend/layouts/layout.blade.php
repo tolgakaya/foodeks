@@ -5,6 +5,7 @@
 @include('frontend.layouts.head')
 
 <body>
+    @include('frontend.layouts.modal')
     @include('sweet::alert')
     <!--[if lte IE 8]>
         <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a>.</p>
@@ -49,7 +50,7 @@
         </div>
     </div>
     <div class="layer"></div><!-- Mobile menu overlay mask -->
-    @include('frontend.layouts.modal')
+
     <!-- COMMON SCRIPTS -->
     <script src="{{asset('frontend/js/jquery-2.2.4.min.js')}}"></script>
     <script src="{{asset('frontend/js/common_scripts_min.js')}}"></script>
@@ -62,6 +63,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#register').on('show.bs.modal', function (event) {
+                $('.main-menu').removeClass('show');
+            });
+            $('#login_2').on('show.bs.modal', function (event) {
+                $('.main-menu').removeClass('show');
+                });
             $("#btnLogin").click(function(e){
                 e.preventDefault();
                 var password = $("#password").val();
