@@ -24,7 +24,7 @@
     data-natural-height="350">
     <div id="subheader">
         <div id="sub_content">
-            <h1>{{strtoupper($restaurantMenu->name)}} Aktif Menüsü</h1>
+            <h1>{{strtoupper($restaurantMenu->name)}} Menü</h1>
             <div><i class="icon_pin"></i> {{$restaurantMenu->address}}</div>
         </div><!-- End sub_content -->
     </div><!-- End subheader -->
@@ -33,7 +33,7 @@
 @endsection
 @section('main')
 <!-- Content ================================================== -->
-<div class="container margin_60_35">
+<div class="container">
     <div class="row">
         <div id='loadergif' class='app_loader' style='display: none; z-index:9999'>
             <div id="cooking">
